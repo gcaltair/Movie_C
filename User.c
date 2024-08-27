@@ -3,56 +3,44 @@
 //
 
 #include "User.h"
-bool login()
-{
-    return true;
-}
-User* User_add() {
-    // 动态分配内存用于保存一个 User 结构体
-    User* newUser = (User*)malloc(sizeof(User));
-    if (newUser == NULL) {
-        printf("Memory allocation failed!\n");
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+User* User_add(const char* id, const char* name, const char* gender,
+               const char* telephone, const char* password, const char* email, double balance) {
+    User* user = (User*)malloc(sizeof(User));
+    if (user == NULL) {
+        printf("Memory allocation failed\n");
         return NULL;
     }
+    // 动态分配内存并复制字符串
+    user->userID = strdup(id);
+    user->user_name = strdup(name);
+    user->gender = strdup(gender);
+    user->telephone = strdup(telephone);
+    user->password = strdup(password);
+    user->email = strdup(email);
+    user->user_balance = balance;
 
-    // 动态分配和初始化各个字段
-    newUser->userID = (char*)malloc(50 * sizeof(char));
-    newUser->user_name = (char*)malloc(50 * sizeof(char));
-    newUser->gender = (char*)malloc(10 * sizeof(char));
-    newUser->telephone = (char*)malloc(20 * sizeof(char));
-    newUser->password = (char*)malloc(50 * sizeof(char));
-    newUser->email = (char*)malloc(50 * sizeof(char));
+    return user;
+}
 
-    if (!newUser->userID || !newUser->user_name || !newUser->gender ||
-        !newUser->telephone || !newUser->password || !newUser->email) {
-        printf("Memory allocation for fields failed!\n");
-        free(newUser); // 释放分配的内存
-        return NULL;
+void user_show(const User *user) {
+    if (user == NULL) {
+        printf("User data is NULL.\n");
+        return;
     }
 
-    // 获取用户输入并将其存储在结构体中
-    printf("Enter User ID: ");
-    scanf("%49s", newUser->userID);
+    printf("User ID: %s\n", user->userID);
+    printf("Name: %s\n", user->user_name);
+    printf("Gender: %s\n", user->gender);
+    printf("Telephone: %s\n", user->telephone);
+    printf("Password: %s\n", user->password);  // 注意：实际系统中通常不会打印密码
+    printf("Email: %s\n", user->email);
+    printf("Balance: %.2f\n", user->user_balance);
 
-    printf("Enter User Name: ");
-    scanf("%49s", newUser->user_name);
-
-    printf("Enter Gender: ");
-    scanf("%9s", newUser->gender);
-
-    printf("Enter Telephone: ");
-    scanf("%19s", newUser->telephone);
-
-    printf("Enter Password: ");
-    scanf("%49s", newUser->password);
-
-    printf("Enter Email: ");
-    scanf("%49s", newUser->email);
-
-    printf("Enter User Balance: ");
-    scanf("%lf", &newUser->user_balance);
-
-    return newUser;
 }
+
 void modify_personalinfo(); //修改用户信息
 

@@ -4,14 +4,15 @@
 
 #ifndef VECTOR_H
 #define VECTOR_H
-
+#include <stddef.h>
 typedef int ElementType;
 typedef struct {
-    ElementType* data;
-    int capacity;
-    int size;
+    void* data;
+    size_t capacity;
+    size_t size;
+    size_t elem_size;
 }Vector;
-Vector* vector_create();
+Vector* vector_create(size_t elem_size);
 void vector_destroy(Vector* v);
-void vector_push_back(Vector* v,ElementType element);
+void vector_push_back(Vector* v,void* value);
 #endif //VECTOR_H
