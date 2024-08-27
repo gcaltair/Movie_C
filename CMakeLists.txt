@@ -3,4 +3,9 @@ project(Movie_C C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Movie_C main.c)
+add_executable(Movie_C main.c
+        Vector.c
+        Vector.h
+        test.c)
+add_executable(test1
+        test.c)
