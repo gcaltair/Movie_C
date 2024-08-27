@@ -6,7 +6,8 @@
 #define MOVIE_C_USER_H
 
 #include <stdbool.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 typedef struct {
     char* userID;
     char* user_name;
@@ -17,6 +18,7 @@ typedef struct {
     double user_balance;
 }User;
 bool login();
+User* User_add();
 void modify_personalinfo(); //修改用户信息
 
 
