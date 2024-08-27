@@ -26,7 +26,7 @@ User* Admin_add() {
     if (!newAdmin->admin_ID || !newAdmin->admin_name || !newAdmin->admin_password ||
         !newAdmin->admin_telephone || !newAdmin->admin_email || !newAdmin->admin_cinema) {
         printf("Memory allocation for fields failed!\n");
-        free(newUser); // 释放分配的内存
+        free(newAdmin); // 释放分配的内存
         return NULL;
     }
 
