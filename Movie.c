@@ -1,58 +1,84 @@
-//
-// Created by Y on 2024/8/27.
-//
 
-#include "Movie.h"
+//created by y on 2024.8.27
 
-bool login()
-{
-    return true;
-}
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+
+typedef struct {
+    char* session_number;
+    char* movie_name;
+    char* affiliated_cinema;
+    char* play_theater;
+    char* start_time;
+    char* end_time;
+    int remaining_ticket;   
+    double price;            
+    double discount;       
+    char* theater_type;
+} Movie;
+
 Movie* Movie_add() {
-    // 动态分配内存用于保存一个 Movie 结构体
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
-    if (newMovie == NULL) {
-        printf("Memory allocation failed!\n");
+    if (!newMovie) {
+        printf("Memory allocation for Movie struct failed!\n");
         return NULL;
     }
 
-    // 动态分配和初始化各个字段
+    // 动态分配和初始化各个字符串字段  
     newMovie->session_number = (char*)malloc(50 * sizeof(char));
     newMovie->movie_name = (char*)malloc(50 * sizeof(char));
     newMovie->affiliated_cinema = (char*)malloc(10 * sizeof(char));
-    newMovie->telephone = (char*)malloc(20 * sizeof(char));
-    newMovie->password = (char*)malloc(50 * sizeof(char));
-    newMovie->email = (char*)malloc(50 * sizeof(char));
+    newMovie->play_theater = (char*)malloc(20 * sizeof(char));
+    newMovie->start_time = (char*)malloc(50 * sizeof(char));
+    newMovie->end_time = (char*)malloc(50 * sizeof(char));
+    newMovie->theater_type = (char*)malloc(50 * sizeof(char));
 
-    if (!newUser->userID || !newUser->user_name || !newUser->gender ||
-        !newUser->telephone || !newUser->password || !newUser->email) {
+    if (!newMovie->session_number || !newMovie->movie_name || !newMovie->affiliated_cinema ||
+        !newMovie->play_theater || !newMovie->start_time || !newMovie->end_time || !newMovie->theater_type) {
         printf("Memory allocation for fields failed!\n");
-        free(newUser); // 释放分配的内存
+        // 释放已分配的内存  
+        free(newMovie->session_number);
+        free(newMovie->movie_name);
+        free(newMovie->affiliated_cinema);
+        free(newMovie->play_theater);
+        free(newMovie->start_time);
+        free(newMovie->end_time);
+        free(newMovie->theater_type);
+        free(newMovie);
         return NULL;
     }
 
-    // 获取用户输入并将其存储在结构体中
-    printf("Enter User ID: ");
-    scanf("%49s", newUser->userID);
+    // 获取用户输入并将其存储在结构体中  
+    printf("Enter session number: ");
+    scanf("%49s", newMovie->session_number);
 
-    printf("Enter User Name: ");
-    scanf("%49s", newUser->user_name);
+    printf("Enter movie name: ");
+    scanf("%49s", newMovie->movie_name);
 
-    printf("Enter Gender: ");
-    scanf("%9s", newUser->gender);
+    printf("Enter affiliated_cinema: ");
+    scanf("%9s", newMovie->affiliated_cinema);
 
-    printf("Enter Telephone: ");
-    scanf("%19s", newUser->telephone);
+    printf("Enter play_theater: ");
+    scanf("%19s", newMovie->play_theater);
 
-    printf("Enter Password: ");
-    scanf("%49s", newUser->password);
+    printf("Enter start time: ");
+    scanf("%49s", newMovie->start_time);
 
-    printf("Enter Email: ");
-    scanf("%49s", newUser->email);
+    printf("Enter end time: ");
+    scanf("%49s", newMovie->end_time);
 
-    printf("Enter User Balance: ");
-    scanf("%lf", &newUser->user_balance);
+    printf("Enter remaining ticket: ");
+    scanf("%d", &newMovie->remaining_ticket);   
 
-    return newUser;
+    printf("Enter price: ");
+    scanf("%lf", &newMovie->price);
+
+    printf("Enter discount: ");
+    scanf("%lf", &newMovie->discount);
+
+    printf("Enter theater_type: ");
+    scanf("%49s", newMovie->theater_type);
+
+    return newMovie;
 }
-void modify_personalinfo(); //修改用户信息

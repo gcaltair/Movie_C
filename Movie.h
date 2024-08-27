@@ -18,7 +18,7 @@ typedef struct {
     char* theater_type;
 }Movie;
 
-movie* find_movie1(char *movie_name)//according to movie name to find 
+Movie* find_movie1(char* movie_name);//according to movie name to find 
 
 
 

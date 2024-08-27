@@ -9,4 +9,6 @@ typedef struct {
     char* location;
     int cinema_id;
 }Cinema;
+Cinema* cinema_add(const char* name, const char* location, int id);
+void cinema_show(const Cinema* cinema);
 #endif //MOVIE_C_CINEMA_H

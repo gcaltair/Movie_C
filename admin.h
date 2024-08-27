@@ -4,16 +4,19 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "Cinema.h"
+
 typedef struct {
     char* admin_ID;
     char* admin_name;
     char* admin_telephone;
     char* admin_password;
     char* admin_email;
-    char* admin_cinema;
+    Cinema* cinema;
 }Admin;
-bool login();
-Admin* Admin_add();
+Admin* Admin_add(const char* id, const char* name, const char* telephone,
+                 const char* password, const char* email, Cinema* cinema);
+void admin_show(const Admin* admin);
 void modify_personalinfo(); //修改用户信息
 
 
