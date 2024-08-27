@@ -11,7 +11,7 @@ typedef struct {
     char* admin_password;
     char* admin_email;
     char* admin_cinema;
-}admin;
+}Admin;
 bool login();
 Admin* Admin_add();
 void modify_personalinfo(); //修改用户信息

@@ -14,11 +14,19 @@ add_executable(Movie_C main.c
         Movie.c
         Movie.h
         Theater.c
-        Theater.h)
+        Theater.h
+        Cinema.c
+        Cinema.h
+        admin.h
+        admin.c)
 add_executable(test1
         test.c
         User.c
         User.h
         Order.c
         Theater.c
-        Theater.h)
+        Theater.h
+        Cinema.c
+        Cinema.h
+        admin.h
+        admin.c)

@@ -3,6 +3,8 @@
 //
 
 #include "admin.h"
+#include "User.h"
+
 bool login()
 {
     return true;
