@@ -8,8 +8,13 @@ add_executable(Movie_C main.c
         Vector.h
         test.c
         User.c
-        User.h)
+        User.h
+        Order.c
+        Order.h
+        Movie.c
+        Movie.h)
 add_executable(test1
         test.c
         User.c
-        User.h)
+        User.h
+        Order.c)
