@@ -8,5 +8,5 @@ typedef struct {
     char* theater_name;
     int theater_capacity;
     char* theater_type;
-};
+}theater;
 #endif //MOVIE_C_THEATER_H
