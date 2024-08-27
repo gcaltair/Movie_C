@@ -6,6 +6,10 @@ set(CMAKE_C_STANDARD 11)
 add_executable(Movie_C main.c
         Vector.c
         Vector.h
-        test.c)
+        test.c
+        User.c
+        User.h)
 add_executable(test1
-        test.c)
+        test.c
+        User.c
+        User.h)
