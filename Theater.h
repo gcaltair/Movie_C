@@ -15,5 +15,5 @@ typedef struct {
     //缺座位图，座位号
     char* theater_type;
     double day_income;
-}theater;
+}Theater;
 #endif //MOVIE_C_THEATER_H
