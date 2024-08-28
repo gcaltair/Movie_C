@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "Cinema.h"
+#include "Theater.h"
 
 Cinema *cinema_add(const char *name, const char *location, int id) {
     // 动态分配内存给Cinema结构体
@@ -31,6 +32,10 @@ void cinema_show(const Cinema* cinema) {
     printf("Cinema Name: %s\n", cinema->cinema_name);
     printf("Location: %s\n", cinema->location);
     printf("Cinema ID: %d\n", cinema->cinema_id);
+}
+void cinema_show_detail(const Cinema* cinema){
+    cinema_show(cinema);
+    theater_show(cinema->theater);
 }
 Cinema* cinema_create_list(Cinema* new_cinema)
 {
@@ -68,6 +73,7 @@ Cinema* cinema_find_by_id(Cinema* head, int id) {
         }
         temp = temp->next;
     }
+    printf("Not found Cinema ID %d\n",id);
     return NULL; // 如果没有找到匹配的ID，返回NULL
 }
 void cinema_show_all(Cinema* head) {

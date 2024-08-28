@@ -4,7 +4,6 @@
 
 #ifndef MOVIE_C_CINEMA_H
 #define MOVIE_C_CINEMA_H
-#include "Theater.h"
 typedef struct Cinema{
     char* cinema_name;
     char* location;
@@ -19,6 +18,6 @@ Cinema* cinema_find_by_id(Cinema* head, int id);
 Cinema* cinema_add(const char* name, const char* location, int id);
 void cinema_show(const Cinema* cinema);
 void cinema_show_all(Cinema* head);
-
+void cinema_show_detail(const Cinema* cinema);
 
 #endif //MOVIE_C_CINEMA_H
