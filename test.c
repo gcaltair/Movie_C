@@ -5,16 +5,17 @@
 #include "User.h"
 #include "admin.h"
 #include "Cinema.h"
+#include "movie.h"
+#include "theater.h"
+int main() {
+    Movie* movie_list = NULL;
 
-int main()
-{
+    // 增加一部电影
+    addMovie(&movie_list);
 
-    Cinema* cinema_list = cinema_create_list("Cinema A", "Location A", 1,NULL);
-    cinema_add_to_list(&cinema_list, "Cinema B", "Location B", 2,NULL);
-    cinema_add_to_list(&cinema_list, "Cinema C", "Location C", 3,NULL);
-//
-//    printf("Showing all cinemas:\n");
-    cinema_show_all(cinema_list);
-    cinema_show(cinema_list);
-    cinema_show(cinema_find_by_id(cinema_list,2));
-}
+    // 显示所有电影信息
+    show_all_movies(movie_list);
+
+    // 释放链表（此部分可以扩展以释放内存）
+
+    return 0;
