@@ -5,17 +5,18 @@
 #include "User.h"
 #include "admin.h"
 #include "Cinema.h"
-#include "movie.h"
-#include "theater.h"
-int main() {
-    Movie* movie_list = NULL;
+#include "Theater.h"
 
-    // 增加一部电影
+    // 锟斤拷锟斤拷一锟斤拷锟斤拷影
     addMovie(&movie_list);
 
-    // 显示所有电影信息
-    show_all_movies(movie_list);
+    Cinema* t = cinema_add("Cinema A", "Location A", 1);
+    Cinema *cinema_list= cinema_create_list(t);;
+    cinema_direct_add_to_list(&cinema_list, "Cinema C", "Location C", 3);
+    Theater *theater_temp= theater_add("theater1",20,cinema_list,"3D");
+    Theater *theater_list=theater_create_list(theater_temp);
+    theater_add_to_list(&theater_list,theater_temp);
+    cinema_show(theater_temp->cinema);
+    theater_show(cinema_list->theater);
 
-    // 释放链表（此部分可以扩展以释放内存）
-
-    return 0;
+}
