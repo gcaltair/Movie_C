@@ -6,6 +6,7 @@
 //
 //折扣活动：movie->discount = 1 - 0.1*（用户已购买的票数）-0.05*(用户单次购买座位数)
 #include "Order.h"
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 
