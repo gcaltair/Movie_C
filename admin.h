@@ -4,16 +4,16 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "Cinema.h"
 
+typedef struct Cinema Cinema;
 //管理员结构体
-typedef struct {
+typedef struct Admin{
     char* admin_id;
     char* admin_name;
     char* admin_telephone;
     char* admin_password;
     char* admin_email;
-    Cinema* cinema;
+    struct Cinema* cinema;
 }Admin;
 Admin* Admin_add(const char* id, const char* name, const char* telephone,
                  const char* password, const char* email, Cinema* cinema);

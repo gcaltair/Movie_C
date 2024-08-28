@@ -16,7 +16,7 @@ theater_show(cinema_list->theater);
 #include "Theater.h"
 #include "Cinema.h"
 // 创建并初始化一个新的 Theater 结构体
-Theater* theater_add(const char* name, int capacity, Cinema* cinema_, const char* type) {
+Theater* theater_create(const char* name, int capacity, Cinema* cinema_, const char* type) {
     // 动态分配内存给 Theater 结构体
     Theater* theater = (Theater*)malloc(sizeof(Theater));
     if (theater == NULL) {
@@ -69,7 +69,7 @@ void theater_add_to_list(Theater** head, Theater* new_theater) {
 
 // 直接添加剧院元素到链表中
 void theater_direct_add_to_list(Theater** head, const char* name, int capacity, Cinema* cinema, const char* type) {
-    Theater* new_theater = theater_add(name, capacity, cinema, type);
+    Theater* new_theater = theater_create(name, capacity, cinema, type);
     if (new_theater == NULL) {
         return;
     }

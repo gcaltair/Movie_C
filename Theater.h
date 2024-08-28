@@ -29,7 +29,7 @@ void theater_direct_add_to_list(Theater** head, const char* name, int capacity, 
 Theater* theater_find_by_name(Theater* head, const char* name);
 
 // 添加新影厅
-Theater* theater_add(const char* name, int capacity, Cinema* cinema, const char* type);
+Theater* theater_create(const char* name, int capacity, Cinema* cinema, const char* type);
 
 // 显示单个影厅信息
 void theater_show(const Theater* theater);
