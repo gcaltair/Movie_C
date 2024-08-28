@@ -4,16 +4,17 @@
 #include<stdio.h>
 #include "User.h"
 #include "admin.h"
+#include "Cinema.h"
 
 int main()
 {
-    Cinema* cinema = cinema_add("Cinema A", "123 Main St", 101);
-    User* usr1= User_add("114514","gc",
-                         "man","114514",
-                         "114514","114514@qq.com",1.1);
-    user_show(usr1);
-    Admin* admin = Admin_add("adm123", "Alice",
-                             "12345678901", "password123",
-                             "alice@cinema.com", cinema);
-    admin_show(admin);
+
+    Cinema* cinema_list = cinema_create_list("Cinema A", "Location A", 1,NULL);
+    cinema_add_to_list(&cinema_list, "Cinema B", "Location B", 2,NULL);
+    cinema_add_to_list(&cinema_list, "Cinema C", "Location C", 3,NULL);
+//
+//    printf("Showing all cinemas:\n");
+    cinema_show_all(cinema_list);
+    cinema_show(cinema_list);
+    cinema_show(cinema_find_by_id(cinema_list,2));
 }

@@ -6,7 +6,7 @@
 #define MOVIE_C_USER_H
 
 
-typedef struct {
+typedef struct User{
     char* userID;
     char* user_name;
     char* gender;
@@ -14,6 +14,7 @@ typedef struct {
     char* password;
     char* email;
     double user_balance;
+    struct User* next;
 }User;
 void user_show(const User* user);
 User* User_add(const char* id, const char* name, const char* gender,

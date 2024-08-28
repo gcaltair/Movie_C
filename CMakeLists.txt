@@ -4,8 +4,6 @@ project(Movie_C C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(Movie_C main.c
-        Vector.c
-        Vector.h
         test.c
         User.c
         User.h
@@ -18,7 +16,8 @@ add_executable(Movie_C main.c
         Cinema.c
         Cinema.h
         admin.h
-        admin.c)
+        admin.c
+)
 add_executable(test1
         test.c
         User.c
@@ -29,4 +28,5 @@ add_executable(test1
         Cinema.c
         Cinema.h
         admin.h
-        admin.c)
+        admin.c
+)
