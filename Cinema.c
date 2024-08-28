@@ -6,7 +6,7 @@
 #include <string.h>
 #include "Cinema.h"
 
-Cinema *cinema_add(const char *name, const char *location, int id,Cinema* next) {
+Cinema *cinema_add(const char *name, const char *location, int id) {
     // 动态分配内存给Cinema结构体
     Cinema* cinema = (Cinema*)malloc(sizeof(Cinema));
     if (cinema == NULL) {
@@ -18,7 +18,8 @@ Cinema *cinema_add(const char *name, const char *location, int id,Cinema* next) 
     cinema->cinema_name = strdup(name);
     cinema->location = strdup(location);
     cinema->cinema_id = id;
-
+    cinema->next=NULL;
+    cinema->theater=NULL;
     return cinema;
 }
 void cinema_show(const Cinema* cinema) {
@@ -31,25 +32,13 @@ void cinema_show(const Cinema* cinema) {
     printf("Location: %s\n", cinema->location);
     printf("Cinema ID: %d\n", cinema->cinema_id);
 }
-Cinema* cinema_create_list(const char* name, const char* location, int id,Cinema* next)
+Cinema* cinema_create_list(Cinema* new_cinema)
 {
-    // 创建新的Cinema节点
-    Cinema* head = (Cinema*)malloc(sizeof(Cinema));
-    if (head == NULL) {
-        printf("Memory allocation failed.\n");
-        return NULL;
-    }
-
-    // 动态分配内存并复制参数内容到结构体字段
-    head->cinema_name = strdup(name);
-    head->location = strdup(location);
-    head->cinema_id = id;
-    head->next = NULL; // 初始化时next指向NULL
-
+    Cinema* head;
+    head=new_cinema;
     return head;
 }
-void cinema_add_to_list(Cinema** head, const char* name, const char* location, int id,Cinema* next) {
-    Cinema* new_cinema = cinema_add(name, location, id,NULL);
+void cinema_add_to_list(Cinema** head,Cinema* new_cinema) {
     if (*head == NULL) {
         *head = new_cinema;
         return;
@@ -59,6 +48,17 @@ void cinema_add_to_list(Cinema** head, const char* name, const char* location, i
     temp->next=*head;
     *head=temp;
 
+}
+void cinema_direct_add_to_list(Cinema** head,const char* name, const char* location, int id)
+{
+    Cinema *new_cinema= cinema_add(name,location,id);
+    if (*head == NULL) {
+        *head = new_cinema;
+        return;
+    }
+    Cinema* temp = new_cinema;
+    temp->next=*head;
+    *head=temp;
 }
 Cinema* cinema_find_by_id(Cinema* head, int id) {
     Cinema* temp = head;

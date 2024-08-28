@@ -7,7 +7,7 @@
 
 #include "Cinema.h"
 
-typedef struct {
+typedef struct Theater{
     int theater_id;
     char* theater_name;
     int theater_capacity;
