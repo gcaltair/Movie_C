@@ -7,7 +7,7 @@
 #include "Cinema.h"
 #include "Theater.h"
 
-Cinema *cinema_add(const char *name, const char *location, int id) {
+Cinema *cinema_create(const char *name, const char *location, int id) {
     // 动态分配内存给Cinema结构体
     Cinema* cinema = (Cinema*)malloc(sizeof(Cinema));
     if (cinema == NULL) {
@@ -56,7 +56,7 @@ void cinema_add_to_list(Cinema** head,Cinema* new_cinema) {
 }
 void cinema_direct_add_to_list(Cinema** head,const char* name, const char* location, int id)
 {
-    Cinema *new_cinema= cinema_add(name,location,id);
+    Cinema *new_cinema= cinema_create(name,location,id);
     if (*head == NULL) {
         *head = new_cinema;
         return;

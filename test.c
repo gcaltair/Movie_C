@@ -7,10 +7,9 @@
 #include "Cinema.h"
 #include "Theater.h"
 
-    // ����һ����Ӱ
-    addMovie(&movie_list);
+int main(){
 
-    Cinema* t = cinema_add("Cinema A", "Location A", 1);
+    Cinema* t = cinema_create("Cinema A", "Location A", 1);
     Cinema *cinema_list= cinema_create_list(t);;
     cinema_direct_add_to_list(&cinema_list, "Cinema C", "Location C", 3);
     Theater *theater_temp= theater_add("theater1",20,cinema_list,"3D");

@@ -16,38 +16,41 @@ typedef struct Movie {
 } Movie;
 
 // 创建新的 Movie 节点  
-Movie* createMovie(const char* session_number, Theater* play_theater, const char* start_time, const char* end_time,
+Movie* movie_create(const char* session_number, Theater* play_theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type);
 
-// 添加 Movie 到链表  
-void addMovie(Movie** head, Movie* newMovie);
+// 添加 Movie 到链表
+void movie_add_to_list(Movie** head, Movie* newMovie);
 
-// 从用户输入中创建 Movie 并添加到链表  
-void addMovieFromInput(Movie** head);
+// 从用户输入中创建 Movie 并添加到链表
+//gc:这个函数先别修了，就放着别管，保证编译能过就行
+//或者直接把他注释掉
+void add_movie_from_input(Movie** head);
 
 // 显示单个 Movie 的信息  
-void show_movie(const Movie* movie);
+void movie_show(const Movie* movie);
 
 // 显示链表中所有 Movie 的信息  
-void show_all_movies(Movie* head);
+void movie_show_all(Movie* head);
 
 // 根据影片名查找 Movie 节点  
-Movie* find_movie_by_name(Movie* head, const char* movie_name);
+Movie* movie_find_by_name(Movie* head, const char* movie_name);
 
 // 根据影片名和影院名查找 Movie 节点  
-void find_movies_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name);
+void movie_find_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name);
 
 // 根据放映场次类型过滤  
-void find_movies_by_theater_type(Movie* head, const char* theater_type);
+void movie_find_by_theater_type(Movie* head, const char* theater_type);
 
 // 根据放映开始时间排序  
-void sort_movies_by_start_time(Movie** head);
+void movie_sort_by_start_time(Movie** head);
 
-// 根据票价排序  
-void sort_movies_by_price(Movie** head);
+// 根据票价排序
+//gc:qsort好像不让用?老师说要自己实现排序(不过既然写好了就别变了)
+void movie_sort_by_price(Movie** head);
 
 // 根据余票数排序  
-void sort_movies_by_remaining_ticket(Movie** head);
+void movie_sort_by_remaining_ticket(Movie** head);
 
 // 购票功能  
 void purchase_ticket(Movie* movie, int number_of_tickets);
