@@ -7,8 +7,8 @@
 #include "Cinema.h"
 #include "Theater.h"
 
-int main()
-{
+    // ����һ����Ӱ
+    addMovie(&movie_list);
 
     Cinema* t = cinema_add("Cinema A", "Location A", 1);
     Cinema *cinema_list= cinema_create_list(t);;

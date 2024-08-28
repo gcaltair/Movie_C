@@ -42,5 +42,5 @@ void user_show(const User *user) {
 
 }
 
-void modify_personalinfo(); //修改用户信息
+void modify_personalinfo();
 
