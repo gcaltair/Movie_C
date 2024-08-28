@@ -19,7 +19,7 @@ Order* add_order(User* usr, Movie* movie) {
 	//剩余座位数不足
 	if (movie->remaining_ticket == 0) {
 		printf("该场次无空余座位，请选择其他场次。\n");
-			return head;
+		return head;
 	}
 	//以距某时间节点分钟数计算时间
 	int  end_day, end_hour, end_minute;
