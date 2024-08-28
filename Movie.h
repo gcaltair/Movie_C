@@ -45,10 +45,14 @@ void movie_find_by_theater_type(Movie* head, const char* theater_type);
 // 根据放映开始时间排序  
 void movie_sort_by_start_time(Movie** head);
 
+// 比较函数，用于根据票价排序  
+int compare_by_price(const void* a, const void* b);
 // 根据票价排序
-//gc:qsort好像不让用?老师说要自己实现排序(不过既然写好了就别变了)
 void movie_sort_by_price(Movie** head);
 
+
+// 比较函数，用于根据余票数排序  
+int compare_by_remaining_ticket(const void* a, const void* b);
 // 根据余票数排序  
 void movie_sort_by_remaining_ticket(Movie** head);
 

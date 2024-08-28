@@ -4,7 +4,7 @@
 #include "Movie.h"
 #include "Cinema.h"
 // 创建新的 Movie 节点  
-Movie* createMovie(const char* session_number, Theater* theater, const char* start_time, const char* end_time,
+Movie* movie_create(const char* session_number, Theater* theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
@@ -26,7 +26,7 @@ Movie* createMovie(const char* session_number, Theater* theater, const char* sta
 }
 
 // 添加 Movie 到链表  
-void addMovie(Movie** head, Movie* newMovie) {
+void movie_add_to_list(Movie** head, Movie* newMovie) {
     if (*head == NULL) {
         *head = newMovie;
     }
@@ -40,7 +40,7 @@ void addMovie(Movie** head, Movie* newMovie) {
 }
 
 // 从用户输入中创建 Movie 并添加到链表  
-void addMovieFromInput(Movie** head) {
+void add_movie_from_input(Movie** head) {
     char session_number[50], start_time[50], end_time[50], theater_type[50];
     Theater* theater;
     int remaining_ticket;
@@ -97,7 +97,7 @@ Theater* find_theater_by_name(const char* theater_name) {
 }
 
 // 根据影片名查找 Movie 节点  
-Movie* find_movie_by_name(Movie* head, const char* movie_name) {
+Movie* movie_find_by_name(Movie* head, const char* movie_name) {
     Movie* current = head;
     while (current != NULL) {
         if (strcmp(current->session_number, movie_name) == 0) {
@@ -109,7 +109,7 @@ Movie* find_movie_by_name(Movie* head, const char* movie_name) {
 }
 
 // 根据影片名和影院名查找 Movie 节点  
-void find_movies_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name) {
+void movie_find_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name) {
     Movie* current = head;
     while (current != NULL) {
         if (strcmp(current->session_number, movie_name) == 0 && strcmp(current->theater->cinema->cinema_name, cinema_name) == 0) {
@@ -120,7 +120,7 @@ void find_movies_by_name_and_cinema(Movie* head, const char* movie_name, const c
 }
 
 // 根据放映场次类型过滤  
-void find_movies_by_theater_type(Movie* head, const char* theater_type) {
+void movie_find_by_theater_type(Movie* head, const char* theater_type) {
     Movie* current = head;
     while (current != NULL) {
         if (strcmp(current->theater_type, theater_type) == 0) {
@@ -138,7 +138,7 @@ int compare_by_start_time(const void* a, const void* b) {
 }
 
 // 排序所有场次  
-void sort_movies_by_start_time(Movie** head) {
+void movie_sort_by_start_time(Movie** head) {
     int count = 0;
     Movie* current = *head;
     while (current != NULL) {
@@ -172,7 +172,7 @@ int compare_by_price(const void* a, const void* b) {
 }
 
 // 排序所有场次  
-void sort_movies_by_price(Movie** head) {
+void movie_sort_by_price(Movie** head) {
     int count = 0;
     Movie* current = *head;
     while (current != NULL) {
@@ -206,7 +206,7 @@ int compare_by_remaining_ticket(const void* a, const void* b) {
 }
 
 // 排序所有场次  
-void sort_movies_by_remaining_ticket(Movie** head) {
+void movie_sort_by_remaining_ticket(Movie** head) {
     int count = 0;
     Movie* current = *head;
     while (current != NULL) {
@@ -235,7 +235,7 @@ void sort_movies_by_remaining_ticket(Movie** head) {
 
 
 // 显示单个 Movie 的信息  
-void show_movie(const Movie* movie) {
+void movie_show(const Movie* movie) {
     if (movie == NULL) return;
     printf("Session Number: %s\n", movie->session_number);
     printf("Play Theater: %s\n", movie->theater ? movie->theater->theater_name : "N/A");
@@ -249,7 +249,7 @@ void show_movie(const Movie* movie) {
 }
 
 // 显示链表中所有 Movie 的信息  
-void show_all_movies(Movie* head) {
+void movie_show_all(Movie* head) {
     Movie* current = head;
     while (current != NULL) {
         show_movie(current);
