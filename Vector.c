@@ -42,8 +42,9 @@ static void vector_resize(Vector *v) {
     }
     v->data=p_;
 }
-void vector_push_back(Vector *v,void* value) {
-    if(v->size>=v->capacity-1) vector_resize(v);
-    v->data[++(v->size)]=value;
+void vector_push_back(Vector* v, void* value) {
+    if (v->size >= v->capacity - 1)
+        vector_resize(v);
+    ((void**)(v->data))[v->size++] = value;  // 使用类型转换，将 void* 赋值给 void**
 }
 

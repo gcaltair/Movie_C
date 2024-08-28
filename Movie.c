@@ -1,24 +1,24 @@
-
 //created by y on 2024.8.27
 
 #include <stdio.h>  
 #include <stdlib.h>  
 #include <string.h>  
+#include "Movie.h"  
 
 typedef struct {
     char* session_number;
     char* movie_name;
     char* affiliated_cinema;
-    char* play_theater;
+    Theater* play_theater;
     char* start_time;
     char* end_time;
-    int remaining_ticket;   
-    double price;            
-    double discount;       
+    int remaining_ticket;
+    double price;
+    double discount;
     char* theater_type;
 } Movie;
 
-Movie* Movie_add() {
+static Movie* Movie_add(char* session_number, char* movie_name, char* affiliated_cinema, Theater* play_theater, char* start_time, char* end_time, int remaining_ticket, double price, double discount, char* theater_type) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
         printf("Memory allocation for Movie struct failed!\n");
@@ -29,19 +29,17 @@ Movie* Movie_add() {
     newMovie->session_number = (char*)malloc(50 * sizeof(char));
     newMovie->movie_name = (char*)malloc(50 * sizeof(char));
     newMovie->affiliated_cinema = (char*)malloc(10 * sizeof(char));
-    newMovie->play_theater = (char*)malloc(20 * sizeof(char));
     newMovie->start_time = (char*)malloc(50 * sizeof(char));
     newMovie->end_time = (char*)malloc(50 * sizeof(char));
     newMovie->theater_type = (char*)malloc(50 * sizeof(char));
 
     if (!newMovie->session_number || !newMovie->movie_name || !newMovie->affiliated_cinema ||
-        !newMovie->play_theater || !newMovie->start_time || !newMovie->end_time || !newMovie->theater_type) {
+         !newMovie->start_time || !newMovie->end_time || !newMovie->theater_type) {
         printf("Memory allocation for fields failed!\n");
         // 释放已分配的内存  
         free(newMovie->session_number);
         free(newMovie->movie_name);
         free(newMovie->affiliated_cinema);
-        free(newMovie->play_theater);
         free(newMovie->start_time);
         free(newMovie->end_time);
         free(newMovie->theater_type);
@@ -69,7 +67,7 @@ Movie* Movie_add() {
     scanf("%49s", newMovie->end_time);
 
     printf("Enter remaining ticket: ");
-    scanf("%d", &newMovie->remaining_ticket);   
+    scanf("%d", &newMovie->remaining_ticket);
 
     printf("Enter price: ");
     scanf("%lf", &newMovie->price);
