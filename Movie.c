@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Movie.h"
-
+#include "Cinema.h"
 // 创建新的 Movie 节点  
-Movie* createMovie(const char* session_number, Theater* play_theater, const char* start_time, const char* end_time,
+Movie* createMovie(const char* session_number, Theater* theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
@@ -13,7 +13,7 @@ Movie* createMovie(const char* session_number, Theater* play_theater, const char
     }
 
     newMovie->session_number = strdup(session_number); // 使用 strdup 简化内存分配和复制  
-    newMovie->play_theater = play_theater;
+    newMovie->theater = theater;
     newMovie->start_time = strdup(start_time);
     newMovie->end_time = strdup(end_time);
     newMovie->remaining_ticket = remaining_ticket;
@@ -42,7 +42,7 @@ void addMovie(Movie** head, Movie* newMovie) {
 // 从用户输入中创建 Movie 并添加到链表  
 void addMovieFromInput(Movie** head) {
     char session_number[50], start_time[50], end_time[50], theater_type[50];
-    Theater* play_theater;
+    Theater* theater;
     int remaining_ticket;
     double price, discount;
 
@@ -52,8 +52,8 @@ void addMovieFromInput(Movie** head) {
     char theater_name[20];
     printf("Enter play theater name: ");
     scanf("%19s", theater_name);
-    play_theater = find_theater_by_name(theater_name);
-    if (!play_theater) {
+    theater = find_theater_by_name(theater_name);
+    if (!theater) {
         printf("Theater not found. Cannot create movie.\n");
         return;
     }
@@ -76,7 +76,7 @@ void addMovieFromInput(Movie** head) {
     printf("Enter theater type: ");
     scanf("%49s", theater_type);
 
-    Movie* newMovie = createMovie(session_number, play_theater, start_time, end_time,
+    Movie* newMovie = createMovie(session_number, theater, start_time, end_time,
         remaining_ticket, price, discount, theater_type);
     if (newMovie) {
         addMovie(head, newMovie);
@@ -112,7 +112,7 @@ Movie* find_movie_by_name(Movie* head, const char* movie_name) {
 void find_movies_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name) {
     Movie* current = head;
     while (current != NULL) {
-        if (strcmp(current->session_number, movie_name) == 0 && strcmp(current->play_theater->cinema->cinema_name, cinema_name) == 0) {
+        if (strcmp(current->session_number, movie_name) == 0 && strcmp(current->theater->cinema->cinema_name, cinema_name) == 0) {
             show_movie(current);
         }
         current = current->next;
@@ -238,7 +238,7 @@ void sort_movies_by_remaining_ticket(Movie** head) {
 void show_movie(const Movie* movie) {
     if (movie == NULL) return;
     printf("Session Number: %s\n", movie->session_number);
-    printf("Play Theater: %s\n", movie->play_theater ? movie->play_theater->theater_name : "N/A");
+    printf("Play Theater: %s\n", movie->theater ? movie->theater->theater_name : "N/A");
     printf("Start Time: %s\n", movie->start_time);
     printf("End Time: %s\n", movie->end_time);
     printf("Remaining Tickets: %d\n", movie->remaining_ticket);

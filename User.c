@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-User* User_add(const char* id, const char* name, const char* gender,
+User* User_create(const char* id, const char* name, const char* gender,
                const char* telephone, const char* password, const char* email, double balance) {
     User* user = (User*)malloc(sizeof(User));
     if (user == NULL) {
