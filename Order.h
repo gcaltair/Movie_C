@@ -17,6 +17,6 @@ typedef struct {
     Cinema* cinema;
     int seats; //可以是二维数组？
     int status; //订单状态
-    int time;
+    char time[30];
 }Order;
 #endif //MOVIE_C_ORDER_H

@@ -5,7 +5,7 @@
 #ifndef MOVIE_C_USER_H
 #define MOVIE_C_USER_H
 
-//用户结构体
+
 typedef struct {
     char* userID;
     char* user_name;
@@ -14,6 +14,7 @@ typedef struct {
     char* password;
     char* email;
     double user_balance;
+    struct User* next;
 }User;
 //添加新用户
 void user_show(const User* user);
