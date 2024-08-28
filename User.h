@@ -14,11 +14,14 @@ typedef struct {
     char* password;
     char* email;
     double user_balance;
+    struct User* next;
 }User;
+//添加新用户
 void user_show(const User* user);
 User* User_add(const char* id, const char* name, const char* gender,
                const char* telephone, const char* password, const char* email, double balance) ;
-void modify_personalinfo(); //修改用户信息
+//修改用户信息
+void modify_personalinfo();
 
 
 

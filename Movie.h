@@ -9,9 +9,7 @@
 
 typedef struct {
     char* session_number;
-    char* movie_name;
-    char* affiliated_cinema; // 归属影院  
-    Theater* play_theater; // 在哪个影厅播放  
+    Theater* play_theater; //在哪个影厅播放
     char* start_time;
     char* end_time;
     int remaining_ticket;
