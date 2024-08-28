@@ -5,7 +5,7 @@
 #ifndef MOVIE_C_USER_H
 #define MOVIE_C_USER_H
 
-
+//用户结构体
 typedef struct {
     char* userID;
     char* user_name;
@@ -15,10 +15,12 @@ typedef struct {
     char* email;
     double user_balance;
 }User;
+//添加新用户
 void user_show(const User* user);
 User* User_add(const char* id, const char* name, const char* gender,
                const char* telephone, const char* password, const char* email, double balance) ;
-void modify_personalinfo(); //修改用户信息
+//修改用户信息
+void modify_personalinfo();
 
 
 
