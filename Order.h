@@ -8,7 +8,7 @@
 #include "Movie.h"
 #include "Cinema.h"
 
-typedef struct {
+typedef struct Order{
     int orderID;
     User* usr;
     Movie* movie;
@@ -17,7 +17,7 @@ typedef struct {
     int seats; //可以是二维数组？
     int status; //订单状态
     char time[30];
-    Order* next;
+    struct Order* next;
 }Order;
 Order* get_head();
 #endif //MOVIE_C_ORDER_H

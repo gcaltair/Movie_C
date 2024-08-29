@@ -5,9 +5,11 @@
 #include "User.h"
 #include "admin.h"
 #include "Cinema.h"
+#include"Movie.h"
 #include "Theater.h"
-
+#include "Order.h"
 int main(){
+
 
 //    Cinema* t = cinema_create("Cinema A", "Location A", 1);
 //    Cinema *cinema_list= cinema_create_list(t);
@@ -22,5 +24,6 @@ int main(){
     user_add_to_list(&head,temp);
     user_show_all(head);
     user_show(user_find_by_id(head,"114514"));
+
 
 }
