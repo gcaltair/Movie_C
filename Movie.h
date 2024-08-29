@@ -4,6 +4,7 @@
 #include "Theater.h"  
 
 typedef struct Movie {
+    char* movie_name;
     char* session_number;
     Theater* theater; // 指向在哪个影厅播放  
     char* start_time;

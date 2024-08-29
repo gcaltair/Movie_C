@@ -12,8 +12,7 @@ Order* get_tail(Order* head) {
 	return current;
 }
 //购票功能
-Order* add_order(User* usr, Movie* movie) {
-	Order* head = get_head();
+Order* add_order(User* usr, Movie* movie,Order* head) {
 	Order* tail = get_tail(head);
 	Order* temp = head;
 	//剩余座位数不足
@@ -137,8 +136,7 @@ Order* add_order(User* usr, Movie* movie) {
 	return head;
 }
 //查询用户历史订单
-void user_historyorder(User* usr) {
-	Order* head = get_head();
+void user_historyorder(User* usr,Order* head) {
 	Order* tail = get_tail(head);
 	Order* temp = head;
 	int count = 0;
