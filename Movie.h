@@ -56,7 +56,5 @@ int compare_by_remaining_ticket(const void* a, const void* b);
 // 根据余票数排序  
 void movie_sort_by_remaining_ticket(Movie** head);
 
-// 购票功能  
-void purchase_ticket(Movie* movie, int number_of_tickets);
 
 #endif // MOVIE_C_MOVIE_H
