@@ -39,9 +39,7 @@ void cinema_show_detail(const Cinema* cinema){
 }
 Cinema* cinema_create_list(Cinema* new_cinema)
 {
-    Cinema* head;
-    head=new_cinema;
-    return head;
+    return new_cinema;
 }
 void cinema_add_to_list(Cinema** head,Cinema* new_cinema) {
     if (*head == NULL) {

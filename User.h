@@ -17,16 +17,16 @@ typedef struct User {
     struct Order* order;
 } User;
 
-User* user_create_list(User* new_user); // åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
-void user_add_to_list(User** head, User* new_user); // æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+User* user_create_list(User* new_user); // ´´½¨Á´±íÍ·½Úµã
+void user_add_to_list(User** head, User* new_user); // Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
 void user_direct_add_to_list(User** head, const char* userID, const char* name, const char* gender,
                              const char* telephone, const char* password, const char* email, double balance);
-User* user_find_by_id(User* head, const char* userID); // é€šè¿‡ç”¨æˆ·IDæŸ¥æ‰¾ç”¨æˆ·
+User* user_find_by_id(User* head, const char* userID); // Í¨¹ıÓÃ»§ID²éÕÒÓÃ»§
 User* user_create(const char* userID, const char* name, const char* gender, const char* telephone,
-                  const char* password, const char* email, double balance); // åˆ›å»ºç”¨æˆ·
-void user_show(const User* user); // æ˜¾ç¤ºå•ä¸ªç”¨æˆ·ä¿¡æ¯
-void user_show_all(User* head); // æ˜¾ç¤ºæ‰€æœ‰ç”¨æˆ·ä¿¡æ¯
-//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
+                  const char* password, const char* email, double balance); // ´´½¨ÓÃ»§
+void user_show(const User* user); // ÏÔÊ¾µ¥¸öÓÃ»§ĞÅÏ¢
+void user_show_all(User* head); // ÏÔÊ¾ËùÓĞÓÃ»§ĞÅÏ¢
+//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
 void modify_personalinfo();
 
 

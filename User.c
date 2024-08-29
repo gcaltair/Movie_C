@@ -3,7 +3,7 @@
 #include <string.h>
 #include "user.h"
 
-// åˆ›å»ºç”¨æˆ·
+// ´´½¨ÓÃ»§
 User* user_create(const char* userID, const char* name, const char* gender, const char* telephone,
                   const char* password, const char* email, double balance) {
     User* new_user = (User*)malloc(sizeof(User));
@@ -23,13 +23,13 @@ User* user_create(const char* userID, const char* name, const char* gender, cons
 
     return new_user;
 }
-// åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
+// ´´½¨Á´±íÍ·½Úµã
 User* user_create_list(User* new_user) {
     new_user->next = NULL;
     return new_user;
 }
 
-// æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+// Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
 void user_add_to_list(User** head, User* new_user) {
     if (*head == NULL) {
         *head = new_user;
@@ -41,14 +41,14 @@ void user_add_to_list(User** head, User* new_user) {
     (*head)=temp;
 }
 
-// ç›´æ¥æ·»åŠ ä¸€ä¸ªç”¨æˆ·åˆ°é“¾è¡¨
+// Ö±½ÓÌí¼ÓÒ»¸öÓÃ»§µ½Á´±í
 void user_direct_add_to_list(User** head, const char* userID, const char* name, const char* gender,
                              const char* telephone, const char* password, const char* email, double balance) {
     User* new_user = user_create(userID, name, gender, telephone, password, email, balance);
     user_add_to_list(head, new_user);
 }
 
-// é€šè¿‡ç”¨æˆ·IDæŸ¥æ‰¾ç”¨æˆ·
+// Í¨¹ıÓÃ»§ID²éÕÒÓÃ»§
 User* user_find_by_id(User* head, const char* userID) {
     while (head != NULL) {
         if (strcmp(head->userID, userID) == 0) {
@@ -59,7 +59,7 @@ User* user_find_by_id(User* head, const char* userID) {
     return NULL;
 }
 
-// æ˜¾ç¤ºå•ä¸ªç”¨æˆ·ä¿¡æ¯
+// ÏÔÊ¾µ¥¸öÓÃ»§ĞÅÏ¢
 void user_show(const User* user) {
     if (user == NULL) {
         printf("User not found.\n");
@@ -73,7 +73,7 @@ void user_show(const User* user) {
     printf("Balance: %.2f\n", user->user_balance);
 }
 
-// æ˜¾ç¤ºæ‰€æœ‰ç”¨æˆ·ä¿¡æ¯
+// ÏÔÊ¾ËùÓĞÓÃ»§ĞÅÏ¢
 void user_show_all(User* head) {
     while (head != NULL) {
         user_show(head);
@@ -82,7 +82,7 @@ void user_show_all(User* head) {
     }
 }
 
-// é‡Šæ”¾ç”¨æˆ·é“¾è¡¨å ç”¨çš„å†…å­˜
+// ÊÍ·ÅÓÃ»§Á´±íÕ¼ÓÃµÄÄÚ´æ
 void user_free(User* head) {
     while (head != NULL) {
         User* temp = head;

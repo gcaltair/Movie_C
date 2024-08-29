@@ -4,59 +4,60 @@
 #include "Theater.h"  
 
 typedef struct Movie {
+    char* movie_name;
     char* session_number;
-    Theater* theater; // æŒ‡å‘åœ¨å“ªä¸ªå½±å…æ’­æ”¾  
+    Theater* theater; // Ö¸ÏòÔÚÄÄ¸öÓ°Ìü²¥·Å  
     char* start_time;
     char* end_time;
     int remaining_ticket;
     double price;
     double discount;
     char* theater_type;
-    struct Movie* next; // æŒ‡å‘ä¸‹ä¸€ä¸ªç”µå½±åœºæ¬¡ï¼ˆé“¾è¡¨ï¼‰  
+    struct Movie* next; // Ö¸ÏòÏÂÒ»¸öµçÓ°³¡´Î£¨Á´±í£©  
 } Movie;
 
-// åˆ›å»ºæ–°çš„ Movie èŠ‚ç‚¹  
+// ´´½¨ĞÂµÄ Movie ½Úµã  
 Movie* movie_create(const char* session_number, Theater* play_theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type);
 
-// æ·»åŠ  Movie åˆ°é“¾è¡¨
+// Ìí¼Ó Movie µ½Á´±í
 void movie_add_to_list(Movie** head, Movie* newMovie);
 
-// ä»ç”¨æˆ·è¾“å…¥ä¸­åˆ›å»º Movie å¹¶æ·»åŠ åˆ°é“¾è¡¨
-//gc:è¿™ä¸ªå‡½æ•°å…ˆåˆ«ä¿®äº†ï¼Œå°±æ”¾ç€åˆ«ç®¡ï¼Œä¿è¯ç¼–è¯‘èƒ½è¿‡å°±è¡Œ
-//æˆ–è€…ç›´æ¥æŠŠä»–æ³¨é‡Šæ‰
+// ´ÓÓÃ»§ÊäÈëÖĞ´´½¨ Movie ²¢Ìí¼Óµ½Á´±í
+//gc:Õâ¸öº¯ÊıÏÈ±ğĞŞÁË£¬¾Í·Å×Å±ğ¹Ü£¬±£Ö¤±àÒëÄÜ¹ı¾ÍĞĞ
+//»òÕßÖ±½Ó°ÑËû×¢ÊÍµô
 void add_movie_from_input(Movie** head);
 
-// æ˜¾ç¤ºå•ä¸ª Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾µ¥¸ö Movie µÄĞÅÏ¢  
 void movie_show(const Movie* movie);
 
-// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰ Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾Á´±íÖĞËùÓĞ Movie µÄĞÅÏ¢  
 void movie_show_all(Movie* head);
 
-// æ ¹æ®å½±ç‰‡åæŸ¥æ‰¾ Movie èŠ‚ç‚¹  
+// ¸ù¾İÓ°Æ¬Ãû²éÕÒ Movie ½Úµã  
 Movie* movie_find_by_name(Movie* head, const char* movie_name);
 
-// æ ¹æ®å½±ç‰‡åå’Œå½±é™¢åæŸ¥æ‰¾ Movie èŠ‚ç‚¹  
+// ¸ù¾İÓ°Æ¬ÃûºÍÓ°ÔºÃû²éÕÒ Movie ½Úµã  
 void movie_find_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name);
 
-// æ ¹æ®æ”¾æ˜ åœºæ¬¡ç±»å‹è¿‡æ»¤  
+// ¸ù¾İ·ÅÓ³³¡´ÎÀàĞÍ¹ıÂË  
 void movie_find_by_theater_type(Movie* head, const char* theater_type);
 
-// æ ¹æ®æ”¾æ˜ å¼€å§‹æ—¶é—´æ’åº  
+// ¸ù¾İ·ÅÓ³¿ªÊ¼Ê±¼äÅÅĞò  
 void movie_sort_by_start_time(Movie** head);
 
-// æ¯”è¾ƒå‡½æ•°ï¼Œç”¨äºæ ¹æ®ç¥¨ä»·æ’åº  
+// ±È½Ïº¯Êı£¬ÓÃÓÚ¸ù¾İÆ±¼ÛÅÅĞò  
 int compare_by_price(const void* a, const void* b);
-// æ ¹æ®ç¥¨ä»·æ’åº
+// ¸ù¾İÆ±¼ÛÅÅĞò
 void movie_sort_by_price(Movie** head);
 
 
-// æ¯”è¾ƒå‡½æ•°ï¼Œç”¨äºæ ¹æ®ä½™ç¥¨æ•°æ’åº  
+// ±È½Ïº¯Êı£¬ÓÃÓÚ¸ù¾İÓàÆ±ÊıÅÅĞò  
 int compare_by_remaining_ticket(const void* a, const void* b);
-// æ ¹æ®ä½™ç¥¨æ•°æ’åº  
+// ¸ù¾İÓàÆ±ÊıÅÅĞò  
 void movie_sort_by_remaining_ticket(Movie** head);
 
-// è´­ç¥¨åŠŸèƒ½  
+// ¹ºÆ±¹¦ÄÜ  
 void purchase_ticket(Movie* movie, int number_of_tickets);
 
 #endif // MOVIE_C_MOVIE_H

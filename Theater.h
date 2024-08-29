@@ -10,31 +10,31 @@ typedef struct Theater {
     char* theater_name;
     int theater_capacity;
     struct Cinema* cinema;
-    // ç¼ºå°‘åº§ä½å›¾å’Œåº§ä½å·çš„å®šä¹‰
+    // È±ÉÙ×ùÎ»Í¼ºÍ×ùÎ»ºÅµÄ¶¨Òå
     char* theater_type;
     struct Movie* movie;
     struct Theater* next;
 } Theater;
 
-// åˆ›å»ºå½±å…é“¾è¡¨å¤´èŠ‚ç‚¹
+// ´´½¨Ó°ÌüÁ´±íÍ·½Úµã
 Theater* theater_create_list(Theater* new_theater);
 
-// æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°å½±å…é“¾è¡¨ï¼ˆå¤´æ’æ³•ï¼‰
+// Ìí¼ÓÒ»¸öÔªËØµ½Ó°ÌüÁ´±í£¨Í·²å·¨£©
 void theater_add_to_list(Theater** head, Theater* new_theater);
 
-// ç›´æ¥æ·»åŠ å½±å…å…ƒç´ åˆ°é“¾è¡¨ä¸­
+// Ö±½ÓÌí¼ÓÓ°ÌüÔªËØµ½Á´±íÖĞ
 void theater_direct_add_to_list(Theater** head, const char* name, int capacity, Cinema* cinema, const char* type);
 
-// æ ¹æ®å½±å…åæŸ¥æ‰¾å½±å…
+// ¸ù¾İÓ°ÌüÃû²éÕÒÓ°Ìü
 Theater* theater_find_by_name(Theater* head, const char* name);
 
-// æ·»åŠ æ–°å½±å…
+// Ìí¼ÓĞÂÓ°Ìü
 Theater* theater_create(const char* name, int capacity, Cinema* cinema, const char* type);
 
-// æ˜¾ç¤ºå•ä¸ªå½±å…ä¿¡æ¯
+// ÏÔÊ¾µ¥¸öÓ°ÌüĞÅÏ¢
 void theater_show(const Theater* theater);
 
-// æ˜¾ç¤ºæ‰€æœ‰å½±å…ä¿¡æ¯
+// ÏÔÊ¾ËùÓĞÓ°ÌüĞÅÏ¢
 void theater_show_all(Theater* head);
 
 #endif //MOVIE_C_THEATER_H

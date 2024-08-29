@@ -22,7 +22,6 @@ add_executable(test1
         test.c
         User.c
         User.h
-        Order.c
         Theater.c
         Theater.h
         Cinema.c
