@@ -1,4 +1,3 @@
-//
 // Created by G on 2024/8/27.
 //
 
@@ -20,4 +19,5 @@ typedef struct {
     char time[30];
     Order* next;
 }Order;
+Order* get_head();
 #endif //MOVIE_C_ORDER_H

@@ -123,16 +123,17 @@ Order* add_order(User* usr, Movie* movie) {
 	}
 	//生成订单传出指针
 	srand(time(NULL));
-	tail->next->oderID = rand();
-	tail->next->usr = usr;
-	tail->next->movie = movie;
+	tail->next->orderID = rand();
+	tail->next->usr = NULL;
+	tail->next->movie = NULL;
 	tail->next->movie->remaining_ticket -= seat_number;
-	tail->next->theater = movie->play_theater;
+	tail->next->theater = NULL;
 	//int seats
 	tail->next->status = 1;
 	time_t current_time = time(NULL);
 	strcpy(tail->next->time, ctime(&current_time));
 	tail = tail->next;
+	tail->next->next = NULL;
 	return head;
 }
 //查询用户历史订单
