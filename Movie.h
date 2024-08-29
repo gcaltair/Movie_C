@@ -6,13 +6,16 @@
 typedef struct Movie {
     char* movie_name;
     char* session_number;
+
     Theater* theater; // 指向在哪个影厅播放  
+
     char* start_time;
     char* end_time;
     int remaining_ticket;
     double price;
     double discount;
     char* theater_type;
+
     struct Movie* next; // 指向下一个电影场次（链表）  
 } Movie;
 
@@ -28,5 +31,6 @@ void movie_show(const Movie* movie);
 
 // 显示链表中所有 Movie 的信息  
 void movie_show_all(Movie* head);
+
 
 #endif // MOVIE_C_MOVIE_H
