@@ -4,7 +4,8 @@
 
 #include "admin.h"
 #include "string.h"
-
+#include "Cinema.h"
+#include "stdio.h"
 Admin* Admin_add(const char* id, const char* name, const char* telephone,
                  const char* password, const char* email, Cinema * cinema_) {
     // 动态分配内存给Admin结构体
@@ -42,25 +43,25 @@ void admin_show(const Admin *admin) {
 void modify_personalinfo(); 
 //查询管理员信息
 Admin* find_admin(char* name) {
-    Admin* admin = (Admin*)malloc(sizeof(Admin));
+    Admin *admin = (Admin *) malloc(sizeof(Admin));
     if (admin == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
     }
     //return admin;
     //遍历id计算管理员个数
-        int count = 0;
-        int i = 0;
-        if (admin[i].admin_id) {
-            i++;
-            count++;
-        }
+    int count = 0;
+    int i = 0;
+    if (admin[i].admin_id) {
+        i++;
+        count++;
+    }
     //通过id查找管理员信息
     char search_adminid[50];
     int k = 0;
     printf("Enter admin id to update: ");
     scanf("%49s", search_adminid);
-    for (int j = 0 ; j < count; j++) {
+    for (int j = 0; j < count; j++) {
         if (strcmp(admin[j].admin_id, search_adminid) == 0) {
             //找到管理员,输出id，name等
             printf("%s %s", admin->admin_id, admin->admin_name);
@@ -70,6 +71,8 @@ Admin* find_admin(char* name) {
     if (k == 0) {
         printf("The admin is not existed!");
     }
-           
+
 //修改管理员信息
-    void modify_admin(Admin * admin);
+    void modify_admin(Admin *admin);
+
+}
