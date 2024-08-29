@@ -2,13 +2,13 @@
 // Created by G on 2024/8/27.
 //
 /*
-²âÊÔ´úÂë
+æµ‹è¯•ä»£ç 
 Cinema* t = cinema_add("Cinema A", "Location A", 1);
 Cinema *cinema_list= cinema_create_list(t);;
 cinema_direct_add_to_list(&cinema_list, "Cinema C", "Location C", 3);
 Theater *theater_temp= theater_add("theater1",20,cinema_list,"3D");
 Theater *theater_list=theater_create_list(theater_temp);
-theater_add_to_list(&theater_list,theater_temp); //Ö»ÓĞÊ¹ÓÃÕâ¸öº¯ÊıÌí¼Ó¶ÔÏóµ½Á´±í²Å»á¸üĞÂCinema->TheaterµÄÖ¸Õë
+theater_add_to_list(&theater_list,theater_temp); //åªæœ‰ä½¿ç”¨è¿™ä¸ªå‡½æ•°æ·»åŠ å¯¹è±¡åˆ°é“¾è¡¨æ‰ä¼šæ›´æ–°Cinema->Theaterçš„æŒ‡é’ˆ
 cinema_show(theater_temp->cinema);
 theater_show(cinema_list->theater);
 
@@ -18,50 +18,50 @@ theater_show(cinema_list->theater);
 #include <string.h>
 #include "Theater.h"
 #include "Cinema.h"
-// ´´½¨²¢³õÊ¼»¯Ò»¸öĞÂµÄ Theater ½á¹¹Ìå
-Theater* theater_create(const char* name, int capacity, Cinema* cinema_, const char* type) {
-    // ¶¯Ì¬·ÖÅäÄÚ´æ¸ø Theater ½á¹¹Ìå
+#include "hash.txt"
+// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ªæ–°çš„ Theater ç»“æ„ä½“
+Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
+    // åŠ¨æ€åˆ†é…å†…å­˜ç»™ Theater ç»“æ„ä½“
     Theater* theater = (Theater*)malloc(sizeof(Theater));
     if (theater == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
     }
 
-    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊıÄÚÈİµ½½á¹¹Ìå×Ö¶Î
+    // åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶å‚æ•°å†…å®¹åˆ°ç»“æ„ä½“å­—æ®µ
+    theater->theater_id= strdup(theater_id_);
     theater->theater_name = strdup(name);
     theater->theater_capacity = capacity;
     theater->cinema = cinema_;
+    theater->cinema_id= strdup(cinema_id_);
     theater->theater_type = strdup(type);
-    theater->movie = NULL;  // ĞèÒªÁíÍâ¸³Öµ
+    theater->movie = NULL;  // éœ€è¦å¦å¤–èµ‹å€¼
     theater->next = NULL;
+    theater->hash_next=NULL;
     theater->cinema=cinema_;
+    insert_theater_to_hash_table(hashTable,theater);
     return theater;
 }
 
-// ÏÔÊ¾µ¥¸ö¾çÔºĞÅÏ¢
+// æ˜¾ç¤ºå•ä¸ªå‰§é™¢ä¿¡æ¯
 void theater_show(const Theater* theater) {
     if (theater == NULL) {
         printf("Theater data is NULL.\n");
         return;
     }
 
+    printf("Theater ID: %s\n",theater->theater_id);
     printf("Theater Name: %s\n", theater->theater_name);
     printf("Capacity: %d\n", theater->theater_capacity);
-    if (theater->cinema != NULL) {
-        printf("Cinema Name: %s\n", theater->cinema->cinema_name);
-    }
+    printf("Cinema ID: %s\n",theater->cinema_id);
     printf("Theater Type: %s\n", theater->theater_type);
 }
 
-// ´´½¨¾çÔºÁ´±íÍ·½Úµã
-Theater* theater_create_list(Theater* new_theater) {
-    return new_theater;
-}
-
-// Ìí¼ÓÒ»¸öÔªËØµ½¾çÔºÁ´±í£¨Í·²å·¨£©
+// æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°å‰§é™¢é“¾è¡¨ï¼ˆå¤´æ’æ³•ï¼‰
 void theater_add_to_list(Theater** head, Theater* new_theater) {
     if (*head == NULL) {
         *head = new_theater;
+        (*head)->cinema->theater=(*head);
         return;
     }
 
@@ -70,19 +70,7 @@ void theater_add_to_list(Theater** head, Theater* new_theater) {
     (*head)->cinema->theater=(*head);
 }
 
-// Ö±½ÓÌí¼Ó¾çÔºÔªËØµ½Á´±íÖĞ
-void theater_direct_add_to_list(Theater** head, const char* name, int capacity, Cinema* cinema, const char* type) {
-    Theater* new_theater = theater_create(name, capacity, cinema, type);
-    if (new_theater == NULL) {
-        return;
-    }
-
-    new_theater->next = *head;
-    *head = new_theater;
-    (*head)->cinema->theater=(*head);
-}
-
-// ¸ù¾İ¾çÔºÃû²éÕÒ¾çÔº
+// æ ¹æ®å‰§é™¢åæŸ¥æ‰¾å‰§é™¢
 Theater* theater_find_by_name(Theater* head, const char* name) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -91,10 +79,10 @@ Theater* theater_find_by_name(Theater* head, const char* name) {
         }
         temp = temp->next;
     }
-    return NULL; // Èç¹ûÃ»ÓĞÕÒµ½Æ¥ÅäµÄÃû×Ö£¬·µ»ØNULL
+    return NULL; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°åŒ¹é…çš„åå­—ï¼Œè¿”å›NULL
 }
 
-// ÏÔÊ¾ËùÓĞ¾çÔºĞÅÏ¢
+// æ˜¾ç¤ºæ‰€æœ‰å‰§é™¢ä¿¡æ¯
 void theater_show_all(Theater* head) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -103,3 +91,39 @@ void theater_show_all(Theater* head) {
     }
 }
 
+// åˆå§‹åŒ–å“ˆå¸Œè¡¨ï¼Œå°†æ‰€æœ‰çš„æŒ‡é’ˆè®¾ç½®ä¸º NULL
+void init_theater_hash_table(Theater_hash_table* ht) {
+    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+        ht->table[i] = NULL;
+    }
+}
+
+// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ª Theater_hash_table
+Theater_hash_table* theater_hash_table_create() {
+    Theater_hash_table* ht = (Theater_hash_table*)malloc(sizeof(Theater_hash_table));
+    if (!ht) {
+        return NULL;
+    }
+    init_theater_hash_table(ht);
+    return ht;
+}
+
+// ä½¿ç”¨å“ˆå¸Œè¡¨å°†å‰§é™¢æ’å…¥è¡¨ä¸­
+void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater) {
+    uint32_t index = hash(theater->theater_id, strlen(theater->theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
+    theater->hash_next = ht->table[index];  // å¤„ç†å“ˆå¸Œå†²çªï¼Œå°†æ–°å‰§é™¢æ’å…¥å“ˆå¸Œé“¾è¡¨å¤´éƒ¨
+    ht->table[index] = theater;
+}
+
+// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾å‰§é™¢ï¼Œé€šè¿‡ theater_id æŸ¥æ‰¾
+Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_id) {
+    uint32_t index = hash(theater_id, strlen(theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
+    Theater* theater = ht->table[index];
+    while (theater) {
+        if (strcmp(theater->theater_id, theater_id) == 0) {
+            return theater;  // æ‰¾åˆ°åŒ¹é…çš„å‰§é™¢ï¼Œè¿”å›æŒ‡é’ˆ
+        }
+        theater = theater->hash_next;  // ä½¿ç”¨hash_nextæŒ‡é’ˆç»§ç»­æŸ¥æ‰¾å“ˆå¸Œé“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªå‰§é™¢
+    }
+    return NULL;  // å¦‚æœæœªæ‰¾åˆ°ï¼Œè¿”å›NULL
+}

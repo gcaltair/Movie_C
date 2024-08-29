@@ -3,7 +3,7 @@
 #include <string.h>
 #include "Movie.h"
 #include "Cinema.h"
-// ´´½¨ĞÂµÄ Movie ½Úµã  
+// åˆ›å»ºæ–°çš„ Movie èŠ‚ç‚¹  
 Movie* movie_create(const char* session_number, Theater* theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
@@ -12,7 +12,7 @@ Movie* movie_create(const char* session_number, Theater* theater, const char* st
         return NULL;
     }
 
-    newMovie->session_number = strdup(session_number); // Ê¹ÓÃ strdup ¼ò»¯ÄÚ´æ·ÖÅäºÍ¸´ÖÆ  
+    newMovie->session_number = strdup(session_number); // ä½¿ç”¨ strdup ç®€åŒ–å†…å­˜åˆ†é…å’Œå¤åˆ¶  
     newMovie->theater = theater;
     newMovie->start_time = strdup(start_time);
     newMovie->end_time = strdup(end_time);
@@ -25,7 +25,7 @@ Movie* movie_create(const char* session_number, Theater* theater, const char* st
     return newMovie;
 }
 
-// Ìí¼Ó Movie µ½Á´±í  
+// æ·»åŠ  Movie åˆ°é“¾è¡¨  
 void movie_add_to_list(Movie** head, Movie* newMovie) {
     if (*head == NULL) {
         *head = newMovie;
@@ -39,7 +39,7 @@ void movie_add_to_list(Movie** head, Movie* newMovie) {
     }
 }
 
-// ÏÔÊ¾µ¥¸ö Movie µÄĞÅÏ¢  
+// æ˜¾ç¤ºå•ä¸ª Movie çš„ä¿¡æ¯  
 void movie_show(const Movie* movie) {
     if (movie == NULL) return;
     printf("Session Number: %s\n", movie->session_number);
@@ -53,7 +53,7 @@ void movie_show(const Movie* movie) {
     printf("----------\n");
 }
 
-// ÏÔÊ¾Á´±íÖĞËùÓĞ Movie µÄĞÅÏ¢  
+// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰ Movie çš„ä¿¡æ¯  
 void movie_show_all(Movie* head) {
     Movie* current = head;
     while (current != NULL) {

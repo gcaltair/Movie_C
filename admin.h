@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 typedef struct Cinema Cinema;
-//¹ÜÀíÔ±½á¹¹Ìå
+//ç®¡ç†å‘˜ç»“æ„ä½“
 typedef struct Admin{
     char* admin_id;
     char* admin_name;
@@ -18,11 +18,11 @@ typedef struct Admin{
 Admin* Admin_add(const char* id, const char* name, const char* telephone,
                  const char* password, const char* email, Cinema* cinema);
 void admin_show(const Admin* admin);
-//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
+//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
 void modify_personalinfo(); 
-//²éÑ¯¹ÜÀíÔ±ĞÅÏ¢
+//æŸ¥è¯¢ç®¡ç†å‘˜ä¿¡æ¯
 Admin* find_admin(char* name);
-//ĞŞ¸Ä¹ÜÀíÔ±ĞÅÏ¢
+//ä¿®æ”¹ç®¡ç†å‘˜ä¿¡æ¯
 void modify_admin(Admin* admin);
 
 #endif //MOVIE_C_ADMIN_H

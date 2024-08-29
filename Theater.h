@@ -4,37 +4,37 @@
 #ifndef MOVIE_C_THEATER_H
 #define MOVIE_C_THEATER_H
 
+#define HASH_TABLE_SIZE 100
 typedef struct Cinema Cinema;
+typedef struct Theater_hash_table Theater_hash_table;
 
 typedef struct Theater {
+    char* theater_id;
     char* theater_name;
     int theater_capacity;
     struct Cinema* cinema;
-    // È±ÉÙ×ùÎ»Í¼ºÍ×ùÎ»ºÅµÄ¶¨Òå
+    char* cinema_id;
+    // ç¼ºå°‘åº§ä½å›¾å’Œåº§ä½å·çš„å®šä¹‰
     char* theater_type;
     struct Movie* movie;
     struct Theater* next;
-} Theater;
+    struct Theater* hash_next;
+}Theater;
 
-// ´´½¨Ó°ÌüÁ´±íÍ·½Úµã
-Theater* theater_create_list(Theater* new_theater);
+// æ·»åŠ æ–°å½±å…
+Theater* theater_create(Theater_hash_table *hashTable, const char* id,
+                        const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type);
 
-// Ìí¼ÓÒ»¸öÔªËØµ½Ó°ÌüÁ´±í£¨Í·²å·¨£©
 void theater_add_to_list(Theater** head, Theater* new_theater);
-
-// Ö±½ÓÌí¼ÓÓ°ÌüÔªËØµ½Á´±íÖĞ
-void theater_direct_add_to_list(Theater** head, const char* name, int capacity, Cinema* cinema, const char* type);
-
-// ¸ù¾İÓ°ÌüÃû²éÕÒÓ°Ìü
 Theater* theater_find_by_name(Theater* head, const char* name);
-
-// Ìí¼ÓĞÂÓ°Ìü
-Theater* theater_create(const char* name, int capacity, Cinema* cinema, const char* type);
-
-// ÏÔÊ¾µ¥¸öÓ°ÌüĞÅÏ¢
 void theater_show(const Theater* theater);
-
-// ÏÔÊ¾ËùÓĞÓ°ÌüĞÅÏ¢
 void theater_show_all(Theater* head);
 
+typedef struct Theater_hash_table {
+    Theater* table[HASH_TABLE_SIZE];
+} Theater_hash_table;
+Theater_hash_table* theater_hash_table_create();
+void init_theater_hash_table(Theater_hash_table* ht);
+void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater);
+Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_id);
 #endif //MOVIE_C_THEATER_H

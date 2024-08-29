@@ -8,14 +8,14 @@
 #include "stdio.h"
 Admin* Admin_add(const char* id, const char* name, const char* telephone,
                  const char* password, const char* email, Cinema * cinema_) {
-    // ¶¯Ì¬·ÖÅäÄÚ´æ¸øAdmin½á¹¹Ìå
+    // åŠ¨æ€åˆ†é…å†…å­˜ç»™Adminç»“æ„ä½“
     Admin* admin = (Admin*)malloc(sizeof(Admin));
     if (admin == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
     }
 
-    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊıÄÚÈİµ½½á¹¹Ìå×Ö¶Î
+    // åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶å‚æ•°å†…å®¹åˆ°ç»“æ„ä½“å­—æ®µ
     admin->admin_id = strdup(id);
     admin->admin_name = strdup(name);
     admin->admin_telephone = strdup(telephone);
@@ -34,14 +34,14 @@ void admin_show(const Admin *admin) {
     printf("Admin ID: %s\n", admin->admin_id);
     printf("Name: %s\n", admin->admin_name);
     printf("Telephone: %s\n", admin->admin_telephone);
-    printf("Password: %s\n", admin->admin_password);  // ×¢Òâ£ºÊµ¼ÊÏµÍ³ÖĞÍ¨³£²»»á´òÓ¡ÃÜÂë
+    printf("Password: %s\n", admin->admin_password);  // æ³¨æ„ï¼šå®é™…ç³»ç»Ÿä¸­é€šå¸¸ä¸ä¼šæ‰“å°å¯†ç 
     printf("Email: %s\n", admin->admin_email);
     cinema_show(admin->cinema);
 
 }
-//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
+//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
 void modify_personalinfo(); 
-//²éÑ¯¹ÜÀíÔ±ĞÅÏ¢
+//æŸ¥è¯¢ç®¡ç†å‘˜ä¿¡æ¯
 Admin* find_admin(char* name) {
     Admin *admin = (Admin *) malloc(sizeof(Admin));
     if (admin == NULL) {
@@ -49,21 +49,21 @@ Admin* find_admin(char* name) {
         return NULL;
     }
     //return admin;
-    //±éÀúid¼ÆËã¹ÜÀíÔ±¸öÊı
+    //éå†idè®¡ç®—ç®¡ç†å‘˜ä¸ªæ•°
     int count = 0;
     int i = 0;
     if (admin[i].admin_id) {
         i++;
         count++;
     }
-    //Í¨¹ıid²éÕÒ¹ÜÀíÔ±ĞÅÏ¢
+    //é€šè¿‡idæŸ¥æ‰¾ç®¡ç†å‘˜ä¿¡æ¯
     char search_adminid[50];
     int k = 0;
     printf("Enter admin id to update: ");
     scanf("%49s", search_adminid);
     for (int j = 0; j < count; j++) {
         if (strcmp(admin[j].admin_id, search_adminid) == 0) {
-            //ÕÒµ½¹ÜÀíÔ±,Êä³öid£¬nameµÈ
+            //æ‰¾åˆ°ç®¡ç†å‘˜,è¾“å‡ºidï¼Œnameç­‰
             printf("%s %s", admin->admin_id, admin->admin_name);
             k++;
         }
@@ -72,7 +72,7 @@ Admin* find_admin(char* name) {
         printf("The admin is not existed!");
     }
 
-//ĞŞ¸Ä¹ÜÀíÔ±ĞÅÏ¢
+//ä¿®æ”¹ç®¡ç†å‘˜ä¿¡æ¯
     void modify_admin(Admin *admin);
 
 }

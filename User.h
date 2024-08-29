@@ -4,6 +4,8 @@
 #ifndef MOVIE_C_USER_H
 #define MOVIE_C_USER_H
 
+#define HASH_TABLE_SIZE 100
+typedef struct User_hash_table User_hash_table;
 typedef struct Order Order;
 typedef struct User {
     char* userID;
@@ -14,22 +16,31 @@ typedef struct User {
     char* email;
     double user_balance;
     struct User* next;
-    struct Order* order;
+    struct User* hash_next;
+    Order* order;
 } User;
 
-User* user_create_list(User* new_user); // ´´½¨Á´±íÍ·½Úµã
-void user_add_to_list(User** head, User* new_user); // Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
-void user_direct_add_to_list(User** head, const char* userID, const char* name, const char* gender,
+User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,
+                  const char* password, const char* email, double balance); // åˆ›å»ºç”¨æˆ·
+
+User* user_create_list(User* new_user); // åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
+void user_add_to_list(User** head, User* new_user); // æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+void user_direct_add_to_list(User_hash_table *hashTable,User** head, const char* userID, const char* name, const char* gender,
                              const char* telephone, const char* password, const char* email, double balance);
-User* user_find_by_id(User* head, const char* userID); // Í¨¹ıÓÃ»§ID²éÕÒÓÃ»§
-User* user_create(const char* userID, const char* name, const char* gender, const char* telephone,
-                  const char* password, const char* email, double balance); // ´´½¨ÓÃ»§
-void user_show(const User* user); // ÏÔÊ¾µ¥¸öÓÃ»§ĞÅÏ¢
-void user_show_all(User* head); // ÏÔÊ¾ËùÓĞÓÃ»§ĞÅÏ¢
-//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
+User* user_find_by_id(User* head, const char* userID); // é€šè¿‡ç”¨æˆ·IDæŸ¥æ‰¾ç”¨æˆ·
+
+void user_show(const User* user); // æ˜¾ç¤ºå•ä¸ªç”¨æˆ·ä¿¡æ¯
+void user_show_all(User* head); // æ˜¾ç¤ºæ‰€æœ‰ç”¨æˆ·ä¿¡æ¯
+//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
 void modify_personalinfo();
 
 
-
-
+//å“ˆå¸Œè¡¨ç›¸å…³
+typedef struct User_hash_table{
+    User* table[HASH_TABLE_SIZE];
+}User_hash_table;
+User_hash_table* user_hash_table_create();
+void user_hash_table_init(User_hash_table * ht);
+void insert_user_to_hash_table(User_hash_table * ht, User* user);
+User* find_user_in_hash_table(User_hash_table * ht, const char* userID);
 #endif //MOVIE_C_USER_H

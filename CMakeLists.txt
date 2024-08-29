@@ -17,6 +17,7 @@ add_executable(Movie_C main.c
         Cinema.h
         admin.h
         admin.c
+        hash.txt
 )
 add_executable(test1
         test.c

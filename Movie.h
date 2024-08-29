@@ -6,27 +6,27 @@
 typedef struct Movie {
     char* movie_name;
     char* session_number;
-    Theater* theater; // Ö¸ÏòÔÚÄÄ¸öÓ°Ìü²¥·Å  
+    Theater* theater; // æŒ‡å‘åœ¨å“ªä¸ªå½±å…æ’­æ”¾  
     char* start_time;
     char* end_time;
     int remaining_ticket;
     double price;
     double discount;
     char* theater_type;
-    struct Movie* next; // Ö¸ÏòÏÂÒ»¸öµçÓ°³¡´Î£¨Á´±í£©  
+    struct Movie* next; // æŒ‡å‘ä¸‹ä¸€ä¸ªç”µå½±åœºæ¬¡ï¼ˆé“¾è¡¨ï¼‰  
 } Movie;
 
-// ´´½¨ĞÂµÄ Movie ½Úµã  
+// åˆ›å»ºæ–°çš„ Movie èŠ‚ç‚¹  
 Movie* movie_create(const char* session_number, Theater* play_theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type);
 
-// Ìí¼Ó Movie µ½Á´±í
+// æ·»åŠ  Movie åˆ°é“¾è¡¨
 void movie_add_to_list(Movie** head, Movie* newMovie);
 
-// ÏÔÊ¾µ¥¸ö Movie µÄĞÅÏ¢  
+// æ˜¾ç¤ºå•ä¸ª Movie çš„ä¿¡æ¯  
 void movie_show(const Movie* movie);
 
-// ÏÔÊ¾Á´±íÖĞËùÓĞ Movie µÄĞÅÏ¢  
+// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰ Movie çš„ä¿¡æ¯  
 void movie_show_all(Movie* head);
 
 #endif // MOVIE_C_MOVIE_H
