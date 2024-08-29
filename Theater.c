@@ -1,11 +1,14 @@
+//
+// Created by G on 2024/8/27.
+//
 /*
-å¨´å¬­ç˜¯æµ ï½‡çˆœ
+²âÊÔ´úÂë
 Cinema* t = cinema_add("Cinema A", "Location A", 1);
 Cinema *cinema_list= cinema_create_list(t);;
 cinema_direct_add_to_list(&cinema_list, "Cinema C", "Location C", 3);
 Theater *theater_temp= theater_add("theater1",20,cinema_list,"3D");
 Theater *theater_list=theater_create_list(theater_temp);
-theater_add_to_list(&theater_list,theater_temp); //é™î…æ¹æµ£è·¨æ•¤æ©æ¬Žé‡œé‘èŠ¥æšŸå¨£è¯²å§žç€µç¡…è–„é’ä¼´æ‘¼ç›ã„¦å¢ æµ¼æ°­æ´¿é‚ç™ˆinema->Theateré¨å‹¬å¯šé–½ï¿½
+theater_add_to_list(&theater_list,theater_temp); //Ö»ÓÐÊ¹ÓÃÕâ¸öº¯ÊýÌí¼Ó¶ÔÏóµ½Á´±í²Å»á¸üÐÂCinema->TheaterµÄÖ¸Õë
 cinema_show(theater_temp->cinema);
 theater_show(cinema_list->theater);
 
@@ -15,27 +18,27 @@ theater_show(cinema_list->theater);
 #include <string.h>
 #include "Theater.h"
 #include "Cinema.h"
-// é’æ¶˜ç¼“éªžè·ºåžµæ¿®å¬ªå¯²æ¶“ï¿½æ¶“î…æŸŠé¨ï¿½ Theater ç¼æ’´ç€¯æµ£ï¿½
-Theater* theater_create(const char* name, int capacity, Cinema* cinema_, const char* type) {
-    // é”ã„¦ï¿½ä½¸åžŽé–°å¶…å”´ç€›æ¨¼ç²° Theater ç¼æ’´ç€¯æµ£ï¿½
+// ´´½¨²¢³õÊ¼»¯Ò»¸öÐÂµÄ Theater ½á¹¹Ìå
+Theater* theater_add(const char* name, int capacity, Cinema* cinema_, const char* type) {
+    // ¶¯Ì¬·ÖÅäÄÚ´æ¸ø Theater ½á¹¹Ìå
     Theater* theater = (Theater*)malloc(sizeof(Theater));
     if (theater == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
     }
 
-    // é”ã„¦ï¿½ä½¸åžŽé–°å¶…å”´ç€›æ¨ºè‹Ÿæ¾¶å¶…åŸ—é™å‚›æšŸéå‘­î†é’æ‰®ç²¨é‹å‹ªç¶‹ç€›æ¥î†Œ
+    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊýÄÚÈÝµ½½á¹¹Ìå×Ö¶Î
     theater->theater_name = strdup(name);
     theater->theater_capacity = capacity;
     theater->cinema = cinema_;
     theater->theater_type = strdup(type);
-    theater->movie = NULL;  // é—‡ï¿½ç‘•ä½¸å½Ÿæ¾¶æ ¬ç¥´éŠï¿½
+    theater->movie = NULL;  // ÐèÒªÁíÍâ¸³Öµ
     theater->next = NULL;
     theater->cinema=cinema_;
     return theater;
 }
 
-// é„å‰§ãšé—æ›šé‡œé“Ñ‡æ«Œæ·‡â„ƒä¼…
+// ÏÔÊ¾µ¥¸ö¾çÔºÐÅÏ¢
 void theater_show(const Theater* theater) {
     if (theater == NULL) {
         printf("Theater data is NULL.\n");
@@ -50,12 +53,12 @@ void theater_show(const Theater* theater) {
     printf("Theater Type: %s\n", theater->theater_type);
 }
 
-// é’æ¶˜ç¼“é“Ñ‡æ«Œé–¾æã€ƒæ¾¶ç£‹å¦­éï¿½
+// ´´½¨¾çÔºÁ´±íÍ·½Úµã
 Theater* theater_create_list(Theater* new_theater) {
     return new_theater;
 }
 
-// å¨£è¯²å§žæ¶“ï¿½æ¶“î„åŽ“ç»±çŠ²åŸŒé“Ñ‡æ«Œé–¾æã€ƒé”›å ã”éŽ»æŽ“ç¡¶é”›ï¿½
+// Ìí¼ÓÒ»¸öÔªËØµ½¾çÔºÁ´±í£¨Í·²å·¨£©
 void theater_add_to_list(Theater** head, Theater* new_theater) {
     if (*head == NULL) {
         *head = new_theater;
@@ -67,9 +70,9 @@ void theater_add_to_list(Theater** head, Theater* new_theater) {
     (*head)->cinema->theater=(*head);
 }
 
-// é©å­˜å¸´å¨£è¯²å§žé“Ñ‡æ«Œéå†ªç¤Œé’ä¼´æ‘¼ç›ã„¤è…‘
+// Ö±½ÓÌí¼Ó¾çÔºÔªËØµ½Á´±íÖÐ
 void theater_direct_add_to_list(Theater** head, const char* name, int capacity, Cinema* cinema, const char* type) {
-    Theater* new_theater = theater_create(name, capacity, cinema, type);
+    Theater* new_theater = theater_add(name, capacity, cinema, type);
     if (new_theater == NULL) {
         return;
     }
@@ -79,7 +82,7 @@ void theater_direct_add_to_list(Theater** head, const char* name, int capacity, 
     (*head)->cinema->theater=(*head);
 }
 
-// éè§„åµé“Ñ‡æ«Œéšå¶†ç…¡éŽµæƒ§å¢½é—„ï¿½
+// ¸ù¾Ý¾çÔºÃû²éÕÒ¾çÔº
 Theater* theater_find_by_name(Theater* head, const char* name) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -88,10 +91,10 @@ Theater* theater_find_by_name(Theater* head, const char* name) {
         }
         temp = temp->next;
     }
-    return NULL; // æ¿¡å‚›ç‰å¨Œâ„ƒæ¹éŽµæƒ§åŸŒé–å½’åŽ¤é¨å‹«æ‚•ç€›æ¥‹ç´æ©æ–¿æ´–NULL
+    return NULL; // Èç¹ûÃ»ÓÐÕÒµ½Æ¥ÅäµÄÃû×Ö£¬·µ»ØNULL
 }
 
-// é„å‰§ãšéŽµï¿½éˆå¤Šå¢½é—„î­ä¿ŠéŽ­ï¿½
+// ÏÔÊ¾ËùÓÐ¾çÔºÐÅÏ¢
 void theater_show_all(Theater* head) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -99,3 +102,4 @@ void theater_show_all(Theater* head) {
         temp = temp->next;
     }
 }
+
