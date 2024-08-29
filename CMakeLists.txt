@@ -29,4 +29,8 @@ add_executable(test1
         Cinema.h
         admin.h
         admin.c
+        Order.c
+        Order.h
+        Movie.c
+        Movie.h
 )

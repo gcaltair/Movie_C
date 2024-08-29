@@ -3,12 +3,13 @@
 
 #ifndef MOVIE_C_ORDER_H
 #define MOVIE_C_ORDER_H
+#define HASH_TABLE_SIZE 100
 typedef struct User User;
 typedef struct Movie Movie;
 typedef struct Theater Theater;
 typedef struct Cinema Cinema;
 typedef struct Order{
-    int orderID;
+    char* orderID;
     User* usr;
     char* user_id;
     Movie* movie;
@@ -19,23 +20,33 @@ typedef struct Order{
     int status; //订单状态
     char* time;
     struct Order* next;
+    struct Order* hash_next;
 }Order;
-Order* order_create(int orderID, User* usr, const char* user_id, Movie* movie, int movie_id,
+typedef struct Order_hash_table Order_hash_table;
+
+Order* order_create(Order_hash_table* hashTable, char* orderID, User* usr, const char* user_id, Movie* movie, int movie_id,
                     Theater* theater, Cinema* cinema, int seats, int status, const char* time);
-// 将一个订单添加到链表中
 void order_add_to_list(Order** head, Order* new_order);
 
-// 直接添加一个订单到链表
-void order_direct_add_to_list(Order** head, int orderID, User* usr, const char* user_id, Movie* movie,
-                              int movie_id, Theater* theater, Cinema* cinema, int seats, int status, const char* time);
+Order* order_find_by_id(Order* head, char* orderID);
 
-// 通过订单ID查找订单
-Order* order_find_by_id(Order* head, int orderID);
-
-// 显示单个订单信息
 void order_show(const Order* order);
 
-// 显示所有订单信息
 void order_show_all(Order* head);
 
+typedef struct Order_hash_table {
+    Order* table[HASH_TABLE_SIZE];
+} Order_hash_table;
+
+// 创建并初始化一个 Order_hash_table
+Order_hash_table* order_hash_table_create();
+
+// 初始化哈希表，将所有的指针设置为 NULL
+void init_order_hash_table(Order_hash_table* ht);
+
+// 使用哈希表将订单插入表中
+void insert_order_to_hash_table(Order_hash_table* ht, Order* order);
+
+// 在哈希表中查找订单，通过 orderID 查找
+Order* find_order_in_hash_table(Order_hash_table* ht, char* orderID);
 #endif //MOVIE_C_ORDER_H
