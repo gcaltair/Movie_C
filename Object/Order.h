@@ -13,10 +13,11 @@ typedef struct Order{
     User* usr;
     char* user_id;
     Movie* movie;
-    int movie_id;
+    char* movie_id;
     Theater* theater;
-    Cinema* cinema; //指向头节点
-    int seats; //可以是二维数组？
+    Cinema* cinema;
+    char* seats; //可以是二维数组？
+    int seat_number;
     int status; //订单状态
     char* time;
     struct Order* next;
@@ -24,8 +25,8 @@ typedef struct Order{
 }Order;
 typedef struct Order_hash_table Order_hash_table;
 
-Order* order_create(Order_hash_table* hashTable, char* orderID, User* usr, const char* user_id, Movie* movie, int movie_id,
-                    Theater* theater, Cinema* cinema, int seats, int status, const char* time);
+Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
+                    Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time);
 void order_add_to_list(Order** head, Order* new_order);
 
 Order* order_find_by_id(Order* head, char* orderID);

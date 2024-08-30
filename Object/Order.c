@@ -9,8 +9,8 @@
 #include <stdint.h>
 #include "../hash.txt"
 
-Order* order_create(Order_hash_table *hashTable,char* orderID, User* usr, const char* user_id, Movie* movie, int movie_id,
-                    Theater* theater, Cinema* cinema, int seats, int status, const char* time) {
+Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
+                    Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time) {
     Order* new_order = (Order*)malloc(sizeof(Order));
     if (new_order == NULL) {
         printf("Memory allocation failed.\n");
@@ -21,10 +21,11 @@ Order* order_create(Order_hash_table *hashTable,char* orderID, User* usr, const 
     new_order->usr = usr;
     new_order->user_id = strdup(user_id);
     new_order->movie = movie;
-    new_order->movie_id = movie_id;
+    new_order->movie_id = strdup(movie_id);
     new_order->theater = theater;
     new_order->cinema = cinema;
-    new_order->seats = seats;
+    new_order->seats = strdup(seats);
+    new_order->seat_number=seat_number;
     new_order->status = status;
     new_order->time = strdup(time);
     new_order->next = NULL;

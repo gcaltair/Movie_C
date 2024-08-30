@@ -10,7 +10,7 @@
 #include "Object/admin.h"
 #include "Object/Cinema.h"
 #include "Object/Movie.h"
-
+#include "Object/Order.h"
 #define MAX_LINE_LENGTH 1024
 
 void load_data_from_csv(const char* filename, DataHandler handler, void* context) {
@@ -145,4 +145,32 @@ void handle_theater_data(char** fields, void* context) {
         Theater* new_theater = theater_create(hashtable, theater_id, name, capacity, cinema, cinema_id, type);
         theater_add_to_list(theater_list, new_theater);
     }
+}
+void handle_order_data(char** fields, void* context) {
+    if (fields[0] && fields[1] && fields[2] && fields[3] && fields[4] && fields[5] && fields[6]) {
+        const char* orderID = fields[0];
+        const char* user_id = fields[1];
+        const char* movie_id = fields[2];
+        const char* seats = fields[3];
+        int seat_number = atoi(fields[4]);
+        int status = atoi(fields[5]);
+        const char* time = fields[6];
+
+        // 从上下文中提取哈希表和链表
+        Order_hash_table* order_hash_table = ((Order_hash_table**)context)[0];
+        User_hash_table* user_hash_table = ((User_hash_table**)context)[1];
+        Movie_hash_table* movie_hash_table = ((Movie_hash_table**)context)[2];
+        Order** order_list = ((Order***)context)[3]; // 假设上下文中包含订单链表
+        // 查找相关的 User、Movie、Theater 和 Cinema
+        User* user = find_user_in_hash_table(user_hash_table, user_id);
+        Movie* movie = find_movie_in_hash_table(movie_hash_table, movie_id);
+        Theater* theater = movie->theater;
+        Cinema* cinema = theater->cinema;
+
+
+        Order* new_order = order_create(order_hash_table, orderID,
+                                        user, user_id, movie, movie_id, theater, cinema, seats, seat_number, status, time);
+        order_add_to_list(order_list, new_order);
+
+        }
 }
