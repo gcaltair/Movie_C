@@ -6,8 +6,8 @@
 #include "string.h"
 #include "Cinema.h"
 #include "stdio.h"
-Admin* Admin_add(const char* id, const char* name, const char* telephone,
-                 const char* password, const char* email, Cinema * cinema_) {
+Admin* Admin_create(const char* id, const char* name, const char* telephone,
+                 const char* password, const char* email, Cinema *cinema_,char* cinema_id) {
     // 动态分配内存给Admin结构体
     Admin* admin = (Admin*)malloc(sizeof(Admin));
     if (admin == NULL) {
@@ -21,13 +21,23 @@ Admin* Admin_add(const char* id, const char* name, const char* telephone,
     admin->admin_telephone = strdup(telephone);
     admin->admin_password = strdup(password);
     admin->admin_email = strdup(email);
+    admin->cinema_id=cinema_id;
     admin->cinema=cinema_;
-
+    admin->next=NULL;
     return admin;
+}
+void admin_add_to_list(Admin** head, Admin* new_admin) {
+    if (*head == NULL) {
+        *head = new_admin;
+        return;
+    }
+    Admin* temp = new_admin;
+    temp->next = *head;
+    *head = temp;
 }
 void admin_show(const Admin *admin) {
     if (admin == NULL) {
-        printf("Admin data is NULL.\n");
+        printf("Admin Data is NULL.\n");
         return;
     }
 

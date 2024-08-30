@@ -7,7 +7,8 @@
 #include "Theater.h"
 #include <stdio.h>
 #include <stdint.h>
-#include "hash.txt"
+#include "../hash.txt"
+
 Order* order_create(Order_hash_table *hashTable,char* orderID, User* usr, const char* user_id, Movie* movie, int movie_id,
                     Theater* theater, Cinema* cinema, int seats, int status, const char* time) {
     Order* new_order = (Order*)malloc(sizeof(Order));

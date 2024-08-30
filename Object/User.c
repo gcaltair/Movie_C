@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "User.h"
-#include "hash.txt"
+#include "../hash.txt"
+
 // 创建用户
 User* user_create(User_hash_table * hashTable,const char* userID, const char* name, const char* gender, const char* telephone,
                   const char* password, const char* email, double balance) {

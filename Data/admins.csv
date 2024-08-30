@@ -1,0 +1,6 @@
+admin_id,admin_name,admin_telephone,admin_password,admin_email,cinema_id
+A001,John Doe,1234567890,password123,john.doe@example.com,C001
+A002,Jane Smith,0987654321,password456,jane.smith@example.com,C002
+A003,Bob Johnson,1112223333,password789,bob.johnson@example.com,C003
+A004,Alice Brown,4445556666,password101,alice.brown@example.com,C001
+A005,Michael Davis,7778889999,password202,michael.davis@example.com,C004

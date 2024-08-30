@@ -5,32 +5,36 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(Movie_C main.c
         test.c
-        User.c
-        User.h
-        Order.c
-        Order.h
-        Movie.c
-        Movie.h
-        Theater.c
-        Theater.h
-        Cinema.c
-        Cinema.h
-        admin.h
-        admin.c
+        Object/User.c
+        Object/User.h
+        Object/Order.c
+        Object/Order.h
+        Object/Movie.c
+        Object/Movie.h
+        Object/Theater.c
+        Object/Theater.h
+        Object/Cinema.c
+        Object/Cinema.h
+        Object/admin.h
+        Object/admin.c
         hash.txt
+        data_process.c
+        data_process.h
 )
 add_executable(test1
         test.c
-        User.c
-        User.h
-        Theater.c
-        Theater.h
-        Cinema.c
-        Cinema.h
-        admin.h
-        admin.c
-        Order.c
-        Order.h
-        Movie.c
-        Movie.h
+        Object/User.c
+        Object/User.h
+        Object/Theater.c
+        Object/Theater.h
+        Object/Cinema.c
+        Object/Cinema.h
+        Object/admin.h
+        Object/admin.c
+        Object/Order.c
+        Object/Order.h
+        Object/Movie.c
+        Object/Movie.h
+        data_process.c
+        data_process.h
 )

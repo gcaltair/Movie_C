@@ -25,7 +25,7 @@ Cinema *cinema_create(const char *name, const char *location, char* id) {
 }
 void cinema_show(const Cinema* cinema) {
     if (cinema == NULL) {
-        printf("Cinema data is NULL.\n");
+        printf("Cinema Data is NULL.\n");
         return;
     }
 
@@ -52,7 +52,7 @@ void cinema_add_to_list(Cinema** head,Cinema* new_cinema) {
     *head=temp;
 
 }
-Cinema* cinema_find_by_id(Cinema* head, char* id) {
+Cinema* cinema_find_by_id(Cinema* head, const char* id) {
     Cinema* temp = head;
     while (temp != NULL) {
         if (strcmp(temp->cinema_id,id)== 0) {

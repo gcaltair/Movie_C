@@ -1,0 +1,10 @@
+//
+// Created by G on 2024/8/30.
+//
+
+#ifndef MOVIE_C_DATA_PROCESS_H
+#define MOVIE_C_DATA_PROCESS_H
+typedef void (*DataHandler)(char** fields,void *context);
+void handle_user_data(char** fields,void* context);
+void load_data_from_csv(const char* filename, DataHandler handler,void* context);
+#endif //MOVIE_C_DATA_PROCESS_H

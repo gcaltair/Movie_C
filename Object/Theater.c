@@ -18,7 +18,8 @@ theater_show(cinema_list->theater);
 #include <string.h>
 #include "Theater.h"
 #include "Cinema.h"
-#include "hash.txt"
+#include "../hash.txt"
+
 // 创建并初始化一个新的 Theater 结构体
 Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
     // 动态分配内存给 Theater 结构体
@@ -46,7 +47,7 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
 // 显示单个剧院信息
 void theater_show(const Theater* theater) {
     if (theater == NULL) {
-        printf("Theater data is NULL.\n");
+        printf("Theater Data is NULL.\n");
         return;
     }
 

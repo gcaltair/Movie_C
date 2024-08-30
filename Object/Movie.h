@@ -1,7 +1,7 @@
 #ifndef MOVIE_C_MOVIE_H  
 #define MOVIE_C_MOVIE_H  
 
-#include "Theater.h"  
+#include "Theater.h"
 
 typedef struct Movie {
     char* movie_name;

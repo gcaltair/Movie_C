@@ -14,9 +14,12 @@ typedef struct Admin{
     char* admin_password;
     char* admin_email;
     struct Cinema* cinema;
+    char *cinema_id;
+    struct Admin* next;
 }Admin;
-Admin* Admin_add(const char* id, const char* name, const char* telephone,
-                 const char* password, const char* email, Cinema* cinema);
+Admin* Admin_create(const char* id, const char* name, const char* telephone,
+                 const char* password, const char* email,Cinema *cinema_,const char* cinema_id);
+void admin_add_to_list(Admin** head, Admin* new_admin);
 void admin_show(const Admin* admin);
 //修改用户信息
 void modify_personalinfo(); 

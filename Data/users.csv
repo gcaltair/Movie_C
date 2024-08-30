@@ -1,0 +1,6 @@
+userID,user_name,gender,telephone,password,email,user_balance
+U001,John Doe,Male,123-456-7890,password123,john@example.com,100.50
+U002,Jane Smith,Female,234-567-8901,pass456,jane@example.com,250.75
+U003,Bob Johnson,Male,345-678-9012,bob789,bob@example.com,175.00
+U004,Alice Brown,Female,456-789-0123,alicepass,alice@example.com,300.20
+U005,Charlie Davis,Male,567-890-1234,charliepass,charlie@example.com,50.00
