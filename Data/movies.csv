@@ -1,0 +1,6 @@
+movie_id,movie_name,theater_id,start_time,end_time,remaining_ticket,price,discount,theater_type
+M001,Inception,T001,2024-09-01 14:00,2024-09-01 16:30,50,12.00,0.90,IMAX
+M002,Interstellar,T002,2024-09-01 18:00,2024-09-01 21:00,30,10.00,0.85,Standard
+M003,The Dark Knight,T001,2024-09-02 20:00,2024-09-02 22:45,40,11.50,0.80,IMAX
+M004,Dunkirk,T003,2024-09-03 15:00,2024-09-03 17:00,20,8.00,0.95,4D
+M005,Tenet,T004,2024-09-03 19:00,2024-09-03 21:30,25,13.00,0.70,Standard

@@ -22,7 +22,6 @@ Admin* Admin_create(const char* id, const char* name, const char* telephone,
     admin->admin_password = strdup(password);
     admin->admin_email = strdup(email);
     admin->cinema_id=strdup(cinema_id);
-    admin->cinema=cinema_;
     admin->next=NULL;
     return admin;
 }
@@ -53,44 +52,20 @@ void admin_show(const Admin *admin) {
     printf("Telephone: %s\n", admin->admin_telephone);
     printf("Password: %s\n", admin->admin_password);  // 注意：实际系统中通常不会打印密码
     printf("Email: %s\n", admin->admin_email);
-    cinema_show(admin->cinema);
     printf("\n");
 
 }
 //修改用户信息
 void modify_personalinfo(); 
 //查询管理员信息
-Admin* find_admin(char* name) {
-    Admin *admin = (Admin *) malloc(sizeof(Admin));
-    if (admin == NULL) {
-        printf("Memory allocation failed.\n");
-        return NULL;
-    }
-    //return admin;
-    //遍历id计算管理员个数
-    int count = 0;
-    int i = 0;
-    if (admin[i].admin_id) {
-        i++;
-        count++;
-    }
-    //通过id查找管理员信息
-    char search_adminid[50];
-    int k = 0;
-    printf("Enter admin id to update: ");
-    scanf("%49s", search_adminid);
-    for (int j = 0; j < count; j++) {
-        if (strcmp(admin[j].admin_id, search_adminid) == 0) {
-            //找到管理员,输出id，name等
-            printf("%s %s", admin->admin_id, admin->admin_name);
-            k++;
+Admin* admin_find_by_id(Admin* head, char* id) {
+    Admin* temp = head;
+    while (temp != NULL) {
+        if (strcmp(temp->admin_id, id) == 0 ) {
+            return temp;
         }
+        temp = temp->next;
     }
-    if (k == 0) {
-        printf("The admin is not existed!");
-    }
-
-//修改管理员信息
-    void modify_admin(Admin *admin);
-
+    printf("Not found Admin ID %s\n", id);
+    return NULL; // 如果没有找到匹配的ID，返回NULL
 }

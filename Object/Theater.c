@@ -39,7 +39,6 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     theater->movie = NULL;  // 需要另外赋值
     theater->next = NULL;
     theater->hash_next=NULL;
-    theater->cinema=cinema_;
     insert_theater_to_hash_table(hashTable,theater);
     return theater;
 }
@@ -56,6 +55,7 @@ void theater_show(const Theater* theater) {
     printf("Capacity: %d\n", theater->theater_capacity);
     printf("Cinema ID: %s\n",theater->cinema_id);
     printf("Theater Type: %s\n", theater->theater_type);
+    printf("\n");
 }
 
 // 添加一个元素到剧院链表（头插法）

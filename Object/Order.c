@@ -36,14 +36,12 @@ Order* order_create(Order_hash_table *hashTable,char* orderID, User* usr, const 
 void order_add_to_list(Order** head, Order* new_order) {
     if (*head == NULL) {
         *head = new_order;
-        (*head)->usr->order=(*head);
         return;
     }
 
     Order* temp = new_order;
     temp->next = (*head);
     (*head) = temp;
-    (*head)->usr->order=(*head);
 }
 
 // 直接添加一个订单到链表
@@ -120,3 +118,4 @@ Order* find_order_in_hash_table(Order_hash_table* ht, char* orderID) {
     }
     return NULL;  // 如果未找到，返回 NULL
 }
+

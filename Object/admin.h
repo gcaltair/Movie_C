@@ -13,7 +13,6 @@ typedef struct Admin{
     char* admin_telephone;
     char* admin_password;
     char* admin_email;
-    struct Cinema* cinema;
     char *cinema_id;
     struct Admin* next;
 }Admin;
@@ -25,7 +24,7 @@ void admin_show(const Admin* admin);
 void admin_show_all(Admin* head);
 void modify_personalinfo();
 //查询管理员信息
-Admin* find_admin(char* name);
+Admin* admin_find_by_id(Admin* head, char* id);
 //修改管理员信息
 void modify_admin(Admin* admin);
 

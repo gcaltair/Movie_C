@@ -17,7 +17,7 @@ typedef struct User {
     double user_balance;
     struct User* next;
     struct User* hash_next;
-    Order* order;
+    char* my_order_head;
 } User;
 
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,

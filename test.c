@@ -12,23 +12,38 @@
 #include "data_process.h"
 
 
-
+Order* order_list=NULL;
 User* user_list=NULL;
 Admin *admin_list=NULL;
 Cinema *cinema_list=NULL;
+Movie* movie_list=NULL;
+Theater* theater_list=NULL;
+
 User_hash_table *userHashTable=NULL;
 Theater_hash_table* theaterHashTable=NULL;
 Order_hash_table *orderHashTable=NULL;
+Movie_hash_table *movieHashTable=NULL;
 static void hash_ini();
 int main(){
     hash_ini();
-    void* context[]={userHashTable,&user_list};
-    load_data_from_csv("D:\\Movie_C\\Data\\users.csv",handle_user_data,context);
-    context[0]=&cinema_list;
-    load_data_from_csv("D:\\Movie_C\\Data\\cinemas.csv",handle_cinema_data,context);
-    context[0]=cinema_list;context[1]=&admin_list;
-    load_data_from_csv("D:\\Movie_C\\Data\\admins.csv",handle_admin_data,context);
-    admin_show_all(admin_list);
+    void* context1[]={userHashTable,&user_list};
+    load_data_from_csv("D:\\Movie_C\\Data\\users.csv",handle_user_data,context1);
+    void* context2[]= {&cinema_list};
+    load_data_from_csv("D:\\Movie_C\\Data\\cinemas.csv",handle_cinema_data,context2);
+    void *context3[]={cinema_list,&admin_list};
+    load_data_from_csv("D:\\Movie_C\\Data\\admins.csv",handle_admin_data,context3);
+    void *context4[]={&movie_list,movieHashTable,theaterHashTable};
+    load_data_from_csv("D:\\Movie_C\\Data\\movies.csv",handle_movie_data,context4);
+    void* context5[]={&theater_list,theaterHashTable,&cinema_list};
+    load_data_from_csv("D:\\Movie_C\\Data\\theaters.csv",handle_theater_data,context5);
+    // theater_show_all(theater_list);
+    //movie_show_all(movie_list);
+    //    Theater* theater= theater_create(theaterHashTable,"1234","123",20, cinema_find_by_id(cinema_list,"C001"),"C001","3D");
+//    movie_add_to_list(&movie_list,movie_create(movieHashTable,"1234","天气之子", theater,"12:10","13:10",20,20,1,"3D"));
+//    movie_add_to_list(&movie_list, movie_create(movieHashTable,"2222","你的名字",theater,"13:10","13:40",50,10,1,"4D"));
+//    movie_show_all(movie_list);
+//    movie_show(find_movie_in_hash_table(movieHashTable,"2222"));
+//    order_add_to_list(&order_list, order_create(orderHashTable,"2", find_user_in_hash_table(userHashTable,"114514"),"114514",movie_list,1,find_theater_in_hash_table(theaterHashTable,"1"),find_theater_in_hash_table(theaterHashTable,"1")->cinema,2,0,"12:10"));
 
 }
 
@@ -37,6 +52,7 @@ static void hash_ini()
     userHashTable=user_hash_table_create();
     theaterHashTable=theater_hash_table_create();
     orderHashTable=order_hash_table_create();
+    movieHashTable=movie_hash_table_create();
 }
 
 
