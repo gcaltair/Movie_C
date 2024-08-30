@@ -14,17 +14,30 @@
 
 
 User* user_list=NULL;
+Admin *admin_list=NULL;
+Cinema *cinema_list=NULL;
+User_hash_table *userHashTable=NULL;
+Theater_hash_table* theaterHashTable=NULL;
+Order_hash_table *orderHashTable=NULL;
+static void hash_ini();
 int main(){
-    User_hash_table *userHashTable=user_hash_table_create();
-    Theater_hash_table* theaterHashTable=theater_hash_table_create();
-    Order_hash_table *orderHashTable=order_hash_table_create();
+    hash_ini();
     void* context[]={userHashTable,&user_list};
     load_data_from_csv("D:\\Movie_C\\Data\\users.csv",handle_user_data,context);
-    user_show(find_user_in_hash_table(userHashTable,"U005"));
-    user_show_all(user_list);
+    context[0]=&cinema_list;
+    load_data_from_csv("D:\\Movie_C\\Data\\cinemas.csv",handle_cinema_data,context);
+    context[0]=cinema_list;context[1]=&admin_list;
+    load_data_from_csv("D:\\Movie_C\\Data\\admins.csv",handle_admin_data,context);
+    admin_show_all(admin_list);
+
 }
 
-
+static void hash_ini()
+{
+    userHashTable=user_hash_table_create();
+    theaterHashTable=theater_hash_table_create();
+    orderHashTable=order_hash_table_create();
+}
 
 
 

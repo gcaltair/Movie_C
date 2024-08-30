@@ -7,4 +7,6 @@
 typedef void (*DataHandler)(char** fields,void *context);
 void handle_user_data(char** fields,void* context);
 void load_data_from_csv(const char* filename, DataHandler handler,void* context);
+void handle_admin_data(char** fields, void* context);
+void handle_cinema_data(char** fields, void* context);
 #endif //MOVIE_C_DATA_PROCESS_H

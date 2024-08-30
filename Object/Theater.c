@@ -128,3 +128,4 @@ Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_
     }
     return NULL;  // 如果未找到，返回NULL
 }
+

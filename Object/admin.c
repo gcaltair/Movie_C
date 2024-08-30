@@ -7,7 +7,7 @@
 #include "Cinema.h"
 #include "stdio.h"
 Admin* Admin_create(const char* id, const char* name, const char* telephone,
-                 const char* password, const char* email, Cinema *cinema_,char* cinema_id) {
+                 const char* password, const char* email, Cinema *cinema_,const char* cinema_id) {
     // 动态分配内存给Admin结构体
     Admin* admin = (Admin*)malloc(sizeof(Admin));
     if (admin == NULL) {
@@ -21,7 +21,7 @@ Admin* Admin_create(const char* id, const char* name, const char* telephone,
     admin->admin_telephone = strdup(telephone);
     admin->admin_password = strdup(password);
     admin->admin_email = strdup(email);
-    admin->cinema_id=cinema_id;
+    admin->cinema_id=strdup(cinema_id);
     admin->cinema=cinema_;
     admin->next=NULL;
     return admin;
@@ -35,6 +35,13 @@ void admin_add_to_list(Admin** head, Admin* new_admin) {
     temp->next = *head;
     *head = temp;
 }
+void admin_show_all(Admin* head) {
+    Admin* temp = head;
+    while (temp != NULL) {
+        admin_show(temp);
+        temp = temp->next;
+    }
+}
 void admin_show(const Admin *admin) {
     if (admin == NULL) {
         printf("Admin Data is NULL.\n");
@@ -47,6 +54,7 @@ void admin_show(const Admin *admin) {
     printf("Password: %s\n", admin->admin_password);  // 注意：实际系统中通常不会打印密码
     printf("Email: %s\n", admin->admin_email);
     cinema_show(admin->cinema);
+    printf("\n");
 
 }
 //修改用户信息

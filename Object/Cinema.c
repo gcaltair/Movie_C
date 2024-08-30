@@ -31,7 +31,7 @@ void cinema_show(const Cinema* cinema) {
 
     printf("Cinema Name: %s\n", cinema->cinema_name);
     printf("Location: %s\n", cinema->location);
-    printf("Cinema ID: %d\n", cinema->cinema_id);
+    printf("Cinema ID: %s\n", cinema->cinema_id);
 }
 void cinema_show_detail(const Cinema* cinema){
     cinema_show(cinema);

@@ -22,7 +22,8 @@ Admin* Admin_create(const char* id, const char* name, const char* telephone,
 void admin_add_to_list(Admin** head, Admin* new_admin);
 void admin_show(const Admin* admin);
 //修改用户信息
-void modify_personalinfo(); 
+void admin_show_all(Admin* head);
+void modify_personalinfo();
 //查询管理员信息
 Admin* find_admin(char* name);
 //修改管理员信息
