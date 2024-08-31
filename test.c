@@ -11,11 +11,11 @@ int main(){
     do {
         mode =login();
     } while (!mode);
-    if(mode==2)
+    if(mode==admin_mode)
     {
         printf("\nWelcome admin");
     }
-    else
+    else if(mode==user_mode)
     {
         printf("\nWelcome user");
     }
