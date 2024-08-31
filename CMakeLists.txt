@@ -21,6 +21,9 @@ add_executable(Movie_C main.c
         data_process.h
         "Structure File/linked_list.c"
         "Structure File/linked_list.h"
+        user_system.c
+        user_system.h
+        test.h
 )
 add_executable(test1
         test.c
@@ -40,4 +43,7 @@ add_executable(test1
         data_process.h
         "Structure File/linked_list.c"
         "Structure File/linked_list.h"
+        user_system.c
+        user_system.h
+        test.h
 )

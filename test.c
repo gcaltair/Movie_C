@@ -1,40 +1,45 @@
 //
 // Created by G on 2024/8/27.
 //
-#include<stdio.h>
-#include <string.h>
-#include <conio.h>
-#include <zconf.h>
-#include "Object/User.h"
-#include "Object/admin.h"
-#include "Object/Cinema.h"
-#include "Object/Theater.h"
-#include "Object/Movie.h"
-#include "Object/Order.h"
-#include "data_process.h"
-#include "Structure File/linked_list.h"
+#include <synchapi.h>
+#include "test.h"
 
-Order* order_list=NULL;
-User* user_list=NULL;
-Admin *admin_list=NULL;
-Cinema *cinema_list=NULL;
-Movie* movie_list=NULL;
-Theater* theater_list=NULL;
-
-User_hash_table *userHashTable=NULL;
-Theater_hash_table* theaterHashTable=NULL;
-Order_hash_table *orderHashTable=NULL;
-Movie_hash_table *movieHashTable=NULL;
-static void hash_ini();
-static void load_file();
-static int login();
-void getPassword(char *password, int maxLen);
 int main(){
+    int mode;
     hash_ini();
     load_file();
-    login();
+    do {
+        mode =login();
+    } while (!mode);
+    if(mode==2)
+    {
+        printf("\nWelcome admin");
+    }
+    else
+    {
+        printf("\nWelcome user");
+    }
+    sleep(100);
 }
-
+static int login()
+{
+    char password[20];char id[20];bool key=0;
+    do {
+        printf("Enter your ID:");
+        scanf("%s",id);
+        user_now= find_user_in_hash_table(userHashTable,id);
+        admin_now= admin_find_by_id(admin_list,id);//注意考虑重名问题
+        if((!user_now)&&(!admin_now)) {
+            printf("ID don't found\n");
+            Sleep(500);
+            system("cls");
+        }
+    } while ((!user_now)&&(!admin_now));
+    if(admin_password_check(admin_now,admin_list)) return 2;
+    if(user_password_check(user_now,userHashTable)) return 1;
+    system("cls");
+    return 0;
+}
 static void hash_ini()
 {
     userHashTable=user_hash_table_create();
@@ -61,58 +66,6 @@ static void load_file()
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-    load_data_from_csv("D:\\Movie_C\\Data\\order.csv",handle_order_data,context6);
+    load_data_from_csv("order.csv",handle_order_data,context6);
 
-}
-static int login()
-{
-    int count=0;
-    char password[20];char user_id[20];User *usr;bool key=0;
-    do {
-        printf("Enter your username:");
-        scanf("%s",user_id);
-        usr= find_user_in_hash_table(userHashTable,user_id);
-        if(!usr) printf("Username don't found\n");
-    } while (!usr);
-    do {
-        if(count>=5)
-        {
-            for (int i = 0; i < 60; ++i) {
-                system("cls");
-                printf("Your need to wait %d seconds(total 60)",i);
-                sleep(1);
-            }
-            count-=3;
-            break;
-        }
-        printf("Enter your password:");
-        getPassword(password, 20);
-        key=strcmp(usr->password,password);
-        if(key) { printf("\nPassword wrong!\n"); count++;
-            sleep(1);system("cls");
-            printf("Enter your username:%s\n",usr->userID);}
-    } while (key);
-    printf("Welcome");
-    return 1;
-
-
-}
-void getPassword(char *password, int maxLen) {
-    int i = 0;
-    char ch;
-    while (i < maxLen - 1) {
-        ch = _getch(); // 读取一个字符但不显示
-        if (ch == '\r') { // 检测到回车符（Enter键）
-            break;
-        } else if (ch == '\b') { // 处理退格键
-            if (i > 0) {
-                i--;
-                printf("\b \b"); // 删除一个字符
-            }
-        } else {
-            password[i++] = ch;
-            printf("*"); // 显示星号
-        }
-    }
-    password[i] = '\0'; // 字符串末尾添加终止符
 }
