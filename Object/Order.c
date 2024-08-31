@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "../hash.txt"
-
 Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
                     Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time) {
     Order* new_order = (Order*)malloc(sizeof(Order));
@@ -28,8 +27,10 @@ Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, 
     new_order->seat_number=seat_number;
     new_order->status = status;
     new_order->time = strdup(time);
+    vector_push_back((new_order->usr->my_order),new_order->orderID);
     new_order->next = NULL;
     new_order->hash_next=NULL;
+
     insert_order_to_hash_table(hashTable,new_order);
     return new_order;
 }

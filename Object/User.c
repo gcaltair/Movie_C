@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "User.h"
+#include "../Structure File/Vector.h"
 #include "../hash.txt"
 
 // 创建用户
@@ -23,6 +24,7 @@ User* user_create(User_hash_table * hashTable,const char* userID, const char* na
     new_user->hash_next=NULL;
 //id确定后插入
     insert_user_to_hash_table(hashTable,new_user);
+    new_user->my_order=vector_create();
     return new_user;
 }
 // 创建链表头节点

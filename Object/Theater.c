@@ -116,7 +116,7 @@ void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater) {
 
 // 在哈希表中查找剧院，通过 theater_id 查找
 Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_id) {
-    if (!ht) { printf("theater hash table is null"); return; }
+    if (!ht) { printf("theater hash table is null"); return NULL; }
     uint32_t index = hash(theater_id, strlen(theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
     Theater* theater = ht->table[index];
     while (theater) {

@@ -28,8 +28,9 @@ static void load_file();
 int main(){
     hash_ini();
     load_file();
-    movie_sort_by_purchased_ticket(&movie_list);
-    user_show_all(user_list);
+
+    Vector *v=vector_create();
+    printf("%s",find_order_in_hash_table(orderHashTable,find_user_in_hash_table(userHashTable,"U003")->my_order->data[1])->movie->start_time);
 
 }
 
