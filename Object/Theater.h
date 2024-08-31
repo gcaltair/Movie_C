@@ -7,7 +7,7 @@
 #define HASH_TABLE_SIZE 100
 typedef struct Cinema Cinema;
 typedef struct Theater_hash_table Theater_hash_table;
-
+typedef struct Linked_string_list Linked_string_list;
 typedef struct Theater {
     char* theater_id;
     char* theater_name;
@@ -19,6 +19,7 @@ typedef struct Theater {
     struct Movie* movie;
     struct Theater* next;
     struct Theater* hash_next;
+    Linked_string_list * my_movie;
 }Theater;
 
 // 添加新影厅

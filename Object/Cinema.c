@@ -20,6 +20,7 @@ Cinema *cinema_create(const char *name, const char *location, char* id) {
     cinema->location = strdup(location);
     cinema->cinema_id = strdup(id);
     cinema->next=NULL;
+    cinema->my_theater=NULL;
     return cinema;
 }
 void cinema_show(const Cinema* cinema) {

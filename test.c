@@ -29,6 +29,7 @@ int main(){
     hash_ini();
     load_file();
     string_node_show_all(find_user_in_hash_table(userHashTable,"U001")->my_order);
+    string_node_show_all(find_theater_in_hash_table(theaterHashTable,"T001")->my_movie);
 }
 
 static void hash_ini()

@@ -31,7 +31,7 @@ Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, 
     new_order->next = NULL;
     new_order->hash_next=NULL;
 
-    string_direct_add_to_list(&(new_order->usr->my_order),orderID);
+    string_direct_add_to_list(&(new_order->usr->my_order),new_order->orderID);
 
     insert_order_to_hash_table(hashTable,new_order);
     return new_order;

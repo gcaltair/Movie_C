@@ -4,11 +4,13 @@
 
 #ifndef MOVIE_C_CINEMA_H
 #define MOVIE_C_CINEMA_H
+typedef struct Linked_string_list Linked_string_list;
 typedef struct Cinema{
     char* cinema_name;
     char* location;
     char* cinema_id;
     struct Cinema *next;
+    Linked_string_list* my_theater;
 }Cinema;
 Cinema* cinema_create(const char* name, const char* location, char* id);
 Cinema* cinema_create_list(Cinema* new_cinema); //创建链表头节点

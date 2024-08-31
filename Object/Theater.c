@@ -19,7 +19,7 @@ theater_show(cinema_list->theater);
 #include "Theater.h"
 #include "Cinema.h"
 #include "../hash.txt"
-
+#include "../Structure File/linked_list.h"
 // 创建并初始化一个新的 Theater 结构体
 Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
     // 动态分配内存给 Theater 结构体
@@ -39,7 +39,10 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     theater->movie = NULL;  // 需要另外赋值
     theater->next = NULL;
     theater->hash_next=NULL;
+    theater->my_movie=NULL;
     insert_theater_to_hash_table(hashTable,theater);
+
+    string_direct_add_to_list(&(theater->cinema->my_theater),theater->theater_id);
     return theater;
 }
 

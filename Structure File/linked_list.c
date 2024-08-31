@@ -24,7 +24,6 @@ Linked_string_list* create_node(const char* id)
     }
     new_node->id = strdup(id); // 复制字符串
     new_node->next = NULL;
-
     return new_node;
 }
 // 向链表中添加节点

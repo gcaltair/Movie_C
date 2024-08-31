@@ -17,7 +17,6 @@ add_executable(Movie_C main.c
         Object/Cinema.h
         Object/admin.h
         Object/admin.c
-        hash.txt
         data_process.c
         data_process.h
         "Structure File/linked_list.c"

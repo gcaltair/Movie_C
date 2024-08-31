@@ -5,6 +5,7 @@
 #include "Movie.h"
 #include "Cinema.h"
 #include "../hash.txt"
+#include "../Structure File/linked_list.h"
 // 创建新的 Movie 节点  
 Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const char *movie_name,Theater* theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount, const char* theater_type) {
@@ -26,6 +27,9 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const
     newMovie->theater_type = strdup(theater_type);
     newMovie->next = NULL;
     insert_movie_to_hash_table(movieHashTable,newMovie);
+
+    string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+
     return newMovie;
 }
 
