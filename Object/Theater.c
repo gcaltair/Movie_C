@@ -62,13 +62,11 @@ void theater_show(const Theater* theater) {
 void theater_add_to_list(Theater** head, Theater* new_theater) {
     if (*head == NULL) {
         *head = new_theater;
-        (*head)->cinema->theater=(*head);
         return;
     }
 
     new_theater->next = *head;
     *head = new_theater;
-    (*head)->cinema->theater=(*head);
 }
 
 // 根据剧院名查找剧院
@@ -118,6 +116,7 @@ void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater) {
 
 // 在哈希表中查找剧院，通过 theater_id 查找
 Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_id) {
+    if (!ht) { printf("theater hash table is null"); return; }
     uint32_t index = hash(theater_id, strlen(theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
     Theater* theater = ht->table[index];
     while (theater) {
@@ -126,6 +125,7 @@ Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_
         }
         theater = theater->hash_next;  // 使用hash_next指针继续查找哈希链表中的下一个剧院
     }
+    printf("%s haven't find\n", theater_id);
     return NULL;  // 如果未找到，返回NULL
 }
 

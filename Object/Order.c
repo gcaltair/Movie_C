@@ -45,8 +45,6 @@ void order_add_to_list(Order** head, Order* new_order) {
     (*head) = temp;
 }
 
-// 直接添加一个订单到链表
-
 // 通过订单ID查找订单
 Order* order_find_by_id(Order* head, char* orderID) {
     while (head != NULL) {
@@ -66,10 +64,12 @@ void order_show(const Order* order) {
     }
     printf("OrderID: %s\n", order->orderID);
     printf("UserID: %s\n", order->user_id);
-    printf("Movie ID: %d\n", order->movie_id);
-    printf("Seats: %d\n", order->seats);
+    printf("Movie ID: %s\n", order->movie_id);
+    printf("Seats: %s\n", order->seats);
+    printf("Seat number: %d\n", order->seat_number);
     printf("Status: %d\n", order->status);
     printf("Time: %s\n", order->time);
+    movie_show(order->movie);
     // 可以根据需要显示更多的订单信息
 }
 

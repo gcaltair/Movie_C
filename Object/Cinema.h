@@ -9,7 +9,6 @@ typedef struct Cinema{
     char* location;
     char* cinema_id;
     struct Cinema *next;
-    struct Theater* theater;
 }Cinema;
 Cinema* cinema_create(const char* name, const char* location, char* id);
 Cinema* cinema_create_list(Cinema* new_cinema); //创建链表头节点

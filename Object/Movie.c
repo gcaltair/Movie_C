@@ -12,10 +12,11 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const
         printf("Memory allocation failed!\n");
         return NULL;
     }
-
+    if (!theater) { printf("Movie %s's Theater is null\n",movie_id); newMovie->theater = NULL;}
+    else newMovie->theater = theater;
     newMovie->movie_id= strdup(movie_id); // 使用 strdup 简化内存分配和复制
     newMovie->movie_name= strdup(movie_name);
-    newMovie->theater = theater;
+    
     newMovie->start_time = strdup(start_time);
     newMovie->end_time = strdup(end_time);
     newMovie->remaining_ticket = remaining_ticket;

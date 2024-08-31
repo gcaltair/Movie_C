@@ -28,7 +28,8 @@ static void load_file();
 int main(){
     hash_ini();
     load_file();
-
+    theater_show(find_theater_in_hash_table(theaterHashTable,"T005"));
+    order_show_all(order_list);
 }
 
 static void hash_ini()
@@ -46,10 +47,11 @@ static void load_file()
     load_data_from_csv("D:\\Movie_C\\Data\\cinemas.csv",handle_cinema_data,context2);
     void *context3[]={cinema_list,&admin_list};
     load_data_from_csv("D:\\Movie_C\\Data\\admins.csv",handle_admin_data,context3);
-    void *context4[]={&movie_list,movieHashTable,theaterHashTable};
-    load_data_from_csv("D:\\Movie_C\\Data\\movies.csv",handle_movie_data,context4);
-    void* context5[]={&theater_list,theaterHashTable,&cinema_list};
-    load_data_from_csv("D:\\Movie_C\\Data\\theaters.csv",handle_theater_data,context5);
+    void* context4[] = { &theater_list,&cinema_list,theaterHashTable };
+    load_data_from_csv("D:\\Movie_C\\Data\\theaters.csv", handle_theater_data, context4);
+    void *context5[]={&movie_list,movieHashTable,theaterHashTable};
+    load_data_from_csv("D:\\Movie_C\\Data\\movies.csv",handle_movie_data,context5);
+    
     void* context6[] = {
             orderHashTable,   // 订单哈希表
             userHashTable,    // 用户哈希表
@@ -57,4 +59,5 @@ static void load_file()
             &order_list,      // 订单链表
     };
     load_data_from_csv("D:\\Movie_C\\Data\\order.csv",handle_order_data,context6);
+    
 }

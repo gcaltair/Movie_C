@@ -131,8 +131,8 @@ void handle_theater_data(char** fields, void* context) {
         const char* type = fields[4];
 
         Theater** theater_list = ((Theater ***) context)[0];
-        Theater_hash_table *hashtable = ((Theater_hash_table **)context)[1];
-        Cinema** cinema_list = ((Cinema ***) context)[2];
+        Cinema** cinema_list = ((Cinema ***) context)[1];
+        Theater_hash_table* hashtable = ((Theater_hash_table**)context)[2];
 
         // 查找 Cinema 是否存在
         Cinema* cinema = cinema_find_by_id(*cinema_list, cinema_id);
@@ -165,7 +165,9 @@ void handle_order_data(char** fields, void* context) {
         User* user = find_user_in_hash_table(user_hash_table, user_id);
         Movie* movie = find_movie_in_hash_table(movie_hash_table, movie_id);
         Theater* theater = movie->theater;
-        Cinema* cinema = theater->cinema;
+        Cinema* cinema;
+        if (theater) cinema = theater->cinema;
+        else cinema = NULL;
 
 
         Order* new_order = order_create(order_hash_table, orderID,
