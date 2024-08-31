@@ -47,7 +47,7 @@ void insert_movie_to_hash_table(Movie_hash_table* ht, Movie* movie);
 // 在哈希表中查找 Movie
 Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id);
 
-
+//void movie_sort_by_purchased_ticket(Movie** head);
 //Movie* movie_find_by_name(Movie* head, const char* movie_name);
 //
 //Movie* movie_find_by_name_and_cinema(Movie* head, const char* movie_name, const char* cinema_name);

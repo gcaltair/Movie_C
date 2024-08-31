@@ -43,4 +43,6 @@ User_hash_table* user_hash_table_create();
 void user_hash_table_init(User_hash_table * ht);
 void insert_user_to_hash_table(User_hash_table * ht, User* user);
 User* find_user_in_hash_table(User_hash_table * ht, const char* userID);
+void user_free_list(User* head);
+void user_delete(User** head, const char* name);
 #endif //MOVIE_C_USER_H

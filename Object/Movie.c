@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "Movie.h"
 #include "Cinema.h"
 #include "../hash.txt"
@@ -104,7 +105,80 @@ Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id) {
     }
     return NULL;  // 如果未找到，返回NULL
 }
-
+void get_current_time(char* buffer, size_t size) {
+    time_t t = time(NULL);
+    struct tm* tm_info = localtime(&t);
+    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", tm_info);
+}
+// 创建新链表并对其进行排序
+//void movie_sort_by_purchased_ticket(Movie** head) {
+//    Movie* new_head = NULL;
+//    char current_time[20];
+//    get_current_time(current_time, sizeof(current_time));
+//
+//    // 遍历原链表，将未放映的场次添加到新链表中
+//    Movie* current = *head;
+//    while (current != NULL) {
+//        // 判断电影是否未放映：end_time > current_time
+//        if (strcmp(current->end_time, current_time) > 0) {
+//            // 复制节点
+//            Movie* new_node = (Movie*)malloc(sizeof(Movie));
+//            *new_node = *current;  // 复制节点内容
+//            new_node->next = new_head;
+//            new_head = new_node;
+//        }
+//        current = current->next;
+//    }
+//
+//    // 对新链表按余票数进行排序（余票少的排在前面）
+//    if (new_head != NULL) {
+//        int swapped;
+//        do {
+//            swapped = 0;
+//            Movie* ptr = new_head;
+//            Movie* prev = NULL;
+//            while (ptr->next != NULL) {
+//                if (ptr->remaining_ticket > ptr->next->remaining_ticket) {
+//                    // 交换节点数据
+//                    if (prev == NULL) {
+//                        // 交换的是头节点
+//                        Movie* temp = ptr->next;
+//                        ptr->next = temp->next;
+//                        temp->next = ptr;
+//                        new_head = temp;
+//                        prev = new_head;
+//                    }
+//                    else {
+//                        Movie* temp = ptr->next;
+//                        ptr->next = temp->next;
+//                        temp->next = ptr;
+//                        prev->next = temp;
+//                        prev = temp;
+//                    }
+//                    swapped = 1;
+//                }
+//                else {
+//                    prev = ptr;
+//                    ptr = ptr->next;
+//                }
+//            }
+//        } while (swapped);
+//    }
+//
+//    // 输出排序后的链表以供检查
+//    Movie* sorted_current = new_head;
+//    while (sorted_current != NULL) {
+//        printf("Session: %s, Remaining Tickets: %d\n", sorted_current->movie_id, sorted_current->remaining_ticket);
+//        sorted_current = sorted_current->next;
+//    }
+//
+//    // 清理新链表的内存
+//    while (new_head != NULL) {
+//        Movie* temp = new_head;
+//        new_head = new_head->next;
+//        free(temp);
+//    }
+//}
 
 
 

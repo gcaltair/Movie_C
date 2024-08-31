@@ -88,7 +88,7 @@ void user_show_all(User* head) {
 }
 
 // 释放用户链表占用的内存
-void user_free(User* head) {
+void user_free_list(User* head) {
     while (head != NULL) {
         User* temp = head;
         head = head->next;
@@ -141,4 +141,35 @@ User* find_user_in_hash_table(User_hash_table* ht, const char* userID) {
         user = user->hash_next;  // 继续查找链表中的下一个用户
     }
     return NULL;  // 如果未找到，返回NULL
+}
+void user_delete(User **head, const char *user_id) {
+    User* current = *head;
+    User* previous = NULL;
+
+    while (current != NULL && strcmp(current->userID, user_id) != 0) {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == NULL) {
+        printf("User not found.\n");
+        return;
+    }
+
+    if (previous == NULL) {
+        *head = current->next;
+    }
+    else {
+        previous->next = current->next;
+    }
+
+    free(current->userID);
+    free(current->user_name);
+    free(current->gender);
+    free(current->telephone);
+    free(current->password);
+    free(current->email);
+    free(current);
+
+    printf("User deleted successfully.\n");
 }

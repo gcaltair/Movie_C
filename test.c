@@ -28,8 +28,9 @@ static void load_file();
 int main(){
     hash_ini();
     load_file();
-    theater_show(find_theater_in_hash_table(theaterHashTable,"T005"));
-    order_show_all(order_list);
+    movie_sort_by_purchased_ticket(&movie_list);
+    user_show_all(user_list);
+
 }
 
 static void hash_ini()
@@ -59,5 +60,5 @@ static void load_file()
             &order_list,      // ¶©µ¥Á´±í
     };
     load_data_from_csv("D:\\Movie_C\\Data\\order.csv",handle_order_data,context6);
-    
+
 }
