@@ -4,12 +4,11 @@
 #ifndef MOVIE_C_USER_H
 #define MOVIE_C_USER_H
 
-#include "../Structure File/Vector.h"
-
 #define HASH_TABLE_SIZE 100
 typedef struct User_hash_table User_hash_table;
 typedef struct Vector Vector;
 typedef struct Order Order;
+typedef struct Linked_string_list Linked_string_list;
 typedef struct User {
     char* userID;
     char* user_name;
@@ -20,7 +19,7 @@ typedef struct User {
     double user_balance;
     struct User* next;
     struct User* hash_next;
-    Vector* my_order;
+    Linked_string_list* my_order;
 } User;
 
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,

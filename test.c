@@ -10,7 +10,7 @@
 #include "Object/Movie.h"
 #include "Object/Order.h"
 #include "data_process.h"
-
+#include "Structure File/linked_list.h"
 
 Order* order_list=NULL;
 User* user_list=NULL;
@@ -28,10 +28,7 @@ static void load_file();
 int main(){
     hash_ini();
     load_file();
-
-    Vector *v=vector_create();
-    printf("%s",find_order_in_hash_table(orderHashTable,find_user_in_hash_table(userHashTable,"U003")->my_order->data[1])->movie->start_time);
-
+    string_node_show_all(find_user_in_hash_table(userHashTable,"U001")->my_order);
 }
 
 static void hash_ini()

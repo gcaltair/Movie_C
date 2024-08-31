@@ -20,8 +20,8 @@ add_executable(Movie_C main.c
         hash.txt
         data_process.c
         data_process.h
-        "Structure File/Vector.c"
-        "Structure File/Vector.h"
+        "Structure File/linked_list.c"
+        "Structure File/linked_list.h"
 )
 add_executable(test1
         test.c
@@ -39,6 +39,6 @@ add_executable(test1
         Object/Movie.h
         data_process.c
         data_process.h
-        "Structure File/Vector.c"
-        "Structure File/Vector.h"
+        "Structure File/linked_list.c"
+        "Structure File/linked_list.h"
 )
