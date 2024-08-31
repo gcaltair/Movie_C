@@ -4,6 +4,7 @@
 #include<stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <zconf.h>
 #include "Object/User.h"
 #include "Object/admin.h"
 #include "Object/Cinema.h"
@@ -44,15 +45,15 @@ static void hash_ini()
 static void load_file()
 {
     void* context1[]={userHashTable,&user_list};
-    load_data_from_csv("D:\\Movie_C\\Data\\users.csv",handle_user_data,context1);
+    load_data_from_csv("users.csv",handle_user_data,context1);
     void* context2[]= {&cinema_list};
-    load_data_from_csv("D:\\Movie_C\\Data\\cinemas.csv",handle_cinema_data,context2);
+    load_data_from_csv("cinemas.csv",handle_cinema_data,context2);
     void *context3[]={cinema_list,&admin_list};
-    load_data_from_csv("D:\\Movie_C\\Data\\admins.csv",handle_admin_data,context3);
+    load_data_from_csv("admins.csv",handle_admin_data,context3);
     void* context4[] = { &theater_list,&cinema_list,theaterHashTable };
-    load_data_from_csv("D:\\Movie_C\\Data\\theaters.csv", handle_theater_data, context4);
+    load_data_from_csv("theaters.csv", handle_theater_data, context4);
     void *context5[]={&movie_list,movieHashTable,theaterHashTable};
-    load_data_from_csv("D:\\Movie_C\\Data\\movies.csv",handle_movie_data,context5);
+    load_data_from_csv("movies.csv",handle_movie_data,context5);
     
     void* context6[] = {
             orderHashTable,   // ¶©µ¥¹þÏ£±í
@@ -65,10 +66,36 @@ static void load_file()
 }
 static int login()
 {
-    char password[20];
-    printf("Enter your password:");
-    getPassword(password, 20);
+    int count=0;
+    char password[20];char user_id[20];User *usr;bool key=0;
+    do {
+        printf("Enter your username:");
+        scanf("%s",user_id);
+        usr= find_user_in_hash_table(userHashTable,user_id);
+        if(!usr) printf("Username don't found\n");
+    } while (!usr);
+    do {
+        if(count>=5)
+        {
+            for (int i = 0; i < 60; ++i) {
+                system("cls");
+                printf("Your need to wait %d seconds(total 60)",i);
+                sleep(1);
+            }
+            count-=3;
+            break;
+        }
+        printf("Enter your password:");
+        getPassword(password, 20);
+        key=strcmp(usr->password,password);
+        if(key) { printf("\nPassword wrong!\n"); count++;
+            sleep(1);system("cls");
+            printf("Enter your username:%s\n",usr->userID);}
+    } while (key);
+    printf("Welcome");
     return 1;
+
+
 }
 void getPassword(char *password, int maxLen) {
     int i = 0;
