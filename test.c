@@ -3,6 +3,7 @@
 //
 #include<stdio.h>
 #include <string.h>
+#include <conio.h>
 #include "Object/User.h"
 #include "Object/admin.h"
 #include "Object/Cinema.h"
@@ -25,11 +26,12 @@ Order_hash_table *orderHashTable=NULL;
 Movie_hash_table *movieHashTable=NULL;
 static void hash_ini();
 static void load_file();
+static int login();
+void getPassword(char *password, int maxLen);
 int main(){
     hash_ini();
     load_file();
-    string_node_show_all(find_user_in_hash_table(userHashTable,"U001")->my_order);
-    string_node_show_all(find_theater_in_hash_table(theaterHashTable,"T001")->my_movie);
+    login();
 }
 
 static void hash_ini()
@@ -60,4 +62,30 @@ static void load_file()
     };
     load_data_from_csv("D:\\Movie_C\\Data\\order.csv",handle_order_data,context6);
 
+}
+static int login()
+{
+    char password[20];
+    printf("Enter your password:");
+    getPassword(password, 20);
+    return 1;
+}
+void getPassword(char *password, int maxLen) {
+    int i = 0;
+    char ch;
+    while (i < maxLen - 1) {
+        ch = _getch(); // 读取一个字符但不显示
+        if (ch == '\r') { // 检测到回车符（Enter键）
+            break;
+        } else if (ch == '\b') { // 处理退格键
+            if (i > 0) {
+                i--;
+                printf("\b \b"); // 删除一个字符
+            }
+        } else {
+            password[i++] = ch;
+            printf("*"); // 显示星号
+        }
+    }
+    password[i] = '\0'; // 字符串末尾添加终止符
 }
