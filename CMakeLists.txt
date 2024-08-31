@@ -20,6 +20,7 @@ add_executable(Movie_C main.c
         hash.txt
         data_process.c
         data_process.h
+        data_process.c
 )
 add_executable(test1
         test.c
@@ -35,6 +36,6 @@ add_executable(test1
         Object/Order.h
         Object/Movie.c
         Object/Movie.h
-        data_process.c
         data_process.h
+        data_process.c
 )

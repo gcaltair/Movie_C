@@ -22,6 +22,7 @@ Admin* Admin_create(const char* id, const char* name, const char* telephone,
     admin->admin_password = strdup(password);
     admin->admin_email = strdup(email);
     admin->cinema_id=strdup(cinema_id);
+    admin->cinema=cinema_;
     admin->next=NULL;
     return admin;
 }
@@ -52,11 +53,46 @@ void admin_show(const Admin *admin) {
     printf("Telephone: %s\n", admin->admin_telephone);
     printf("Password: %s\n", admin->admin_password);  // 注意：实际系统中通常不会打印密码
     printf("Email: %s\n", admin->admin_email);
+    cinema_show(admin->cinema);
     printf("\n");
 
 }
 //修改用户信息
-void modify_personalinfo(); 
+Admin* admin_modify(Admin* head, char* id, int mode, char* arg) {
+    Admin* admin = admin_find_by_id(head, id);
+    if (admin == NULL) {
+        printf("The admin is not existed!");
+        return NULL; // 如果找不到管理员，则直接返回
+    }
+
+    switch (mode) {
+        case modify_id:
+            // 通常不推荐修改ID，但为了完整性包含此功能
+            free(admin->admin_id); // 释放旧ID的内存
+            admin->admin_id = strdup(arg); // 分配新ID的内存并复制
+            break;
+        case modify_name:
+            free(admin->admin_name);
+            admin->admin_name = strdup(arg);
+            break;
+        case modify_telephone:
+            free(admin->admin_telephone);
+            admin->admin_telephone = strdup(arg);
+            break;
+        case modify_password:
+            free(admin->admin_password);
+            admin->admin_password = strdup(arg);
+            break;
+        case modify_email:
+            free(admin->admin_email);
+            admin->admin_email = strdup(arg);
+            break;
+        default:
+            printf("Invalid modification mode\n");
+            break;
+    }
+    return admin;
+}
 //查询管理员信息
 Admin* admin_find_by_id(Admin* head, char* id) {
     Admin* temp = head;
@@ -68,4 +104,59 @@ Admin* admin_find_by_id(Admin* head, char* id) {
     }
     printf("Not found Admin ID %s\n", id);
     return NULL; // 如果没有找到匹配的ID，返回NULL
+}
+
+char* admin_delete(Admin** head, char* id){
+    Admin* target = admin_find_by_id(*head, id); // 调用 admin_find_by_id 来查找节点
+    if (target != NULL) {
+        char* temp=target->admin_id;
+        Admin* prev = NULL;
+        Admin* current = *head;
+        // 查找要删除的节点的前一个节点
+        while (current != target) {
+            prev = current;
+            current = current->next;
+        }
+
+        // 处理删除逻辑
+        if (prev == NULL) {
+            // 如果要删除的节点是头节点
+            *head = current->next; // 更新头节点
+        }
+        else {
+            // 如果要删除的节点不是头节点
+            prev->next = current->next; // 断开连接
+        }
+
+        // 释放要删除的节点的内存
+        free(current);
+        return temp;
+    }
+}
+void admin_free_list(Admin** head) {
+    Admin* current = *head;
+    Admin* next;
+
+    while (current != NULL) {
+        next = current->next; // 保存下一个节点的指针
+
+        // 释放Cinema结构体
+        //if (current->cinema != NULL) {
+        //    cinema_free(current->cinema);
+        //    current->cinema = NULL; //有助于避免野指针
+        //}
+
+        // 释放Admin结构体
+        free(current->admin_id);
+        free(current->admin_name);
+        free(current->admin_telephone);
+        free(current->admin_password);
+        free(current->admin_email);
+        free(current->cinema_id);
+        free(current);
+
+        current = next; // 移动到下一个节点
+    }
+
+    *head = NULL; // 将头指针设置为NULL，表示链表为空
 }
