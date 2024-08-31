@@ -36,7 +36,6 @@ add_executable(test1
         Object/Order.h
         Object/Movie.c
         Object/Movie.h
-        data_process.c
         data_process.h
         "Structure File/linked_list.c"
         "Structure File/linked_list.h"

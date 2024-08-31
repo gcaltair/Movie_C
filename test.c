@@ -28,6 +28,7 @@ static void load_file();
 int main(){
     hash_ini();
     load_file();
+
     string_node_show_all(find_user_in_hash_table(userHashTable,"U001")->my_order);
     string_node_show_all(find_theater_in_hash_table(theaterHashTable,"T001")->my_movie);
 }
@@ -53,10 +54,10 @@ static void load_file()
     load_data_from_csv("D:\\Movie_C\\Data\\movies.csv",handle_movie_data,context5);
     
     void* context6[] = {
-            orderHashTable,   // ¶©µ¥¹şÏ£±í
-            userHashTable,    // ÓÃ»§¹şÏ£±í
-            movieHashTable,   // µçÓ°¹şÏ£±í
-            &order_list,      // ¶©µ¥Á´±í
+            orderHashTable,   // è®¢å•å“ˆå¸Œè¡¨
+            userHashTable,    // ç”¨æˆ·å“ˆå¸Œè¡¨
+            movieHashTable,   // ç”µå½±å“ˆå¸Œè¡¨
+            &order_list,      // è®¢å•é“¾è¡¨
     };
     load_data_from_csv("D:\\Movie_C\\Data\\order.csv",handle_order_data,context6);
 
