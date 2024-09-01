@@ -8,18 +8,19 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    do {
-        mode =login();
-    } while (!mode);
-    if(mode==admin_mode)
-    {
-        printf("\nWelcome admin");
-    }
-    else if(mode==user_mode)
-    {
-        printf("\nWelcome user");
-    }
-    sleep(100);
+    movie_show_all(movie_find_by_movie_type(movie_list,"Standard"));
+//    do {
+//        mode =login();
+//    } while (!mode);
+//    if(mode==admin_mode)
+//    {
+//        printf("\nWelcome admin");
+//    }
+//    else if(mode==user_mode)
+//    {
+//        printf("\nWelcome user");
+//    }
+//    sleep(100);
 }
 static int login()
 {
