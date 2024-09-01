@@ -280,9 +280,49 @@ Movie* movie_sort_by_occupancy_rate(Movie* head) {
 
     return new_head;
 }
-//按场次总票价收入排序已经放映结束的所有历史场次信息
-//（可以按日期分区段进行排序显示）
+// 排序数组的比较函数
+int compare_movies(const void* a, const void* b) {
+    Movie* movieA = *(Movie**)a;
+    Movie* movieB = *(Movie**)b;
+    return (movieA->price > movieB->price) - (movieA->price < movieB->price);
+}
+Movie* movie_sort_by_price(Movie* head) {
+    if (head == NULL) return NULL;
 
+    // 计算链表长度
+    int length = 0;
+    Movie* current = head;
+    while (current != NULL) {
+        length++;
+        current = current->next;
+    }
+
+    // 将链表数据复制到数组中
+    Movie** movie_array = (Movie**)malloc(length * sizeof(Movie*));
+    current = head;
+    for (int i = 0; i < length; i++) {
+        movie_array[i] = movie_copy_info(current); // 复制当前电影场次信息
+        current = current->next;
+    }
+
+   
+
+    // 使用qsort对数组排序
+    qsort(movie_array, length, sizeof(Movie*), compare_movies);
+
+    // 将排序后的数组重新组成链表
+    Movie* sorted_head = movie_array[0];
+    current = sorted_head;
+    for (int i = 1; i < length; i++) {
+        current->next = movie_array[i];
+        current = current->next;
+    }
+    current->next = NULL; // 结束链表
+
+    free(movie_array); // 释放数组
+
+    return sorted_head; // 返回新链表的头节点
+}
 
     // 声明一个比较函数，用于qsort  
 int compare_movies_by_start_time(const void* a, const void* b) {

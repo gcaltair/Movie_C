@@ -51,6 +51,6 @@ void movie_hash_table_init(Movie_hash_table* ht);
 void insert_movie_to_hash_table(Movie_hash_table* ht, Movie* movie);
 // 在哈希表中查找 Movie
 Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id);
-
+Movie* movie_sort_by_price(Movie* head);
 
 #endif // MOVIE_C_MOVIE_H
