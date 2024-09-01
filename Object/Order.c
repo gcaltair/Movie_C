@@ -192,37 +192,38 @@ char* get_orderID() {
 //       3 :当天已经购买五个场次的票
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
     int count = 0;
-    int* history_order_year;
-    int* history_order_month;
-    int* history_order_day;
-    char** movie_id;
+    int history_order_year[100];
+    int history_order_month[100];
+    int history_order_day[100];
+    Linked_string_list* movie_id_list = NULL;
+    if (!usr) { printf("User is NULL!\n"); return 0; }
     Linked_string_list* order = usr->my_order;
     while (order != NULL) {
         Order* order_find = find_order_in_hash_table(hashTable, order->id);
+        if (order_find->status != 1) continue;
         if ((sscanf(order_find->time, "%d-%d-%d", &history_order_year[count], &history_order_month[count], &history_order_day[count])) != 3) {
+            printf("%d\n", history_order_day[count]);
+            printf("%s",order_find->time);
             return 0;
         }
-        movie_id = realloc(movie_id, (count + 1) * sizeof(char*));
-        movie_id[count] = malloc((strlen(order_find->movie->movie_id) + 1) * sizeof(char));
-        strcpy(movie_id[count], order_find->movie->movie_id);
+        string_direct_add_to_list(&movie_id_list,order_find->movie_id);
         count++;
         order = order->next;
     }
     int current_year, current_month, current_day;
     sscanf(get_current_day(), "%d-%d-%d", &current_year, &current_month, &current_day);
     int history_order_count = 0;
-    for (int i = 0; i < count; i++) {
-        if (history_order_year[i] == current_year && history_order_month[i] == current_month && history_order_day[i] == current_day && strcmp(movie_id[count], movie->movie_id)) {
+    for (int i = count; i >0; i--) {
+        if (history_order_year[i] == current_year && history_order_month[i] == current_month && history_order_day[i] == current_day && strcmp(movie_id_list->id, movie->movie_id)) {
             history_order_count++;
         }
-        if (strcmp(movie_id[i], movie->movie_id) == 0) {
+        if (strcmp(movie_id_list->id,movie->movie_id) == 0) {
             return 2;
         }
+        movie_id_list = movie_id_list->next;
     }
-    for (int i = 0; i < count; i++) {
-        free(movie_id[count]);
-    }
-    free(movie_id);
+    free_list(movie_id_list);
+    
     if (history_order_count >= 5) {
         return 3;
     }

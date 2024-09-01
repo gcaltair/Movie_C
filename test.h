@@ -6,8 +6,9 @@
 #define MOVIE_C_TEST_H
 #include<stdio.h>
 #include <string.h>
-#include <conio.h>
-#include <zconf.h>
+//outer file
+//#include <conio.h>
+//#include <zconf.h>
 #include "Object/User.h"
 #include "Object/admin.h"
 #include "Object/Cinema.h"
