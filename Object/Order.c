@@ -229,7 +229,166 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
     }
     return 1;
 }
+//座位数冲突判断
+//return 0 : 获取位置信息失败
+//       1 ; 订座成功 
+//       4 : 剩余座位数不足或超过最大购票限额
+//       5 ：输入两个相同的座位号。
+//       6：不在影院座次范围内
+//       7 ：座位已售出
+//       8 ：与已售出的座位相隔一个座位
+int saets_check(char* seats, int(*seat_map)[26]) {
+    int seat_number;
+    if (get_seat_number(seats)) {
+        seat_number = get_seat_number(seats);
+    }
+    else {
+        return 0;
+    }
+    if (seat_number > get_remaining_ticket(seat_map) || seat_number > 3) {
+        return 4;
+    }
 
+    char* seats_copy = strdup(seats);
+    char* token = strtok(seats_copy, "-");
+    char charline[3];
+    int line[3];
+    int row[3];
+    for (int i = 0; i < seat_number; i++) {
+        if (sscanf(token, "%c%d", &charline[i], &row[i]) != 2) {
+            return 0;
+        }
+        token = strtok(NULL, "-");
+    }
+    for (int i = 0; i < seat_number; i++) {
+        line[i] = charline[i];
+        line[i] -= 64;
+    }
+    for (int i = 0; i < seat_number; i++) {
+        for (int j = i + 1; j < seat_number; j++) {
+            if (line[i] == line[j] && row[i] == row[j]) {
+                return 5;
+            }
+        }
+    }
+    for (int i = 0; i < seat_number; i++) {
+        if ((seat_map[line[i] - 1][row[i] - 1]) == 0) {
+            return 6;
+        }
+        if ((seat_map[line[i] - 1][row[i] - 1]) == 1) {
+            continue;
+        }
+        if ((seat_map[line[i] - 1][row[i] - 1]) == 2) {
+            return 7;
+        }
+        if ((seat_map[line[i] - 1][row[i] - 1]) == 3) {
+            return 8;
+        }
+    }
+    return 1;
+
+}
+//付款
+//return 0 ：查询错误
+//       1 : 付款成功
+//       2 ：订单状态不合法
+int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable) {
+    if (order->status != 2) {
+        return 2;
+    }
+    double discount;
+    if (get_discount(order, hashTable)) {
+        discount = get_discount(order, hashTable);
+    }
+    else {
+        return 0;
+    }
+    char* seats_copy = strdup(order->seats);
+    char* token = strtok(seats_copy, "-");
+    char charline[3];
+    int line[3];
+    int row[3];
+    for (int i = 0; i < order->seat_number; i++) {
+        if (sscanf(token, "%c%d", &charline[i], &row[i]) != 2) {
+            return 0;
+        }
+        token = strtok(NULL, "-");
+    }
+    for (int i = 0; i < order->seat_number; i++) {
+        line[i] = charline[i];
+        line[i] -= 64;
+    }
+    for (int i = 0; i < order->seat_number; i++) {
+        if (row[i] == 1) {
+            seat_map[line[i] - 1][row[i] - 1] = 2;
+            seat_map[line[i] - 1][row[i]] = 3;
+            continue;
+        }
+        if (row[i] == 26) {
+            seat_map[line[i] - 1][row[i] - 1] = 2;
+            seat_map[line[i] - 1][row[i] - 2] = 3;
+            continue;
+        }
+        else {
+            if (seat_map[line[i] - 1][row[i]] == 1) {
+                seat_map[line[i] - 1][row[i]] = 3;
+            }
+            if (seat_map[line[i] - 1][row[i] - 2] == 1) {
+                seat_map[line[i] - 1][row[i] - 2] = 3;
+            }
+            continue;
+        }
+    }
+    order->usr->user_balance -= discount * order->seat_number * order->movie->price;
+    order->movie->remaining_ticket = get_remaining_ticket(seat_map);
+    order->status = 1;
+    return 1;
+}
+int get_seat_number(char* seats) {
+    int seat_number = 0;
+    char* seats_copy = strdup(seats);
+    char* token = strtok(seats_copy, "-");
+    int i = 1;
+    while (token != NULL) {
+        i = 0;
+        seat_number++;
+        token = strtok(NULL, "-");
+    }
+    if (i) {
+        return 0;
+    }
+    return seat_number;
+}
+
+double get_discount(Order* order, Order_hash_table* hashTable) {
+    Linked_string_list* order_find = order->usr->my_order;
+    int history_seat_number = 0;
+    int i;
+    double discount;
+    while (order_find != NULL) {
+        if (strcmp(order_find->id, order->orderID) == 0) {
+            order_find = order_find->next;
+            i = 0;
+            break;
+        }
+        order_find = order_find->next;
+    }
+    if (i) {
+        return 0;
+    }
+    while (order_find != NULL) {
+        Order* order = find_order_in_hash_table(hashTable, order_find->id);
+        if (order->status == 1) {
+            history_seat_number += order->seat_number;
+        }
+        order_find = order_find->next;
+    }
+    discount = 1 - 0.05 * history_seat_number;
+    if (discount <= 0.5) {
+        discount = 0.5;
+    }
+    return discount;
+}
 // 初始化哈希表，将所有的指针设置为 NULL
 void init_order_hash_table(Order_hash_table* ht) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {

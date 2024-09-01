@@ -42,7 +42,10 @@ char* get_current_day();
 char* get_current_time();
 char* get_orderID();
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
-
+int saets_check(char* seats, int(*seat_map)[26]);
+int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
+double get_discount(Order* order, Order_hash_table* hashTable);
+int get_seat_number(char* seats);
 typedef struct Order_hash_table {
     Order* table[HASH_TABLE_SIZE];
 } Order_hash_table;
