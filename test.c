@@ -19,7 +19,7 @@ int main(){
     {
         printf("\nWelcome user");
     }
-    sleep(100);
+    //sleep(100);
 }
 static int login()
 {
@@ -31,7 +31,7 @@ static int login()
         admin_now= admin_find_by_id(admin_list,id);//注意考虑重名问题
         if((!user_now)&&(!admin_now)) {
             printf("ID don't found\n");
-            Sleep(500);
+            //Sleep(500);
             system("cls");
         }
     } while ((!user_now)&&(!admin_now));

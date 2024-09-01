@@ -4,10 +4,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
-#include <conio.h>
-#include <unistd.h>
-#include <synchapi.h>
+//#include <conio.h>
+//#include <unistd.h>
+//#include <synchapi.h>
 #include "user_system.h"
 #include "Object/User.h"
 #include "Object/admin.h"
@@ -24,7 +25,7 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
             for (int i = 0; i < 60; ++i) {
                 system("cls");
                 printf("Your need to wait %d seconds(total 60)",i);
-                Sleep(1000);
+                //Sleep(1000);
             }
             count-=3;
             return 0;
@@ -36,7 +37,7 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
         if(!key) {
             printf("\nPassword wrong!\n");
             count++;
-            sleep(1);
+            //sleep(1);
             system("cls");
             printf("Enter your ID:%s\n",usr->userID);
         }
@@ -52,7 +53,7 @@ bool admin_password_check(Admin* admin,Admin* admin_list){
             for (int i = 0; i < 60; ++i) {
                 system("cls");
                 printf("Your need to wait %d seconds(total 60)",i);
-                sleep(1);
+                //sleep(1);
             }
             count-=3;
             return 0;
@@ -63,7 +64,7 @@ bool admin_password_check(Admin* admin,Admin* admin_list){
         if(!key) {
             printf("\nPassword wrong!\n");
             count++;
-            Sleep(500);
+            //Sleep(500);
             system("cls");
             printf("Enter your ID:%s\n",admin->admin_id);
         }
@@ -77,7 +78,7 @@ static bool getPassword(char *password, int maxLen) {
     int i = 0;
     char ch;
     while (i < maxLen - 1) {
-        ch = _getch(); // 读取一个字符但不显示
+        //ch = _getch(); // 读取一个字符但不显示
         if(ch==26) return 0;
         if (ch == '\r') { // 检测到回车符（Enter键）
             break;
