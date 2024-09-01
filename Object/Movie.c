@@ -9,7 +9,7 @@
 #include "../Structure File/linked_list.h"
 // 创建新的 Movie 节点  
 Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const char *movie_name,Theater* theater, const char* start_time, const char* end_time,
-    int remaining_ticket, double price, double discount, const char* theater_type) {
+    int remaining_ticket, double price, double discount, const char* movie_type) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
         printf("Memory allocation failed!\n");
@@ -25,7 +25,7 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const
     newMovie->remaining_ticket = remaining_ticket;
     newMovie->price = price;
     newMovie->discount = discount;
-    newMovie->theater_type = strdup(theater_type);
+    newMovie->movie_type = strdup(movie_type);
     newMovie->next = NULL;
     insert_movie_to_hash_table(movieHashTable,newMovie);
 
@@ -59,16 +59,16 @@ void movie_show(const Movie* movie) {
     printf("Remaining Tickets: %d\n", movie->remaining_ticket);
     printf("Price: %.2f\n", movie->price);
     printf("Discount: %.2f\n", movie->discount);
-    printf("Theater Type: %s\n", movie->theater_type);
+    printf("Movie Type: %s\n", movie->movie_type);
     printf("----------\n");
 }
 
 // 显示链表中所有 Movie 的信息  
 void movie_show_all(Movie* head) {
-    Movie* current = head;
-    while (current != NULL) {
-        movie_show(current);
-        current = current->next;
+    Movie* movie = head;
+    while (movie != NULL) {
+        movie_show(movie);
+        movie = movie->next;
     }
 }
 
@@ -110,80 +110,47 @@ Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id) {
     }
     return NULL;  // 如果未找到，返回NULL
 }
-void get_current_time(char* buffer, size_t size) {
-    time_t t = time(NULL);
-    struct tm* tm_info = localtime(&t);
-    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", tm_info);
+Movie *movie_copy_info(Movie* movie)
+{
+
+    Movie* new_movie = (Movie*)malloc(sizeof(Movie));
+    if (!new_movie) {
+        printf("Memory allocation failed!\n");
+        return NULL;
+    }
+    // 复制当前电影的信息到新节点
+    new_movie->movie_id = strdup(movie->movie_id);
+    new_movie->movie_name = strdup(movie->movie_name);
+    new_movie->theater = movie->theater;
+    new_movie->start_time = strdup(movie->start_time);
+    new_movie->end_time = strdup(movie->end_time);
+    new_movie->remaining_ticket = movie->remaining_ticket;
+    new_movie->price = movie->price;
+    new_movie->discount = movie->discount;
+    new_movie->movie_type = strdup(movie->movie_type);
+    new_movie->next = NULL;
+    new_movie->hash_next=NULL;
+    return new_movie;
 }
-// 创建新链表并对其进行排序
-//void movie_sort_by_purchased_ticket(Movie** head) {
-//    Movie* new_head = NULL;
-//    char current_time[20];
-//    get_current_time(current_time, sizeof(current_time));
-//
-//    // 遍历原链表，将未放映的场次添加到新链表中
-//    Movie* current = *head;
-//    while (current != NULL) {
-//        // 判断电影是否未放映：end_time > current_time
-//        if (strcmp(current->end_time, current_time) > 0) {
-//            // 复制节点
-//            Movie* new_node = (Movie*)malloc(sizeof(Movie));
-//            *new_node = *current;  // 复制节点内容
-//            new_node->next = new_head;
-//            new_head = new_node;
-//        }
-//        current = current->next;
-//    }
-//
-//    // 对新链表按余票数进行排序（余票少的排在前面）
-//    if (new_head != NULL) {
-//        int swapped;
-//        do {
-//            swapped = 0;
-//            Movie* ptr = new_head;
-//            Movie* prev = NULL;
-//            while (ptr->next != NULL) {
-//                if (ptr->remaining_ticket > ptr->next->remaining_ticket) {
-//                    // 交换节点数据
-//                    if (prev == NULL) {
-//                        // 交换的是头节点
-//                        Movie* temp = ptr->next;
-//                        ptr->next = temp->next;
-//                        temp->next = ptr;
-//                        new_head = temp;
-//                        prev = new_head;
-//                    }
-//                    else {
-//                        Movie* temp = ptr->next;
-//                        ptr->next = temp->next;
-//                        temp->next = ptr;
-//                        prev->next = temp;
-//                        prev = temp;
-//                    }
-//                    swapped = 1;
-//                }
-//                else {
-//                    prev = ptr;
-//                    ptr = ptr->next;
-//                }
-//            }
-//        } while (swapped);
-//    }
-//
-//    // 输出排序后的链表以供检查
-//    Movie* sorted_current = new_head;
-//    while (sorted_current != NULL) {
-//        printf("Session: %s, Remaining Tickets: %d\n", sorted_current->movie_id, sorted_current->remaining_ticket);
-//        sorted_current = sorted_current->next;
-//    }
-//
-//    // 清理新链表的内存
-//    while (new_head != NULL) {
-//        Movie* temp = new_head;
-//        new_head = new_head->next;
-//        free(temp);
-//    }
-//}
+// 根据放映场次类型过滤
+Movie* movie_filter_by_movie_type(Movie* head, const char* movie_type) {
+    Movie* result_head = NULL;  // 结果链表的头节点
+    Movie* movie = head;
+
+    // 遍历原链表
+    while (movie != NULL) {
+        // 如果电影的 movie_type 符合条件
+        if (strcmp(movie->movie_type, movie_type) == 0) {
+            // 创建一个新节点，将其添加到结果链表
+            Movie* new_movie = movie_copy_info(movie);
+
+            // 将新节点添加到结果链表
+            movie_add_to_list(&result_head,new_movie);
+        }
+        movie = movie->next;  // 继续遍历原链表中的下一个电影
+    }
+    return result_head;  // 返回结果链表的头节点
+}
 //// 根据影片名查找 Movie 节点
 //Movie* movie_find_by_name(Movie* head, const char* movie_name_) {
 //    Movie* current = head;

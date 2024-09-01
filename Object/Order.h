@@ -35,6 +35,17 @@ void order_show(const Order* order);
 
 void order_show_all(Order* head);
 
+int (*Seat_map_generation())[26];
+void Seat_map_show(int (*seat_map)[26]);
+int get_remaining_ticket(int (*seat_map)[26]);
+char* get_current_day();
+char* get_current_time();
+char* get_orderID();
+int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
+int saets_check(char* seats, int(*seat_map)[26]);
+int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
+double get_discount(Order* order, Order_hash_table* hashTable);
+int get_seat_number(char* seats);
 typedef struct Order_hash_table {
     Order* table[HASH_TABLE_SIZE];
 } Order_hash_table;
