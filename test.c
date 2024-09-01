@@ -8,9 +8,8 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    int (*seat_map)[26]=Seat_map_generation();
-    ;
-    printf("%d",process_pay(find_order_in_hash_table(orderHashTable,"O005"), seat_map, orderHashTable));
+
+    
     //Seat_map_show(seat_map);
 
 //    do {
