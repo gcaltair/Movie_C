@@ -158,19 +158,23 @@ Movie* movie_sort_by_purchased_ticket(Movie* head) {
     char current_time[20];
     get_current_time(current_time, sizeof(current_time));
 
-    // 遍历原链表，将未放映的场次添加到新链表中
+    // 遍历原链表，将未放映的场次添加到新链表中  
     Movie* current = head;
     while (current != NULL) {
-        // 判断电影是否未放映：end_time > current_time
+        // 判断电影是否未放映：end_time > current_time  
         if (strcmp(current->end_time, current_time) > 0) {
-            // 复制节点
-            Movie* new_node = (Movie*)malloc(sizeof(Movie));
-            *new_node = *current;  // 复制节点内容
+            // 使用movie_copy_info函数复制节点  
+            Movie* new_node = movie_copy_info(current);
+            if (new_node == NULL) {
+                // 处理内存分配失败的情况，简单返回NULL
+                return NULL;
+            }
             new_node->next = new_head;
             new_head = new_node;
         }
         current = current->next;
     }
+
 
     // 对新链表按余票数进行排序（余票少的排在前面）
     if (new_head != NULL) {
