@@ -4,6 +4,7 @@
 #include <time.h>
 #include "Movie.h"
 #include "Cinema.h"
+#include "Order.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
 // 创建新的 Movie 节点  
@@ -28,7 +29,7 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const
     newMovie->next = NULL;
     insert_movie_to_hash_table(movieHashTable,newMovie);
 
-    string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+    //string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
 
     return newMovie;
 }
@@ -183,20 +184,6 @@ void get_current_time(char* buffer, size_t size) {
 //        free(temp);
 //    }
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //// 根据影片名查找 Movie 节点
 //Movie* movie_find_by_name(Movie* head, const char* movie_name_) {
 //    Movie* current = head;
@@ -233,3 +220,283 @@ void get_current_time(char* buffer, size_t size) {
 //    }
 //    return NULL;
 //}
+//根据已购票数排序（管理员）--返回头结点
+// 获取当前时间的字符串
+void get_current_time(char* buffer, size_t size) {
+    time_t t = time(NULL);
+    struct tm* tm_info = localtime(&t);
+    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", tm_info);
+}
+
+// 创建新链表并对其进行排序
+Movie* movie_sort_by_purchased_ticket(Movie* head) {
+    Movie* new_head = NULL;
+    char current_time[20];
+    get_current_time(current_time, sizeof(current_time));
+
+    // 遍历原链表，将未放映的场次添加到新链表中
+    Movie* current = head;
+    while (current != NULL) {
+        // 判断电影是否未放映：end_time > current_time
+        if (strcmp(current->end_time, current_time) > 0) {
+            // 复制节点
+            Movie* new_node = (Movie*)malloc(sizeof(Movie));
+            *new_node = *current;  // 复制节点内容
+            new_node->next = new_head;
+            new_head = new_node;
+        }
+        current = current->next;
+    }
+
+    // 对新链表按余票数进行排序（余票少的排在前面）
+    if (new_head != NULL) {
+        int swapped;
+        do {
+            swapped = 0;
+            Movie* ptr = new_head;
+            Movie* prev = NULL;
+            while (ptr->next != NULL) {
+                if (ptr->remaining_ticket > ptr->next->remaining_ticket) {
+                    // 交换节点数据
+                    if (prev == NULL) {
+                        // 交换的是头节点
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        new_head = temp;
+                        prev = new_head;
+                    }
+                    else {
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        prev->next = temp;
+                        prev = temp;
+                    }
+                    swapped = 1;
+                }
+                else {
+                    prev = ptr;
+                    ptr = ptr->next;
+                }
+            }
+        } while (swapped);
+    }
+
+    return new_head;
+}
+//按上座率排序已经放映结束的电影
+// 获取当前时间的字符串
+void get_current_time(char* buffer, size_t size) {
+    time_t t = time(NULL);
+    struct tm* tm_info = localtime(&t);
+    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", tm_info);
+}
+
+// 计算上座率
+double calculate_occupancy_rate(Movie* movie) {
+    // 假设上座率计算为: 已售票数 / (已售票数 + 剩余票数)
+    int sold_tickets = movie->remaining_ticket; // 剩余票数
+    return (sold_tickets > 0) ? 1.0 / sold_tickets : 1.0;
+}
+
+// 创建新链表并对其进行排序
+Movie* movie_sort_by_occupancy_rate(Movie* head) {
+    Movie* new_head = NULL;
+    char current_time[20];
+    get_current_time(current_time, sizeof(current_time));
+
+    // 遍历原链表，将已放映结束的场次添加到新链表中
+    Movie* current = head;
+    while (current != NULL) {
+        // 判断电影是否已放映结束：end_time <= current_time
+        if (strcmp(current->end_time, current_time) <= 0) {
+            // 复制节点
+            Movie* new_node = (Movie*)malloc(sizeof(Movie));
+            *new_node = *current;  // 复制节点内容
+            new_node->next = new_head;
+            new_head = new_node;
+        }
+        current = current->next;
+    }
+
+    // 对新链表按上座率进行排序（上座率高的排在前面）
+    if (new_head != NULL) {
+        int swapped;
+        do {
+            swapped = 0;
+            Movie* ptr = new_head;
+            Movie* prev = NULL;
+            while (ptr->next != NULL) {
+                double current_occupancy = calculate_occupancy_rate(ptr);
+                double next_occupancy = calculate_occupancy_rate(ptr->next);
+                if (current_occupancy < next_occupancy) {
+                    // 交换节点数据
+                    if (prev == NULL) {
+                        // 交换的是头节点
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        new_head = temp;
+                        prev = new_head;
+                    }
+                    else {
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        prev->next = temp;
+                        prev = temp;
+                    }
+                    swapped = 1;
+                }
+                else {
+                    prev = ptr;
+                    ptr = ptr->next;
+                }
+            }
+        } while (swapped);
+    }
+
+    return new_head;
+}
+// 按场次总票价收入排序已经放映结束的所有历史场次信息
+//（可以按日期分区段进行排序显示）
+
+typedef struct User {
+    char* userID;
+    char* user_name;
+    char* gender;
+    char* telephone;
+    char* password;
+    char* email;
+    double user_balance;
+    struct User* next;
+    struct Order* order;
+} User;
+
+//typedef struct Order_hash_table {
+//    // 订单哈希表结构
+//
+//} Order_hash_table;
+
+// 假设这个函数已经定义并计算某场次的总票价收入
+double get_movie_income(User* usr, Movie* movie, Order_hash_table* hashTable);
+
+// 获取当前时间的字符串
+void get_current_time(char* buffer, size_t size) {
+    time_t t = time(NULL);
+    struct tm* tm_info = localtime(&t);
+    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", tm_info);
+}
+
+// 创建新链表并对其进行排序
+Movie* movie_sort_by_income(User* usr, Movie* head, Order_hash_table* hashTable) {
+    Movie* new_head = NULL;
+    char current_time[20];
+    get_current_time(current_time, sizeof(current_time));
+
+    // 遍历原链表，将已放映结束的场次添加到新链表中
+    Movie* current = head;
+    while (current != NULL) {
+        // 判断电影是否已放映结束：end_time <= current_time
+        if (strcmp(current->end_time, current_time) <= 0) {
+            // 复制节点
+            Movie* new_node = (Movie*)malloc(sizeof(Movie));
+            *new_node = *current;  // 复制节点内容
+            new_node->next = new_head;
+            new_head = new_node;
+        }
+        current = current->next;
+    }
+
+    // 对新链表按总票价收入进行排序（收入高的排在前面）
+    if (new_head != NULL) {
+        int swapped;
+        do {
+            swapped = 0;
+            Movie* ptr = new_head;
+            Movie* prev = NULL;
+            while (ptr->next != NULL) {
+                double current_income = get_movie_income(usr, ptr, hashTable);
+                double next_income = get_movie_income(usr, ptr->next, hashTable);
+                if (current_income < next_income) {
+                    // 交换节点数据
+                    if (prev == NULL) {
+                        // 交换的是头节点
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        new_head = temp;
+                        prev = new_head;
+                    }
+                    else {
+                        Movie* temp = ptr->next;
+                        ptr->next = temp->next;
+                        temp->next = ptr;
+                        prev->next = temp;
+                        prev = temp;
+                    }
+                    swapped = 1;
+                }
+                else {
+                    prev = ptr;
+                    ptr = ptr->next;
+                }
+            }
+        } while (swapped);
+    }
+
+    return new_head;
+}
+// 根据放映时间排序movie
+    // 声明一个比较函数，用于qsort  
+int compare_movies_by_start_time(const void* a, const void* b) {
+    Movie* movie1 = *(Movie* const*)a;
+    Movie* movie2 = *(Movie* const*)b;
+    return strcmp(movie1->start_time, movie2->start_time);
+}
+    // 对所有电影场次按放映时间进行排序  
+Movie* movie_sort_by_start_time(Movie* head) {
+    Movie** movies = NULL;
+    int count = 0;
+
+    // 首先，计算链表中的电影数量  
+    Movie* current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+
+    // 分配一个数组来存储所有电影的指针  
+    movies = (Movie**)malloc(count * sizeof(Movie*));
+    if (!movies) {
+        printf("Memory allocation failed!\n");
+        return NULL;
+    }
+
+    // 将所有电影的指针存储到数组中  
+    int i = 0;
+    current = head;
+    while (current != NULL) {
+        movies[i++] = current;
+        current = current->next;
+    }
+
+    // 使用qsort对数组进行排序  
+    qsort(movies, count, sizeof(Movie*), compare_movies_by_start_time);
+
+    // 重新构建链表  
+    Movie* new_head = movies[0];
+    for (i = 1; i < count; i++) {
+        movies[i - 1]->next = movies[i];
+    }
+    movies[count - 1]->next = NULL;
+
+    // 释放数组内存  
+    free(movies);
+
+    return new_head;
+}
+
+
+

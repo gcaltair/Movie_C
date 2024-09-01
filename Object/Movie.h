@@ -35,6 +35,11 @@ void movie_show(const Movie* movie);
 // 显示链表中所有 Movie 的信息  
 void movie_show_all(Movie* head);
 
+// 通过放映时间排序movie
+int compare_movies_by_start_time(const void* a, const void* b);// 声明一个比较函数，用于qsort  
+Movie* movie_sort_by_start_time(Movie* head);// 对所有电影场次按放映时间进行排序  
+    
+
 typedef struct Movie_hash_table{
     Movie *table[HASH_TABLE_SIZE];
 }Movie_hash_table;

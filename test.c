@@ -1,14 +1,14 @@
 //
 // Created by G on 2024/8/27.
 //
-#include <synchapi.h>
+//#include <synchapi.h>
 #include "test.h"
 
 int main(){
     int mode;
     hash_ini();
     load_file();
-    do {
+   /* do {
         mode =login();
     } while (!mode);
     if(mode==admin_mode)
@@ -18,7 +18,7 @@ int main(){
     else if(mode==user_mode)
     {
         printf("\nWelcome user");
-    }
+    }*/
     //sleep(100);
 }
 static int login()
