@@ -22,6 +22,16 @@ typedef struct User {
     Linked_string_list* my_order;
 } User;
 
+//对于修改用户的功能的几个mode进行枚举
+enum mode {
+    modify_id = 1,
+    modify_name = 2,
+    modify_gender=3,
+    modify_telephone = 4,
+    modify_password = 5,
+    modify_email = 6
+};
+
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,
                   const char* password, const char* email, double balance); // 创建用户
 
@@ -48,3 +58,4 @@ User* find_user_in_hash_table(User_hash_table * ht, const char* userID);
 void user_free_list(User* head);
 void user_delete(User** head, const char* name);
 #endif //MOVIE_C_USER_H
+
