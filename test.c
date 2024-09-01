@@ -8,7 +8,10 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    movie_show_all(movie_find_by_movie_type(movie_list,"Standard"));
+    int (*seat_map)[26]=Seat_map_generation();
+    printf("%d", history_order_time_check(find_user_in_hash_table(userHashTable,"U001"), find_movie_in_hash_table(movieHashTable,"M001"),orderHashTable));
+    //Seat_map_show(seat_map);
+
 //    do {
 //        mode =login();
 //    } while (!mode);
