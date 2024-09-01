@@ -8,6 +8,9 @@ int main(){
     int mode;
     hash_ini();
     load_file();
+
+    //login 测试
+
    /* do {
         mode =login();
     } while (!mode);
@@ -20,6 +23,45 @@ int main(){
         printf("\nWelcome user");
     }*/
     //sleep(100);
+    
+    //根据放映时间排序
+
+     // 初始化哈希表
+    //Theater_hash_table* ht = theater_hash_table_create();
+    Cinema* cinema = malloc(sizeof(Cinema));
+    //cinema->cinema_id = strdup("Cinema1");
+    cinema->my_theater = NULL;
+
+    // 创建并添加剧院  
+    Theater* theater1 = theater_create(theaterHashTable, "T1", "Theater One", 100, cinema, "Cinema1", "3D");
+    Theater* theater2 = theater_create(theaterHashTable, "T2", "Theater Two", 150, cinema, "Cinema1", "IMAX");
+
+    // 实例化一些Movie数据  
+    Movie* movie1 = movie_create(movieHashTable, "M001", "Inception", theater1, "2024-09-01 21:00", "2024-09-01 23:30", 50, 12.00, 0.90, "IMAX");
+    Movie* movie2 = movie_create(movieHashTable, "M002", "Interstellar", theater2, "2024-09-01 18:00", "2024-09-01 21:00", 30, 10.00, 0.85, "Standard");
+    Movie* movie3 = movie_create(movieHashTable, "M003", "The Dark Knight", theater1, "2024-09-02 11:00", "2024-09-02 13:45", 40, 11.50, 0.80, "IMAX");
+
+    // 创建一个链表  
+    Movie* head = NULL;
+    movie_add_to_list(&head, movie1);
+    movie_add_to_list(&head, movie2);
+    movie_add_to_list(&head, movie3);
+
+    // 打印排序前的电影列表  
+    printf("Before sorting:\n");
+    movie_show_all(head);
+
+    // 按放映时间排序  
+    head = movie_sort_by_start_time(head);
+
+    // 打印排序后的电影列表  
+    printf("\nAfter sorting by start time:\n");
+    movie_show_all(head);
+
+    // 释放内存（略去具体实现，仅作提示）  
+    // ... free all allocated memory ...  
+
+    return 0;
 }
 static int login()
 {
