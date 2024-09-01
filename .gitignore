@@ -5,7 +5,8 @@
 
 # User-specific files
 .idea/
-camke-build-debug/
+cmake-build-debug/
+
 *.rsuser
 *.suo
 *.user
