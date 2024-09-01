@@ -1,7 +1,7 @@
 //
 // Created by G on 2024/8/27.
 //
-#include <synchapi.h>
+//#include <synchapi.h>
 #include "test.h"
 
 int main(){
