@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <time.h>
 #include "../hash.txt"
-#include"../Structure File/linked_list.h"
+#include "../Structure File/linked_list.h"
 //订座位，seats为用户视角下，故行与列均-1
 // 座位  0 ：不在影院座次范围内
 //       1 ：可购买
@@ -19,54 +19,54 @@
 //       2 ：生成订单未付款
 //       3 ：取消订单
 //       4 ：退款
+Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
+                    Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time) {
+    Order* new_order = (Order*)malloc(sizeof(Order));
+    if (new_order == NULL) {
+        printf("Memory allocation failed.\n");
+        return NULL;
+    }
 
-Order* order_create(Order_hash_table* hashTable, const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
-	Theater* theater, Cinema* cinema, const char* seats, int seat_number, const char* time) {
-	Order* new_order = (Order*)malloc(sizeof(Order));
-	if (new_order == NULL) {
-		printf("Memory allocation failed.\n");
-		return NULL;
-	}
+    new_order->orderID = strdup(orderID);
+    new_order->usr = usr;
+    new_order->user_id = strdup(user_id);
+    new_order->movie = movie;
+    new_order->movie_id = strdup(movie_id);
+    new_order->theater = theater;
+    new_order->cinema = cinema;
+    new_order->seats = strdup(seats);
+    new_order->seat_number=seat_number;
+    new_order->status = status;
+    new_order->time = strdup(time);
+    new_order->next = NULL;
+    new_order->hash_next=NULL;
 
-	new_order->orderID = strdup(orderID);
-	new_order->usr = usr;
-	new_order->user_id = strdup(user_id);
-	new_order->movie = movie;
-	new_order->movie_id = strdup(movie_id);
-	new_order->theater = theater;
-	new_order->cinema = cinema;
-	new_order->seats = strdup(seats);
-	new_order->seat_number = seat_number;
-	new_order->status = 2;
-	new_order->time = strdup(time);
-	vector_push_back((new_order->usr->my_order), new_order->orderID);
-	new_order->next = NULL;
-	new_order->hash_next = NULL;
+    string_direct_add_to_list(&(new_order->usr->my_order),new_order->orderID);
 
-	insert_order_to_hash_table(hashTable, new_order);
-	return new_order;
+    insert_order_to_hash_table(hashTable,new_order);
+    return new_order;
 }
 // 将一个订单添加到链表中
 void order_add_to_list(Order** head, Order* new_order) {
-	if (*head == NULL) {
-		*head = new_order;
-		return;
-	}
+    if (*head == NULL) {
+        *head = new_order;
+        return;
+    }
 
-	Order* temp = new_order;
-	temp->next = (*head);
-	(*head) = temp;
+    Order* temp = new_order;
+    temp->next = (*head);
+    (*head) = temp;
 }
 
 // 通过订单ID查找订单
 Order* order_find_by_id(Order* head, char* orderID) {
-	while (head != NULL) {
-		if (strcmp(head->orderID, orderID) == 0) {
-			return head;
-		}
-		head = head->next;
-	}
-	return NULL;
+    while (head != NULL) {
+        if (strcmp(head->orderID,orderID)==0) {
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL;
 }
 
 // 显示单个订单信息
@@ -148,7 +148,6 @@ int (*seat_map_generation())[26] {
 	}
 	return seat_map;
 }
-
 //展示座位图
 void seat_map_show(int (*seat_map)[26]) {
 	printf("   ");
@@ -190,87 +189,85 @@ int get_remaining_ticket(int (*seat_map)[26]) {
 
 //以字符串形式返回当前年月日（2024-8-31）
 char* get_current_day() {
-	time_t now = time(0);
-	struct tm* ltm = localtime(&now);
-	char* current_time;
-	int current_year = 1900 + ltm->tm_year;
-	int current_month = 1 + ltm->tm_mon;
-	int current_day = ltm->tm_mday;
-	sprintf(current_time, "%d-%d-%d", current_year, current_month, current_day);
+    time_t now = time(0);
+    struct tm* ltm = localtime(&now);
+    int current_year = 1900 + ltm->tm_year;
+    int current_month = 1 + ltm->tm_mon;
+    int current_day = ltm->tm_mday;
+    char* current_time = (char*)malloc(11 * sizeof(char));
+    if (current_time == NULL) {
+        return NULL;
+    }
+    sprintf(current_time, "%d-%d-%d", current_year, current_month, current_day);
+    return current_time;
 }
-
-//获取当前时间生成订单号
 char* get_current_time() {
-	time_t now = time(0);
-	struct tm* ltm = localtime(&now);
-	int current_year = 1900 + ltm->tm_year;
-	int current_month = 1 + ltm->tm_mon;
-	int current_day = ltm->tm_mday;
-	int current_hour = ltm->tm_hour;
-	int current_min = ltm->tm_min;
-	int current_sec = ltm->tm_sec;
-	char* current_time = (char*)malloc(20 * sizeof(char));
-	if (current_time == NULL) {
-		return NULL;
-	}
-	sprintf(current_time, "%d-%d-%d %d:%d:%d", current_year, current_month, current_day, current_hour, current_min, current_sec);
-	return current_time;
+    time_t now = time(0);
+    struct tm* ltm = localtime(&now);
+    int current_year = 1900 + ltm->tm_year;
+    int current_month = 1 + ltm->tm_mon;
+    int current_day = ltm->tm_mday;
+    int current_hour = ltm->tm_hour;
+    int current_min = ltm->tm_min;
+    int current_sec = ltm->tm_sec;
+    char* current_time = (char*)malloc(20 * sizeof(char));
+    if (current_time == NULL) {
+        return NULL;
+    }
+    sprintf(current_time, "%d-%d-%d %d:%d:%d", current_year, current_month, current_day, current_hour, current_min, current_sec);
+    return current_time;
 }
-
-////生成orderID
 char* get_orderID() {
-	srand(time(0));
-	int randomNumber = rand();
-	char* rand;
-	sprintf(rand, "-%d", randomNumber);
-	char* orderID = strcat(get_current_time(), rand);
-	return orderID;
+    srand(time(0));
+    int randomNumber = rand();
+    char* rand;
+    sprintf(rand, "%d", randomNumber);
+    char* orderID = strcat(get_current_time(), rand);
+    return orderID;
 }
-
-
 //历史场次时间冲突判断
 //return 0 :查询失败
 //       1 :无冲突
 //       2 :已购买过该场次的票
 //       3 :当天已经购买五个场次的票
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
-	int count = 0;
-	int history_order_year[100];
-	int history_order_month[100];
-	int history_order_day[100];
-	Linked_string_list* movie_id_list = NULL;
-	if (!usr) { printf("User is NULL!\n"); return 0; }
-	Linked_string_list* order = usr->my_order;
-	while (order != NULL) {
-		Order* order_find = find_order_in_hash_table(hashTable, order->id);
-		if (order_find->status != 1) continue;
-		if ((sscanf(order_find->time, "%d-%d-%d", &history_order_year[count], &history_order_month[count], &history_order_day[count])) != 3) {
-			printf("%d\n", history_order_day[count]);
-			printf("%s", order_find->time);
-			return 0;
-		}
-		string_direct_add_to_list(&movie_id_list, order_find->movie_id);
-		count++;
-		order = order->next;
-	}
-	int current_year, current_month, current_day;
-	sscanf(get_current_day(), "%d-%d-%d", &current_year, &current_month, &current_day);
-	int history_order_count = 0;
-	for (int i = count; i > 0; i--) {
-		if (history_order_year[i] == current_year && history_order_month[i] == current_month && history_order_day[i] == current_day && strcmp(movie_id_list->id, movie->movie_id)) {
-			history_order_count++;
-		}
-		if (strcmp(movie_id_list->id, movie->movie_id) == 0) {
-			return 2;
-		}
-		movie_id_list = movie_id_list->next;
-	}
-	free_list(movie_id_list);
-
-	if (history_order_count >= 5) {
-		return 3;
-	}
-	return 1;
+    int count = 0;
+    int history_order_year[100];
+    int history_order_month[100];
+    int history_order_day[100];
+    Linked_string_list* movie_id_list = NULL;
+    if (!usr) { printf("User is NULL!\n"); return 0; }
+    Linked_string_list* order = usr->my_order;
+    while (order != NULL) {
+        Order* order_find = find_order_in_hash_table(hashTable, order->id);
+        if (order_find->status != 1) continue;
+        if ((sscanf(order_find->time, "%d-%d-%d", &history_order_year[count], &history_order_month[count], &history_order_day[count])) != 3) {
+            printf("%d\n", history_order_day[count]);
+            printf("%s",order_find->time);
+            return 0;
+        }
+        string_direct_add_to_list(&movie_id_list,order_find->movie_id);
+        count++;
+        order = order->next;
+    }
+    int current_year, current_month, current_day;
+    sscanf(get_current_day(), "%d-%d-%d", &current_year, &current_month, &current_day);
+    int history_order_count = 0;
+    for (int i = count; i >0; i--) {
+        if (history_order_year[i] == current_year && history_order_month[i] == current_month && history_order_day[i] == current_day && strcmp(movie_id_list->id, movie->movie_id)) {
+            history_order_count++;
+        }
+        if (strcmp(movie_id_list->id,movie->movie_id) == 0) {
+            return 2;
+        }
+        movie_id_list = movie_id_list->next;
+    }
+    free_list(movie_id_list);
+    
+    if (history_order_count >= 5) {
+        return 3;
+    }
+    return 1;
 }
 
 //通过seats计算座位数

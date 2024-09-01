@@ -9,8 +9,7 @@ int main(){
     hash_ini();
     load_file();
     int (*seat_map)[26]=Seat_map_generation();
-    ;
-    printf("%d",process_pay(find_order_in_hash_table(orderHashTable,"O005"), seat_map, orderHashTable));
+    printf("%d", history_order_time_check(find_user_in_hash_table(userHashTable,"U001"), find_movie_in_hash_table(movieHashTable,"M001"),orderHashTable));
     //Seat_map_show(seat_map);
 
 //    do {
