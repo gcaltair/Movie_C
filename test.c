@@ -9,11 +9,9 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    //film_show_all(film_list);
-    //film_show(find_film_in_hash_table_by_id(filmHashTable, "FLM001"));
-    //Seat_map_show(seat_map);
-
-    do {
+    movie_show_all(movie_sort(movie_list, compare_movies_by_occupancy_rate));
+    
+    /*do {
         mode =login();
     } while (!mode);
     if(mode==admin_mode)
@@ -23,7 +21,7 @@ int main(){
     else if(mode==user_mode)
     {
         printf("\nWelcome user");
-    }
+    }*/
     
 }
 static int login()

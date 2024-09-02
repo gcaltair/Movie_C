@@ -56,7 +56,7 @@ void movie_show(const Movie* movie) {
     if (movie == NULL) return;
     printf("Movie ID: %s\n",movie->movie_id);
     printf("Film ID: %s\n", movie->film_id);
-    printf("Play Theater ID: %s\n", movie->theater_id);
+    printf("Theater ID: %s\n", movie->theater_id);
     printf("Start Time: %s\n", movie->start_time);
     printf("End Time: %s\n", movie->end_time);
     printf("Remaining Tickets: %d\n", movie->remaining_ticket);
@@ -73,6 +73,8 @@ void movie_show_all(Movie* head) {
         movie = movie->next;
     }
 }
+
+
 
 
 // 创建哈希表
@@ -124,6 +126,7 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->movie_id = strdup(movie->movie_id);
     new_movie->film_id = strdup(movie->film_id);
     new_movie->film = movie->film;
+    new_movie->theater_id = movie->theater_id;
     new_movie->theater = movie->theater;
     new_movie->start_time = strdup(movie->start_time);
     new_movie->end_time = strdup(movie->end_time);
@@ -154,186 +157,79 @@ Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
     return result_head;  // 返回结果链表的头节点
 }
 
-// 创建新链表并对其进行排序
-Movie* movie_sort_by_purchased_ticket(Movie* head) {
+Movie* movie_list_create_by_film_name(char* name,Film_hash_table* film_hash_table,Movie_hash_table* movie_hash_table)
+{
     Movie* new_head = NULL;
-    char current_time[20];
-    get_current_time(current_time, sizeof(current_time));
-
-    // 遍历原链表，将未放映的场次添加到新链表中  
-    Movie* current = head;
-    while (current != NULL) {
-        // 判断电影是否未放映：end_time > current_time  
-        if (strcmp(current->end_time, current_time) > 0) {
-            // 使用movie_copy_info函数复制节点  
-            Movie* new_node = movie_copy_info(current);
-            if (new_node == NULL) {
-                // 处理内存分配失败的情况，简单返回NULL
-                return NULL;
-            }
-            new_node->next = new_head;
-            new_head = new_node;
-        }
-        current = current->next;
+    Film* film = find_film_in_hash_table_by_name(film_hash_table, name);
+    Linked_string_list* string_head = film->playing_movie;
+    while (string_head)
+    {
+        Movie* target = movie_copy_info(find_movie_in_hash_table(movie_hash_table, string_head->id));
+        movie_add_to_list(&new_head, target);
     }
-
-
-    // 对新链表按余票数进行排序（余票少的排在前面）
-    if (new_head != NULL) {
-        int swapped;
-        do {
-            swapped = 0;
-            Movie* ptr = new_head;
-            Movie* prev = NULL;
-            while (ptr->next != NULL) {
-                if (ptr->remaining_ticket > ptr->next->remaining_ticket) {
-                    // 交换节点数据
-                    if (prev == NULL) {
-                        // 交换的是头节点
-                        Movie* temp = ptr->next;
-                        ptr->next = temp->next;
-                        temp->next = ptr;
-                        new_head = temp;
-                        prev = new_head;
-                    }
-                    else {
-                        Movie* temp = ptr->next;
-                        ptr->next = temp->next;
-                        temp->next = ptr;
-                        prev->next = temp;
-                        prev = temp;
-                    }
-                    swapped = 1;
-                }
-                else {
-                    prev = ptr;
-                    ptr = ptr->next;
-                }
-            }
-        } while (swapped);
-    }
-
     return new_head;
 }
 
-// 计算上座率
-double calculate_occupancy_rate(Movie* movie) {
-    // 假设上座率计算为: 已售票数 / (已售票数 + 剩余票数)
-    int sold_tickets = movie->remaining_ticket; // 剩余票数
-    return (sold_tickets > 0) ? 1.0 / sold_tickets : 1.0;
-}
-
-// 创建新链表并对其进行排序
-Movie* movie_sort_by_occupancy_rate(Movie* head) {
+Movie* movie_filter_by_film_name(char* name, Movie* head)
+{
     Movie* new_head = NULL;
-    char current_time[20];
-    get_current_time(current_time, sizeof(current_time));
-
-    // 遍历原链表，将已放映结束的场次添加到新链表中
-    Movie* current = head;
-    while (current != NULL) {
-        // 判断电影是否已放映结束：end_time <= current_time
-        if (strcmp(current->end_time, current_time) <= 0) {
-            // 复制节点
-            Movie* new_node = (Movie*)malloc(sizeof(Movie));
-            *new_node = *current;  // 复制节点内容
-            new_node->next = new_head;
-            new_head = new_node;
+    while (head)
+    {
+        if (!strcmp(head->film->film_name, name))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
         }
-        current = current->next;
+        head = head->next;
     }
-
-    // 对新链表按上座率进行排序（上座率高的排在前面）
-    if (new_head != NULL) {
-        int swapped;
-        do {
-            swapped = 0;
-            Movie* ptr = new_head;
-            Movie* prev = NULL;
-            while (ptr->next != NULL) {
-                double current_occupancy = calculate_occupancy_rate(ptr);
-                double next_occupancy = calculate_occupancy_rate(ptr->next);
-                if (current_occupancy < next_occupancy) {
-                    // 交换节点数据
-                    if (prev == NULL) {
-                        // 交换的是头节点
-                        Movie* temp = ptr->next;
-                        ptr->next = temp->next;
-                        temp->next = ptr;
-                        new_head = temp;
-                        prev = new_head;
-                    }
-                    else {
-                        Movie* temp = ptr->next;
-                        ptr->next = temp->next;
-                        temp->next = ptr;
-                        prev->next = temp;
-                        prev = temp;
-                    }
-                    swapped = 1;
-                }
-                else {
-                    prev = ptr;
-                    ptr = ptr->next;
-                }
-            }
-        } while (swapped);
-    }
-
     return new_head;
 }
-// 排序数组的比较函数
-int compare_movies(const void* a, const void* b) {
-    Movie* movieA = *(Movie**)a;
-    Movie* movieB = *(Movie**)b;
-    return (movieA->price > movieB->price) - (movieA->price < movieB->price);
-}
-Movie* movie_sort_by_price(Movie* head) {
-    if (head == NULL) return NULL;
 
-    // 计算链表长度
-    int length = 0;
-    Movie* current = head;
-    while (current != NULL) {
-        length++;
-        current = current->next;
-    }
-
-    // 将链表数据复制到数组中
-    Movie** movie_array = (Movie**)malloc(length * sizeof(Movie*));
-    current = head;
-    for (int i = 0; i < length; i++) {
-        movie_array[i] = movie_copy_info(current); // 复制当前电影场次信息
-        current = current->next;
-    }
-
-   
-
-    // 使用qsort对数组排序
-    qsort(movie_array, length, sizeof(Movie*), compare_movies);
-
-    // 将排序后的数组重新组成链表
-    Movie* sorted_head = movie_array[0];
-    current = sorted_head;
-    for (int i = 1; i < length; i++) {
-        current->next = movie_array[i];
-        current = current->next;
-    }
-    current->next = NULL; // 结束链表
-
-    free(movie_array); // 释放数组
-
-    return sorted_head; // 返回新链表的头节点
+int compare_movies_by_income(const void* a, const void* b)
+{
+    Movie* movie1 = *(Movie* const*)a;
+    Movie* movie2 = *(Movie* const*)b;
+    double income1 = (movie1->theater->theater_capacity - movie1->remaining_ticket) * (movie1->discount);
+    double income2 = (movie2->theater->theater_capacity - movie1->remaining_ticket) * (movie2->discount);
+    return income1 < income2 ? 1 : -1;
 }
 
-    // 声明一个比较函数，用于qsort  
+
+
+//上座率升序
+int compare_movies_by_occupancy_rate(const void* a, const void* b)
+{
+    Movie* movie1 = *(Movie* const*)a;
+    Movie* movie2 = *(Movie* const*)b;
+    double rate1 = (1 - (movie1->remaining_ticket)*(1.0)/ (movie1->theater->theater_capacity));
+    double rate2= (1 - (movie2->remaining_ticket)*(1.0) / (movie2->theater->theater_capacity));
+    if (rate1 < rate2) return -1;
+    return 1;
+}
+
+int compare_movies_by_price(const void* a, const void* b)
+{
+    Movie* movie1 = *(Movie* const*)a;
+    Movie* movie2 = *(Movie* const*)b;
+    if (movie1->price < movie2->price) return -1;
+    return 1;
+}
+
+
+int compare_movies_by_remaining_ticket(const void* a, const void* b)
+{
+    Movie* movie1 = *(Movie* const*)a;
+    Movie* movie2 = *(Movie* const*)b;
+    if (movie1->remaining_ticket < movie2->remaining_ticket) return 1;
+    return -1;
+}
+ 
 int compare_movies_by_start_time(const void* a, const void* b) {
     Movie* movie1 = *(Movie* const*)a;
     Movie* movie2 = *(Movie* const*)b;
     return strcmp(movie1->start_time, movie2->start_time);
 }
-    // 对所有电影场次按放映时间进行排序  
-Movie* movie_sort_by_start_time(Movie* head) {
+    
+Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
     Movie** movies = NULL;
     int count = 0;
 
@@ -360,7 +256,7 @@ Movie* movie_sort_by_start_time(Movie* head) {
     }
 
     // 使用qsort对数组进行排序  
-    qsort(movies, count, sizeof(Movie*), compare_movies_by_start_time);
+    qsort(movies, count, sizeof(Movie*), compare);
 
     // 重新构建链表  
     Movie* new_head = movies[0];
