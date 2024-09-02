@@ -8,22 +8,21 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    string_node_show_all(film_list->playing_movie);
     //film_show_all(film_list);
     //film_show(find_film_in_hash_table_by_id(filmHashTable, "FLM001"));
     //Seat_map_show(seat_map);
 
-//    do {
-//        mode =login();
-//    } while (!mode);
-//    if(mode==admin_mode)
-//    {
-//        printf("\nWelcome admin");
-//    }
-//    else if(mode==user_mode)
-//    {
-//        printf("\nWelcome user");
-//    }
+    do {
+        mode =login();
+    } while (!mode);
+    if(mode==admin_mode)
+    {
+        printf("Welcome admin");
+    }
+    else if(mode==user_mode)
+    {
+        printf("Welcome user");
+    }
 //    sleep(100);
 }
 static int login()

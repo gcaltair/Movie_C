@@ -31,7 +31,7 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
             return 0;
         }
         printf("Enter your password:");
-        getPassword(password, 20);
+        scanf("%s", password);
         if(!strcmp(password,"^C"))return 0;
         key=!strcmp(usr->password,password);
         if(!key) {
@@ -59,7 +59,8 @@ bool admin_password_check(Admin* admin,Admin* admin_list){
             return 0;
         }
         printf("Enter your password:");
-        if(!getPassword(password, 20)) return 0;
+        scanf("%s", password);
+        //if(!getPassword(password, 20)) return 0;
         key=!strcmp(admin->admin_password,password);
         if(!key) {
             printf("\nPassword wrong!\n");
@@ -78,7 +79,7 @@ static bool getPassword(char *password, int maxLen) {
     int i = 0;
     char ch;
     while (i < maxLen - 1) {
-        //ch = _getch(); // 读取一个字符但不显示
+        ch =getchar(); // 读取一个字符但不显示
         if(ch==26) return 0;
         if (ch == '\r') { // 检测到回车符（Enter键）
             break;

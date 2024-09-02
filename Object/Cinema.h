@@ -11,6 +11,7 @@ typedef struct Cinema{
     char* cinema_id;
     struct Cinema *next;
     Linked_string_list* my_theater;
+    Linked_string_list* peek_time;
 }Cinema;
 Cinema* cinema_create(const char* name, const char* location, char* id);
 Cinema* cinema_create_list(Cinema* new_cinema); //创建链表头节点
