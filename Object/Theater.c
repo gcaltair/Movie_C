@@ -1,25 +1,15 @@
 //
 // Created by G on 2024/8/27.
 //
-/*
-测试代码
-Cinema* t = cinema_add("Cinema A", "Location A", 1);
-Cinema *cinema_list= cinema_create_list(t);;
-cinema_direct_add_to_list(&cinema_list, "Cinema C", "Location C", 3);
-Theater *theater_temp= theater_add("theater1",20,cinema_list,"3D");
-Theater *theater_list=theater_create_list(theater_temp);
-theater_add_to_list(&theater_list,theater_temp); //只有使用这个函数添加对象到链表才会更新Cinema->Theater的指针
-cinema_show(theater_temp->cinema);
-theater_show(cinema_list->theater);
-
- */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "Theater.h"
+#include"Movie.h"
 #include "Cinema.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
+
 // 创建并初始化一个新的 Theater 结构体
 Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
     // 动态分配内存给 Theater 结构体
@@ -92,6 +82,68 @@ void theater_show_all(Theater* head) {
         temp = temp->next;
     }
 }
+
+double get_theater_income(Theater* theater, Movie_hash_table* hash_table)
+{
+    double res = 0;
+    Linked_string_list* head = theater->my_movie;
+    while (head)
+    {
+        Movie* target = find_movie_in_hash_table(hash_table, head->id);
+        res += (target->discount) * (target->price);
+
+    }
+    return res;
+}
+//这个函数有问题！！！！
+int compare_theaters_by_income(const void* a, const void* b, void* context) {
+    Theater* theater1 = *(Theater* const*)a;
+    Theater* theater2 = *(Theater* const*)b;
+    Movie_hash_table* movieHashTable = (Movie_hash_table*)context;
+
+    return get_theater_income(theater1, movieHashTable) < get_theater_income(theater2, movieHashTable) ? 1 : -1;
+}
+
+//Theater* theater_sort(Theater* head, int (*compare)(const void*,const void*,void*), Movie_hash_table* movie_hash_table) {
+//    Theater** theaters = NULL;
+//    int count = 0;
+//
+//    // 首先，计算链表中的影厅数量  
+//    Theater* current = head;
+//    while (current != NULL) {
+//        count++;
+//        current = current->next;
+//    }
+//    // 分配一个数组来存储所有影厅的指针  
+//    theaters = (Theater**)malloc(count * sizeof(Theater*));
+//    if (!theaters) {
+//        printf("Memory allocation failed!\n");
+//        return NULL;
+//    }
+//
+//    // 将所有影厅的指针存储到数组中  
+//    int i = 0;
+//    current = head;
+//    while (current != NULL) {
+//        theaters[i++] = current;
+//        current = current->next;
+//    }
+//
+//    // 使用qsort对数组进行排序  
+//    qsort_s(theaters, count, sizeof(Theater*), compare,(void*)movie_hash_table);
+//
+//    // 重新构建链表  
+//    Theater* new_head = theaters[0];
+//    for (i = 1; i < count; i++) {
+//        theaters[i - 1]->next = theaters[i];
+//    }
+//    theaters[count - 1]->next = NULL;
+//
+//    // 释放数组内存  
+//    free(theaters);
+//
+//    return new_head;
+//}
 
 // 初始化哈希表，将所有的指针设置为 NULL
 void init_theater_hash_table(Theater_hash_table* ht) {

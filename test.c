@@ -9,7 +9,6 @@ int main(){
     int mode;
     hash_ini();
     load_file();
-    movie_show_all(movie_sort(movie_list, compare_movies_by_occupancy_rate));
     
     /*do {
         mode =login();

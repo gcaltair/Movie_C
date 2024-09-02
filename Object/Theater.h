@@ -7,6 +7,7 @@
 #define HASH_TABLE_SIZE 100
 typedef struct Cinema Cinema;
 typedef struct Theater_hash_table Theater_hash_table;
+typedef struct Movie_hash_table Movie_hash_table;
 typedef struct Linked_string_list Linked_string_list;
 typedef struct Theater {
     char* theater_id;
@@ -30,6 +31,11 @@ void theater_add_to_list(Theater** head, Theater* new_theater);
 Theater* theater_find_by_name(Theater* head, const char* name);
 void theater_show(const Theater* theater);
 void theater_show_all(Theater* head);
+
+//这个函数有问题！
+int compare_theaters_by_income(const void* a, const void* b, const void* context); 
+
+double get_theater_income(Theater* theater, Movie_hash_table* hash_table);
 
 typedef struct Theater_hash_table {
     Theater* table[HASH_TABLE_SIZE];
