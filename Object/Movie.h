@@ -78,4 +78,5 @@ int compare_movies_by_occupancy_rate(const void* a, const void* b);
 
 int compare_movies_by_price(const void* a, const void* b);
 
+Movie* filter_movies_by_date(const char* input_date, Movie* head);
 #endif // MOVIE_C_MOVIE_H

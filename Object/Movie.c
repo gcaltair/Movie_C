@@ -270,6 +270,28 @@ Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
 
     return new_head;
 }
+// Helper function to compare the date part of start_time with the input date
+int is_same_date(const char* start_time, const char* input_date) {
+    char movie_date[11];
+    strncpy(movie_date, start_time, 10);  // Extract the date part (YYYY-MM-DD) from start_time
+    movie_date[10] = '\0';
+    return strcmp(movie_date, input_date) == 0;
+}
 
+// Function to filter movies by date
+Movie* filter_movies_by_date(const char* input_date, Movie* head) {
+    Movie* filtered_head = NULL;
+    Movie* current = head;
+
+    while (current != NULL) {
+        if (is_same_date(current->start_time, input_date)) {
+            Movie* new_movie = movie_copy_info(current);
+            movie_add_to_list(&filtered_head, new_movie);
+        }
+        current = current->next;
+    }
+
+    return filtered_head;
+}
 
 
