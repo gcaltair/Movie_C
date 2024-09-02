@@ -132,6 +132,7 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->hash_next=NULL;
     return new_movie;
 }
+
 // 根据放映场次类型过滤
 Movie* movie_filter_by_movie_type(Movie* head, const char* movie_type) {
     Movie* result_head = NULL;  // 结果链表的头节点
@@ -152,6 +153,8 @@ Movie* movie_filter_by_movie_type(Movie* head, const char* movie_type) {
     return result_head;  // 返回结果链表的头节点
 }
 
+
+//按照已经购票数排序
 // 创建新链表并对其进行排序
 Movie* movie_sort_by_purchased_ticket(Movie* head) {
     Movie* new_head = NULL;
@@ -226,7 +229,6 @@ Movie* movie_sort_by_occupancy_rate(Movie* head) {
     Movie* new_head = NULL;
     char current_time[20];
     get_current_time(current_time, sizeof(current_time));
-
     // 遍历原链表，将已放映结束的场次添加到新链表中
     Movie* current = head;
     while (current != NULL) {

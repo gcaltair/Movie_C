@@ -23,13 +23,13 @@ typedef struct User {
 } User;
 
 //对于修改用户的功能的几个mode进行枚举
-enum mode {
-    modify_id = 1,
-    modify_name = 2,
-    modify_gender=3,
-    modify_telephone = 4,
-    modify_password = 5,
-    modify_email = 6
+enum mode1{
+    modify_user_id = 1,
+    modify_user_name = 2,
+    modify_user_gender=3,
+    modify_user_telephone = 4,
+    modify_user_password = 5,
+    modify_user_email = 6
 };
 
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,
