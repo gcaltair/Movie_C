@@ -4,27 +4,26 @@
 #include "Theater.h"
 #define HASH_TABLE_SIZE 100
 typedef struct Movie_hash_table Movie_hash_table;
+typedef struct Film Film;
 typedef struct Movie {
     char* movie_id;
-    char* movie_name;
-
-
+    char* film_id;
+    Film* film;
+    char* theater_id;
     Theater* theater; // 指向在哪个影厅播放  
-
+    
     char* start_time;
     char* end_time;
     int remaining_ticket;
     double price;
     double discount;
-    char* movie_type;
 
     struct Movie* next; // 指向下一个电影场次（链表）
     struct Movie *hash_next;
 } Movie;
 
 // 创建新的 Movie 节点  
-Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const char* movie_name,Theater* play_theater, const char* start_time, const char* end_time,
-    int remaining_ticket, double price, double discount, const char* movie_type);
+Movie* movie_create(Movie_hash_table* movieHashTable, const char* movie_id, const char* film_id, Film* film, const char* theater_id, Theater* theater, const char* start_time, const char* end_time, int remaining_ticket, double price, double discount);
 
 // 添加 Movie 到链表
 void movie_add_to_list(Movie** head, Movie* newMovie);

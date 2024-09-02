@@ -11,6 +11,7 @@
 #include "Object/Cinema.h"
 #include "Object/Movie.h"
 #include "Object/Order.h"
+#include"Object/Film.h"
 #define MAX_LINE_LENGTH 1024
 
 void load_data_from_csv(const char* filename, DataHandler handler, void* context) {
@@ -99,7 +100,7 @@ void handle_cinema_data(char** fields, void* context) {
 void handle_movie_data(char** fields, void* context) {
     if (fields[0] && fields[1] && fields[2] && fields[3] && fields[4] && fields[5] && fields[6] && fields[7] && fields[8]) {
         const char* movie_id = fields[0];
-        const char* movie_name = fields[1];
+        const char* film_id = fields[1];
         const char* theater_id = fields[2]; // 影厅ID
         const char* start_time = fields[3];
         const char* end_time = fields[4];
@@ -110,13 +111,15 @@ void handle_movie_data(char** fields, void* context) {
 
         Movie** movie_list = ((Movie ***)context)[0];
         Movie_hash_table* movie_hash_table =  ((Movie_hash_table **)context)[1];
-        Theater_hash_table *theater_table=((Theater_hash_table**)context)[2];
+        Theater_hash_table* theater_table = ((Theater_hash_table**)context)[2];
+        Film_hash_table * film_table = ((Film_hash_table**)context)[3];
 
         // 查找对应的 Theater
         Theater* play_theater = find_theater_in_hash_table(theater_table, theater_id);
-
+        Film* released_film = find_film_in_hash_table_by_id(film_table, film_id);
+        
         // 创建新的 Movie 实例
-        Movie* new_movie = movie_create(movie_hash_table, movie_id, movie_name, play_theater, start_time, end_time, remaining_ticket, price, discount, theater_type);
+        Movie* new_movie = movie_create(movie_hash_table, movie_id, film_id,released_film, theater_id, play_theater, start_time, end_time, remaining_ticket, price, discount);
 
         // 将新创建的 Movie 添加到链表中
         movie_add_to_list(movie_list, new_movie);
@@ -175,4 +178,27 @@ void handle_order_data(char** fields, void* context) {
         order_add_to_list(order_list, new_order);
 
         }
+}
+void handle_film_data(char** fields, void* context) {
+    // 从 context 中获取所需的 Film 列表和哈希表
+    Film** film_list = ((Film***)context)[0];
+    Film_hash_table* hash_table = ((Film_hash_table**)context)[1];
+
+    // 从 fields 中提取数据
+    const char* film_id = fields[0];
+    const char* film_name = fields[1];
+    const char* film_type = fields[2];
+    const char* film_language = fields[3];
+    const char* film_summary = fields[4];
+    int film_rating = atoi(fields[5]);
+
+    // 创建新的 Film 实例
+    Film* new_film = film_create(hash_table, film_id, film_name, film_type, film_language, film_summary, film_rating);
+    if (!new_film) {
+        printf("Failed to create film: %s\n", film_name);
+        return;
+    }
+
+    // 将 Film 添加到链表中
+    film_add_to_list(film_list, new_film);
 }

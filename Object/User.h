@@ -23,13 +23,14 @@ typedef struct User {
 } User;
 
 //对于修改用户的功能的几个mode进行枚举
-enum mode {
+enum user_modify_mode {
     modify_id = 1,
     modify_name = 2,
-    modify_gender=3,
-    modify_telephone = 4,
-    modify_password = 5,
-    modify_email = 6
+    
+    modify_telephone = 3,
+    modify_password = 4,
+    modify_email = 5,
+    modify_gender = 6,
 };
 
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,
@@ -44,7 +45,7 @@ User* user_find_by_id(User* head, const char* userID); // 通过用户ID查找�
 void user_show(const User* user); // 显示单个用户信息
 void user_show_all(User* head); // 显示所有用户信息
 //修改用户信息
-void modify_personalinfo();
+User* user_modify(User* head, char* id, int mode, char* arg);
 
 
 //哈希表相关

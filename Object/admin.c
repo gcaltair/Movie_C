@@ -58,32 +58,32 @@ void admin_show(const Admin *admin) {
 
 }
 //修改用户信息
-Admin* admin_modify(Admin* head, char* id, int mode, char* arg) {
+Admin* admin_modify(Admin* head, char* id, int modify_mode, char* arg) {
     Admin* admin = admin_find_by_id(head, id);
     if (admin == NULL) {
         printf("The admin is not existed!");
         return NULL; // 如果找不到管理员，则直接返回
     }
 
-    switch (mode) {
-        case modify_id:
+    switch (modify_mode) {
+        case 1:
             // 通常不推荐修改ID，但为了完整性包含此功能
             free(admin->admin_id); // 释放旧ID的内存
             admin->admin_id = strdup(arg); // 分配新ID的内存并复制
             break;
-        case modify_name:
+        case 2:
             free(admin->admin_name);
             admin->admin_name = strdup(arg);
             break;
-        case modify_telephone:
+        case 3:
             free(admin->admin_telephone);
             admin->admin_telephone = strdup(arg);
             break;
-        case modify_password:
+        case 4:
             free(admin->admin_password);
             admin->admin_password = strdup(arg);
             break;
-        case modify_email:
+        case 5:
             free(admin->admin_email);
             admin->admin_email = strdup(arg);
             break;

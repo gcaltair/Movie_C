@@ -7,9 +7,10 @@
 #include "Order.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
+#include"Film.h"
 // 创建新的 Movie 节点  
-Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const char *movie_name,Theater* theater, const char* start_time, const char* end_time,
-    int remaining_ticket, double price, double discount, const char* movie_type) {
+Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const char* film_id,Film* film,const char* theater_id,Theater* theater, const char* start_time, const char* end_time,
+    int remaining_ticket, double price, double discount) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
         printf("Memory allocation failed!\n");
@@ -17,19 +18,21 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id, const
     }
     if (!theater) { printf("Movie %s's Theater is null\n",movie_id); newMovie->theater = NULL;}
     else newMovie->theater = theater;
+    newMovie->film = film;
     newMovie->movie_id= strdup(movie_id); // 使用 strdup 简化内存分配和复制
-    newMovie->movie_name= strdup(movie_name);
-    
+    newMovie->film_id = strdup(film_id);
+    newMovie->theater_id = strdup(theater_id);
     newMovie->start_time = strdup(start_time);
     newMovie->end_time = strdup(end_time);
     newMovie->remaining_ticket = remaining_ticket;
     newMovie->price = price;
     newMovie->discount = discount;
-    newMovie->movie_type = strdup(movie_type);
     newMovie->next = NULL;
+    newMovie->hash_next = NULL;
     insert_movie_to_hash_table(movieHashTable,newMovie);
 
-    //string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+    string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+    string_direct_add_to_list(&(film->playing_movie), newMovie->movie_id);
 
     return newMovie;
 }
@@ -52,14 +55,13 @@ void movie_add_to_list(Movie** head, Movie* newMovie) {
 void movie_show(const Movie* movie) {
     if (movie == NULL) return;
     printf("Movie ID: %s\n",movie->movie_id);
-    printf("Movie Name: %s\n", movie->movie_name);
-    printf("Play Theater: %s\n", movie->theater ? movie->theater->theater_name : "N/A");
+    printf("Film ID: %s\n", movie->film_id);
+    printf("Play Theater ID: %s\n", movie->theater_id);
     printf("Start Time: %s\n", movie->start_time);
     printf("End Time: %s\n", movie->end_time);
     printf("Remaining Tickets: %d\n", movie->remaining_ticket);
     printf("Price: %.2f\n", movie->price);
     printf("Discount: %.2f\n", movie->discount);
-    printf("Movie Type: %s\n", movie->movie_type);
     printf("----------\n");
 }
 
@@ -120,27 +122,27 @@ Movie *movie_copy_info(Movie* movie)
     }
     // 复制当前电影的信息到新节点
     new_movie->movie_id = strdup(movie->movie_id);
-    new_movie->movie_name = strdup(movie->movie_name);
+    new_movie->film_id = strdup(movie->film_id);
+    new_movie->film = movie->film;
     new_movie->theater = movie->theater;
     new_movie->start_time = strdup(movie->start_time);
     new_movie->end_time = strdup(movie->end_time);
     new_movie->remaining_ticket = movie->remaining_ticket;
     new_movie->price = movie->price;
     new_movie->discount = movie->discount;
-    new_movie->movie_type = strdup(movie->movie_type);
     new_movie->next = NULL;
     new_movie->hash_next=NULL;
     return new_movie;
 }
 // 根据放映场次类型过滤
-Movie* movie_filter_by_movie_type(Movie* head, const char* movie_type) {
+Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
     Movie* result_head = NULL;  // 结果链表的头节点
     Movie* movie = head;
 
     // 遍历原链表
     while (movie != NULL) {
         // 如果电影的 movie_type 符合条件
-        if (strcmp(movie->movie_type, movie_type) == 0) {
+        if (strcmp(movie->film->film_type, film_type) == 0) {
             // 创建一个新节点，将其添加到结果链表
             Movie* new_movie = movie_copy_info(movie);
 

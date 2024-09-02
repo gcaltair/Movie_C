@@ -53,8 +53,9 @@ void cinema_add_to_list(Cinema** head,Cinema* new_cinema) {
 }
 Cinema* cinema_find_by_id(Cinema* head, const char* id) {
     Cinema* temp = head;
+    //if(!temp->cinema_id&&(!temp))
     while (temp != NULL) {
-        if (strcmp(temp->cinema_id,id)== 0) {
+            if (strcmp(temp->cinema_id,id)== 0) {
             return temp;
         }
         temp = temp->next;

@@ -15,6 +15,7 @@
 #include "Object/Theater.h"
 #include "Object/Movie.h"
 #include "Object/Order.h"
+#include"Object/Film.h"
 #include "data_process.h"
 #include "Structure File/linked_list.h"
 #include "user_system.h"
@@ -22,6 +23,7 @@ User *user_now;
 Admin *admin_now;
 
 Order* order_list=NULL;
+Film* film_list = NULL;
 User* user_list=NULL;
 Admin *admin_list=NULL;
 Cinema *cinema_list=NULL;
@@ -32,6 +34,7 @@ User_hash_table *userHashTable=NULL;
 Theater_hash_table* theaterHashTable=NULL;
 Order_hash_table *orderHashTable=NULL;
 Movie_hash_table *movieHashTable=NULL;
+Film_hash_table* filmHashTable = NULL;
 
 enum system_mode
 {

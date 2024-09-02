@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#include"Film.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
 //订座位，seats为用户视角下，故行与列均-1
@@ -82,7 +83,7 @@ void order_show(const Order* order) {
 	printf("Seat number: %d\n", order->seat_number);
 	printf("Status: %d\n", order->status);
 	printf("Time: %s\n", order->time);
-	movie_show(order->movie);
+	//movie_show(order->movie);
 	// 可以根据需要显示更多的订单信息
 }
 

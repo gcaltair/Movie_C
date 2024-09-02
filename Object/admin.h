@@ -18,13 +18,6 @@ typedef struct Admin{
     struct Admin* next;
 }Admin;
 //对于修改管理员的功能的几个mode进行枚举
-enum mode {
-    modify_id = 1,
-    modify_name = 2,
-    modify_telephone = 3,
-    modify_password = 4,
-    modify_email = 5
-};
 Admin* Admin_create(const char* id, const char* name, const char* telephone,
                     const char* password, const char* email,Cinema *cinema_,const char* cinema_id);
 void admin_add_to_list(Admin** head, Admin* new_admin);

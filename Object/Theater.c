@@ -42,7 +42,7 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     theater->my_movie=NULL;
     insert_theater_to_hash_table(hashTable,theater);
 
-    string_direct_add_to_list(&(theater->cinema->my_theater),theater->theater_id);
+    string_direct_add_to_list(&(cinema_->my_theater),theater->theater_id);
     return theater;
 }
 

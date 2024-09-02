@@ -193,7 +193,7 @@ User* user_modify(User* head, char* id, int mode, char* arg) {
         free(user->user_name);
         user->user_name = strdup(arg);
         break;
-    case 3: // 修改性别
+    case 6: // 修改性别
         free(user->gender);
         user->gender = strdup(arg);
         break;
@@ -205,7 +205,7 @@ User* user_modify(User* head, char* id, int mode, char* arg) {
         free(user->password);
         user->password = strdup(arg);
         break;
-    case 6: // 修改邮箱
+    case 3: // 修改邮箱
         free(user->email);
         user->email = strdup(arg);
         break;

@@ -12,4 +12,5 @@ void handle_cinema_data(char** fields, void* context);
 void handle_movie_data(char** fields, void* context);
 void handle_theater_data(char** fields, void* context);
 void handle_order_data(char** fields, void* context);
+void handle_film_data(char** fields, void* context);
 #endif //MOVIE_C_DATA_PROCESS_H

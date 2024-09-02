@@ -1,0 +1,6 @@
+film_id,film_name,film_type,film_language,film_summary,film_rating
+FLM001,Inception,Sci-Fi,English,A thief who enters dreams to steal secrets.,9
+FLM002,Spirited Away,Animation,Japanese,A young girl is trapped in a mysterious world.,10
+FLM003,Interstellar,Sci-Fi,English,A team of explorers travel through a wormhole.,9
+FLM004,Parasite,Thriller,Korean,A poor family schemes to become employed by a wealthy family.,10
+FLM005,The Dark Knight,Action,English,Batman faces the Joker who wreaks havoc on Goth City.,10
