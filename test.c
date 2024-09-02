@@ -3,13 +3,17 @@
 //
 //#include <synchapi.h>
 #include "test.h"
-
+#include"./Structure File/String_set.h"
 
 int main(){
     int mode;
     hash_ini();
     load_file();
-    
+    //StringSetµÄÊ¹ÓÃ
+    StringSet* set= create_string_set();
+    string_set_add(set, "abc");
+    string_set_add(set, "bcd");
+    printf("%d", string_set_contains(set, "aa"));
     /*do {
         mode =login();
     } while (!mode);
