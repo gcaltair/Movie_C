@@ -4,6 +4,7 @@
 //#include <synchapi.h>
 #include "test.h"
 
+
 int main(){
     int mode;
     hash_ini();
@@ -17,13 +18,13 @@ int main(){
     } while (!mode);
     if(mode==admin_mode)
     {
-        printf("Welcome admin");
+        printf("\nWelcome admin");
     }
     else if(mode==user_mode)
     {
-        printf("Welcome user");
+        printf("\nWelcome user");
     }
-//    sleep(100);
+    
 }
 static int login()
 {
@@ -35,7 +36,7 @@ static int login()
         admin_now= admin_find_by_id(admin_list,id);//注意考虑重名问题
         if((!user_now)&&(!admin_now)) {
             printf("ID don't found\n");
-            //Sleep(500);
+            _sleep(500);
             system("cls");
         }
     } while ((!user_now)&&(!admin_now));
