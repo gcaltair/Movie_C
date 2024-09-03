@@ -2,7 +2,7 @@
 // Created by G on 2024/8/27.
 //
 //#include <synchapi.h>
-#include "test.h"
+#include "main.h"
 #include"./Structure File/String_set.h"
 
 int main(){

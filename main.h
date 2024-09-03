@@ -45,4 +45,5 @@ enum system_mode
 static void hash_ini();
 static void load_file();
 static int login();
+static void admin_opreation();
 #endif //MOVIE_C_TEST_H

@@ -169,7 +169,47 @@ Movie* movie_list_create_by_film_name(char* name,Film_hash_table* film_hash_tabl
     }
     return new_head;
 }
-
+Movie* movie_filter_by_cinema_id(char* id, Movie* head)
+{
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (!strcmp(head->theater->cinema_id, id))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
+Movie* movie_filter_by_not_played(Movie* head)
+{
+    char* time = get_current_time();
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (strcmp(head->start_time,time))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
+Movie* movie_filter_by_played(Movie* head)
+{
+    char* time = get_current_time();
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (strcmp(time, head->end_time))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
 Movie* movie_filter_by_film_name(char* name, Movie* head)
 {
     Movie* new_head = NULL;
@@ -228,7 +268,7 @@ int compare_movies_by_start_time(const void* a, const void* b) {
     Movie* movie2 = *(Movie* const*)b;
     return strcmp(movie1->start_time, movie2->start_time);
 }
-    
+
 Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
     Movie** movies = NULL;
     int count = 0;

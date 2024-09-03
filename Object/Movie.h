@@ -55,6 +55,11 @@ int compare_movies_by_income(const void* a, const void* b);
 //创建一个根据电影名所查到的场次链表
 Movie* movie_list_create_by_film_name(char* name, Film_hash_table* film_hash_table, Movie_hash_table* movie_hash_table);
 
+Movie* movie_filter_by_cinema_id(char* id, Movie* head);
+//筛选已经播放的场次
+Movie* movie_filter_by_played(Movie* head);
+//筛选未播放的场次
+Movie* movie_filter_by_not_played(Movie* head);
 typedef struct Movie_hash_table{
     Movie *table[HASH_TABLE_SIZE];
 }Movie_hash_table;

@@ -4,7 +4,6 @@ project(Movie_C C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(Movie_C main.c
-        test.c
         Object/User.c
         Object/User.h
         Object/Order.c
@@ -23,7 +22,7 @@ add_executable(Movie_C main.c
         "Structure File/linked_list.h"
         user_system.c
         user_system.h
-        test.h
+        "main.h"
  "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h")
 add_executable(test1
         test.c
@@ -45,5 +44,5 @@ add_executable(test1
         "Structure File/linked_list.h"
         user_system.c
         user_system.h
-        test.h
+        "main.h"
  "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h")

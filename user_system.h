@@ -9,4 +9,7 @@ typedef struct User_hash_table User_hash_table;
 typedef struct Admin Admin;
 bool admin_password_check(Admin* admin,Admin* admin_list);
 bool user_password_check(User *usr,User_hash_table*userHashTable);
+int get_user_input_int(int max);
+void admin_greet();
+void admin_order_manage(Admin* admin, Movie* movie_list);
 #endif //MOVIE_C_USER_SYSTEM_H
