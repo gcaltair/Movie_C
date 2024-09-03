@@ -503,14 +503,22 @@ int process_pay(Order* order, int (*seat_map)[26], Order_hash_table* hashTable) 
 
 //展示用户所有订单（不包括已经取消的订单）
 void order_show_mini(User* usr, Order_hash_table* hashTable) {
-	if (usr->my_order = NULL) {
+	if (!usr) {
+		printf("用户不存在");
+		return;
+	}
+	if (usr->my_order == NULL) {
 		printf("您没有历史订单。\n");
 	}
 	printf("您的历史订单如下：\n");
 	int history_order_count = 0;
 	Linked_string_list* order = usr->my_order;
-	while (order != NULL) {
-		Order* order_find = find_order_in_hash_table(hashTable, order);
+	while (order!=NULL) {
+		Order* order_find = find_order_in_hash_table(hashTable, order->id);
+		if (!order_find) {
+			printf("order find is null\n");
+			return;
+		}
 		if (order_find->status == 3) {
 			order = order->next;
 			continue;

@@ -4,6 +4,7 @@ int main() {
     int mode;
     hash_ini();
     load_file();
+    string_node_show_all(user_list->my_order);
     order_show_mini(user_list,orderHashTable);
     /*while (1) {
         do {
