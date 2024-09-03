@@ -23,8 +23,8 @@ typedef struct Order {
 }Order;
 typedef struct Order_hash_table Order_hash_table;
 
-Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
-                    Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time);
+Order* order_create(Order_hash_table* hashTable, const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
+	Theater* theater, Cinema* cinema, const char* seats, int seat_number, int status, const char* time);
 void order_add_to_list(Order** head, Order* new_order);
 
 Order* order_find_by_id(Order* head, char* orderID);
@@ -56,13 +56,13 @@ Order* find_order_in_hash_table(Order_hash_table* ht, char* orderID);
 #endif //MOVIE_C_ORDER_H
 
 //创建并初始化座位图
-int (*seat_map_generation())[26];
+int(*seat_map_generation())[26];
 
 //展示座位图
-void seat_map_show(int (*seat_map)[26]);
+void seat_map_show(int(*seat_map)[26]);
 
 //查询场次剩余座位数
-int get_remaining_ticket(int (*seat_map)[26]);
+int get_remaining_ticket(int(*seat_map)[26]);
 
 //以字符串形式返回当前年月日（2024-8-31）
 char* get_current_day();
@@ -93,7 +93,7 @@ int get_seat_number(char* seats);
 //       6：不在影院座次范围内
 //       7 ：座位已售出
 //       8 ：与已售出的座位相隔一个座位
-int saets_check(char* seats, int (*seat_map)[26]);
+int saets_check(char* seats, int(*seat_map)[26]);
 
 //判断订单能否生成
 //return 0 :查询失败
@@ -105,22 +105,13 @@ int saets_check(char* seats, int (*seat_map)[26]);
 //       6：不在影院座次范围内
 //       7 ：座位已售出
 //       8 ：与已售出的座位相隔一个座位
-int order_generation(User* usr, char* seats, Movie* movie, int (*seat_map)[26], Order_hash_table* hashTable);
+int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable);
 
-//discount计算
-//discount = 1 - 0.05 * history_seat_number
+//订单价格计算
+//discount（用户） = 1 - 0.05 * history_seat_number
 //return 0      :计算失败
-//       >=0。5 :计算成功
-double get_discount(Order* order, Order_hash_table* hashTable);
-
-//取消订单
-//return 0 ；取消失败
-//       1 ：取消成功
-int order_cancel(Order* order);
-
-
-//充值
-void recharge(Order* order, double money);
+//       >0 :计算成功
+double get_order_price(Order* order, Order_hash_table* hashTable);
 
 //判断余额是否充足
 //return 0 : 查询失败
@@ -128,19 +119,36 @@ void recharge(Order* order, double money);
 //       2 ：余额不足
 int balanece_check(Order* order, Order_hash_table* hashTable);
 
+//欠款计算
+//return 0  ：不欠款
+//       >0 ：欠款金额
+double  get_debt(Order* order, Order_hash_table* hashTable);
+
+//充值
+void recharge(Order* order, double money);
+
 //付款
 //return 0 ：查询错误
 //       1 : 付款成功
 //       2 ：订单状态不合法
-int process_pay(Order* order, int (*seat_map)[26], Order_hash_table* hashTable);
+int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
+
+//取消订单
+//return 0 ；取消失败
+//       1 ：取消成功
+int order_cancel(Order* order);
 
 //退票
 //return 0 ：退款失败
 //       1 : 退款成功
-int ticket_refund(Order* order, int (*seat_map)[26], Order_hash_table* hashTable);
+int ticket_refund(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //展示用户所有订单（不包括已经取消的订单）
 void order_show_mini(User* usr, Order_hash_table* hashTable);
 
 //计算影厅收入
 double get_movie_income(User* usr, Movie* movie, Order_hash_table* hashTable);
+
+//智能推荐座位图
+//返回距离F13，F14最近的可购买的三个位置，返回格式"F11-F12-F15",进入函数前需判断余票数大于等于3
+char* get_great_seats(int(*seat_map)[26]);

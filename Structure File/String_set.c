@@ -6,6 +6,7 @@ StringSet* create_string_set() {
     StringSet* set = (StringSet*)malloc(sizeof(StringSet));
     if (set) {
         memset(set->table, 0, sizeof(set->table));
+        set->size = 0;  // 初始化集合的大小
     }
     return set;
 }
@@ -29,6 +30,7 @@ bool string_set_add(StringSet* set, const char* str) {
     node->key = strdup(str);
     node->next = set->table[index];
     set->table[index] = node;
+    set->size++;  // 增加集合的大小
 
     return true;
 }
@@ -58,4 +60,8 @@ void string_set_destroy(StringSet* set) {
         }
     }
     free(set);
+}
+
+int string_set_size(StringSet* set) {
+    return set->size;
 }

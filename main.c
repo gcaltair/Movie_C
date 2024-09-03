@@ -1,18 +1,19 @@
 #include "main.h"
-
+#include "main.h"
+static void admin_order_manage();
 int main() {
     int mode;
     hash_ini();
     load_file();
-    string_node_show_all(user_list->my_order);
-    order_show_mini(user_list,orderHashTable);
+    admin_now = admin_find_by_id(admin_list, "A001");
+    admin_opreation();
     /*while (1) {
+        system("cls");
         do {
             mode = login();
         } while (!mode);
         if (mode == admin_mode)
         {
-            system("cls");
             admin_opreation();
         }
         else if (mode == user_mode)
@@ -24,6 +25,7 @@ int main() {
 static void admin_opreation()
 {
     while (1) {
+        system("cls");
         admin_greet();
         int option = get_user_input_int(5);
         switch (option)
@@ -31,13 +33,122 @@ static void admin_opreation()
         case 0:
             return;
         case 1:
-            admin_order_manage(admin_now,movie_list);
-        
+            admin_order_manage();
+            break;
 
         default:
-            break;
+            return;
         }
     }
+}
+static void admin_order_manage()
+{
+    while (1)
+    {
+        system("cls");
+        admin_order_manage_greet();
+        int option = get_user_input_int(2);
+        switch (option)
+        {
+        case 1:
+            admin_view_order();
+        case 2:
+
+        default:
+            return;
+        }
+    }
+
+}
+static void admin_view_order(){
+    Movie* my_cinema_movie_list = movie_list_create_by_cinema(admin_now->cinema, theaterHashTable, movieHashTable);
+    Movie* new_movie_list = movie_list;
+    Movie* free_temp = NULL;
+    Movie* para_temp = NULL;
+    while (1)
+    {
+        system("cls");
+        display_movie_operate_main_menu();
+        int option = get_user_input_int(3);
+        switch (option)
+        {
+        case 1://选择了排序
+            new_movie_list = for_admin_movie_sort(new_movie_list);//进入排序界面
+            break;
+        case 2://选择了筛选
+            para_temp = new_movie_list;
+            free_temp = new_movie_list;
+            break;
+        case 3:
+            movie_show_all(new_movie_list);
+            _sleep(10000);
+            break;
+        default:
+            return;
+        }
+    }  
+}
+Movie* for_admin_movie_sort(Movie* new_movie_list)//进入排序子菜单
+{
+    while (1)
+    {
+        //Movie* temp = new_movie_list;
+        system("cls");
+        display_admin_sort_menu();
+        int option = get_user_input_int(5);
+        //上座率(降序），价格(升序)，场次收入(降序)，开始时间(升序)，剩余票数(升序)
+        switch (option)
+        {
+        case 1:
+            new_movie_list=movie_operation_sort(new_movie_list, 1);
+            printf("按上座率排序完成");
+            /*movie_list_free(temp);*/
+            _sleep(1000);
+            //temp = NULL;
+            break;
+        case 2:
+            new_movie_list = movie_operation_sort(new_movie_list,2);
+            printf("按价格排序完成");
+            //movie_list_free(temp);
+            _sleep(1000);
+            //temp = NULL;
+            break;
+        case 3:
+            new_movie_list = movie_operation_sort(new_movie_list, 3);
+            printf("按场次收入排序完成");
+            //movie_list_free(temp);
+            _sleep(1000);
+            //temp = NULL;
+            break;
+        case 4:
+            new_movie_list = movie_operation_sort(new_movie_list, 4);
+            printf("按开始时间排序完成");
+            //movie_list_free(temp);
+            _sleep(1000);
+            //temp = NULL;
+            break;
+        case 5:
+            new_movie_list = movie_operation_sort(new_movie_list, 5);
+            printf("按剩余票数排序完成");
+            //movie_list_free(temp);
+            _sleep(1000);
+            //temp = NULL;
+            break;
+        default:
+            return new_movie_list;
+        }
+    }
+}
+Movie* for_admin_movie_filter(Movie* new_movie_list)
+{
+    while (1)
+    {
+
+    }
+}
+Movie* movie_choose(Movie* head, Movie_hash_table* movie_hash_table)
+{
+
 }
 static int login()
 {
@@ -92,20 +203,5 @@ static void load_file()
             &order_list,      // 订单链表
     };
     load_data_from_csv("D:\\cccc\\Data\\order.csv", handle_order_data, context7);
-
-
 }
-void admin_greet()
-{
-    printf("*************************************************\n");
-    printf("*               欢迎使用电影院管理系统          *\n");
-    printf("*************************************************\n");
-    printf("* 1. 订单管理                                   *\n");
-    printf("* 2. 影厅管理                                   *\n");
-    printf("* 3. 场次管理                                   *\n");
-    printf("* 4. 个人信息管理                               *\n");
-    printf("* 5. 用户信息管理                               *\n");
-    printf("*                                               *\n");
-    printf("* 0.退出                                        *\n");
-    printf("*************************************************\n");
-}
+

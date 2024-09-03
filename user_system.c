@@ -127,20 +127,49 @@ int get_user_input_int(int max) {
         }
     }
 }
-void admin_order_manage(Admin* admin,Movie* movie_list)
-{
-    while(1)
-    {
-        int option = get_user_input_int(2);
-        switch (option)
-        {
-        case 1:
-            movie_show_all(movie_filter_by_cinema_id(admin->cinema_id, movie_list));
-        case 2:
 
-        default:
-            return;
-        }
-    }
+void admin_greet()
+{
+    printf("*************************************************\n");
+    printf("*               欢迎使用电影院管理系统          *\n");
+    printf("*************************************************\n");
+    printf("* 1. 订单管理                                   *\n");
+    printf("* 2. 影厅管理                                   *\n");
+    printf("* 3. 场次管理                                   *\n");
+    printf("* 4. 个人信息管理                               *\n");
+    printf("* 5. 用户信息管理                               *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+void admin_order_manage_greet()
+{
+    printf("*************************************************\n");
+    printf("*                 订单管理                      *\n");
+    printf("*************************************************\n");
+    printf("* 1. 查看用户订单                               *\n");
+    printf("* 2. 统计用户订单                               *\n");
+    printf("* 3. 订单搜索                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+//场次操作菜单
+void display_movie_operate_main_menu() {
+    printf("\n==== 操作主菜单 ====\n");
+    printf("1. Sort\n");
+    printf("2. Filter\n");
+    printf("3. 选择场次\n\n");
+    printf("0. 返回订单管理（reset排序结果）\n");
     
+}
+//管理员排序菜单
+void display_admin_sort_menu() {
+    printf("\n==== 排序菜单 ====\n");
+    printf("1. 上座率 (降序)\n");
+    printf("2. 价格 (升序)\n");
+    printf("3. 场次收入 (降序)\n");
+    printf("4. 开始时间 (升序)\n");
+    printf("5. 剩余票数 (升序)\n\n");
+    printf("0. 返回主菜单\n");
 }

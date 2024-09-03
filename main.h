@@ -46,4 +46,6 @@ static void hash_ini();
 static void load_file();
 static int login();
 static void admin_opreation();
+static void admin_view_order();
+Movie* for_admin_movie_sort(Movie* new_movie_list);
 #endif //MOVIE_C_TEST_H

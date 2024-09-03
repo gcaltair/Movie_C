@@ -137,6 +137,64 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->hash_next=NULL;
     return new_movie;
 }
+//1.上座率(降序），2.价格(升序)，3.场次收入(降序)，4.开始时间(升序)，5.剩余票数(升序)
+Movie* movie_operation_sort(Movie* head, int mode)
+{
+    Movie* new_head = NULL;
+    switch (mode)
+    {
+    case 1:
+        new_head=movie_sort(head, compare_movies_by_occupancy_rate);
+        break;
+    case 2:
+        new_head = movie_sort(head, compare_movies_by_price);
+        break;
+    case 3:
+        new_head = movie_sort(head, compare_movies_by_income);
+        break;
+    case 4:
+        new_head = movie_sort(head, compare_movies_by_start_time);
+        break;
+    case 5:
+        new_head = movie_sort(head, compare_movies_by_remaining_ticket);
+        break;
+    default:
+        return head;
+    }
+    return new_head;
+}
+
+Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
+    Movie* new_head = NULL;
+
+    switch (mode) {
+    case 1:  // 过滤时间段
+    
+        char** time_period = (char**)filter_param;  // filter_param should be a char* array with two elements: [start_time, end_time]
+        new_head = movie_filter_by_time_period(head, time_period[0], time_period[1]);
+    
+    break;
+    case 2:  // 过滤已放映
+        new_head = movie_filter_by_played(head);
+        break;
+    case 3:  // 过滤未放映
+        new_head = movie_filter_by_not_played(head);
+        break;
+    case 4:  // 过滤当日日期
+        new_head = movie_filter_by_date((const char*)filter_param, head);  // filter_param should be a const char* representing the date
+        break;
+    case 5:  // 过滤影片类型
+        new_head = movie_filter_by_film_type(head, (const char*)filter_param);  // filter_param should be a const char* representing the film type
+        break;
+    case 6:  // 过滤电影院ID
+        new_head = movie_filter_by_cinema_id((char*)filter_param, head);  // filter_param should be a char* representing the cinema ID
+        break;
+    default:
+        return head;  // 如果 mode 不在 1-6 之间，直接返回原链表
+    }
+
+    return new_head;
+}
 // 根据放映场次类型过滤
 Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
     Movie* result_head = NULL;  // 结果链表的头节点
@@ -169,6 +227,24 @@ Movie* movie_list_create_by_film_name(char* name,Film_hash_table* film_hash_tabl
     }
     return new_head;
 }
+Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table, Movie_hash_table* movie_hash_table)
+{   
+    Movie* new_head = NULL;
+    Linked_string_list* head_theater = cinema->my_theater;
+    while (head_theater)
+    {
+        Theater* theater = find_theater_in_hash_table(theater_hash_table, head_theater->id);
+        Linked_string_list* head_movie = theater->my_movie;
+        while (head_movie)
+        {
+            Movie* new_movie = movie_copy_info(find_movie_in_hash_table(movie_hash_table, head_movie->id));
+            movie_add_to_list(&new_head, new_movie);
+            head_movie = head_movie->next;
+        }
+        head_theater = head_theater->next;
+    }
+    return new_head;
+}
 Movie* movie_filter_by_cinema_id(char* id, Movie* head)
 {
     Movie* new_head = NULL;
@@ -177,6 +253,20 @@ Movie* movie_filter_by_cinema_id(char* id, Movie* head)
         if (!strcmp(head->theater->cinema_id, id))
         {
             movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
+Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time)
+{
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if ((strcmp(head->start_time, start_time)>=0)&& (strcmp(end_time, head->start_time)>=0))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+            
         }
         head = head->next;
     }
@@ -242,10 +332,10 @@ int compare_movies_by_occupancy_rate(const void* a, const void* b)
     Movie* movie2 = *(Movie* const*)b;
     double rate1 = (1 - (movie1->remaining_ticket)*(1.0)/ (movie1->theater->theater_capacity));
     double rate2= (1 - (movie2->remaining_ticket)*(1.0) / (movie2->theater->theater_capacity));
-    if (rate1 < rate2) return -1;
-    return 1;
+    if (rate1 < rate2) return 1;
+    return -1;
 }
-
+//升序
 int compare_movies_by_price(const void* a, const void* b)
 {
     Movie* movie1 = *(Movie* const*)a;
@@ -254,15 +344,15 @@ int compare_movies_by_price(const void* a, const void* b)
     return 1;
 }
 
-
+//升序
 int compare_movies_by_remaining_ticket(const void* a, const void* b)
 {
     Movie* movie1 = *(Movie* const*)a;
     Movie* movie2 = *(Movie* const*)b;
-    if (movie1->remaining_ticket < movie2->remaining_ticket) return 1;
-    return -1;
+    if (movie1->remaining_ticket < movie2->remaining_ticket) return -1;
+    return 1;
 }
- 
+//升序     
 int compare_movies_by_start_time(const void* a, const void* b) {
     Movie* movie1 = *(Movie* const*)a;
     Movie* movie2 = *(Movie* const*)b;
@@ -319,7 +409,7 @@ int is_same_date(const char* start_time, const char* input_date) {
 }
 
 // Function to filter movies by date
-Movie* filter_movies_by_date(const char* input_date, Movie* head) {
+Movie* movie_filter_by_date(const char* input_date, Movie* head) {
     Movie* filtered_head = NULL;
     Movie* current = head;
 
@@ -333,5 +423,23 @@ Movie* filter_movies_by_date(const char* input_date, Movie* head) {
 
     return filtered_head;
 }
+void movie_list_free(Movie* head) {
+    Movie* temp = head;
 
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+
+        // 释放 movie_id, film_id, theater_id, start_time, end_time
+        if (temp->movie_id) free(temp->movie_id);
+        if (temp->film_id) free(temp->film_id);
+        if (temp->theater_id) free(temp->theater_id);
+        if (temp->start_time) free(temp->start_time);
+        if (temp->end_time) free(temp->end_time);
+
+        // 释放 Movie 结构体本身
+        free(temp);
+        temp = NULL;
+    }
+}
 

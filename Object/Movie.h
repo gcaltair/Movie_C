@@ -44,22 +44,28 @@ int compare_movies_by_start_time(const void* a, const void* b);
 Movie* movie_sort(Movie* head, int* compare(void*, void*));
 
 
-Movie* movie_filter_by_film_type(Movie* head, const char* film_type);
-
-//根据电影名筛选场次
-Movie* movie_filter_by_film_name(char* name, Movie* head);
-
 //按场次收入排序(降序)
 int compare_movies_by_income(const void* a, const void* b);
 
 //创建一个根据电影名所查到的场次链表
 Movie* movie_list_create_by_film_name(char* name, Film_hash_table* film_hash_table, Movie_hash_table* movie_hash_table);
 
-Movie* movie_filter_by_cinema_id(char* id, Movie* head);
+Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table, Movie_hash_table* movie_hash_table);
+
+Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time);
 //筛选已经播放的场次
 Movie* movie_filter_by_played(Movie* head);
 //筛选未播放的场次
 Movie* movie_filter_by_not_played(Movie* head);
+
+Movie* movie_filter_by_date(const char* input_date, Movie* head);
+
+Movie* movie_filter_by_film_type(Movie* head, const char* film_type);
+
+Movie* movie_filter_by_cinema_id(char* id, Movie* head);
+
+//根据电影名筛选场次
+Movie* movie_filter_by_film_name(char* name, Movie* head);
 typedef struct Movie_hash_table{
     Movie *table[HASH_TABLE_SIZE];
 }Movie_hash_table;
@@ -77,11 +83,19 @@ Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id);
 //复制movie除哈希表与总链表的信息
 Movie* movie_copy_info(Movie* movie);
 
+Movie* movie_operation_sort(Movie* head, int mode);
 
-//根据上座率排序(升序)
+Movie* movie_operation_filter(Movie* head, int mode, void* filter_param);
+
+
+//根据上座率排序(降序)
 int compare_movies_by_occupancy_rate(const void* a, const void* b);
 
 int compare_movies_by_price(const void* a, const void* b);
 
-Movie* filter_movies_by_date(const char* input_date, Movie* head);
+
+
+void movie_list_free(Movie* head);
+
+
 #endif // MOVIE_C_MOVIE_H
