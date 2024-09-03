@@ -132,7 +132,7 @@ void admin_order_manage(Admin* admin,Movie* movie_list)
     while(1)
     {
         int option = get_user_input_int(2);
-        switch (1)
+        switch (option)
         {
         case 1:
             movie_show_all(movie_filter_by_cinema_id(admin->cinema_id, movie_list));

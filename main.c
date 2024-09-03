@@ -4,7 +4,8 @@ int main() {
     int mode;
     hash_ini();
     load_file();
-    while (1) {
+    order_show_mini(user_list,orderHashTable);
+    /*while (1) {
         do {
             mode = login();
         } while (!mode);
@@ -17,7 +18,7 @@ int main() {
         {
             printf("\nWelcome user");
         }
-    }
+    }*/
 }
 static void admin_opreation()
 {
