@@ -11,15 +11,15 @@
 #include"Film.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
-//è®¢åº§ä½ï¼Œseatsä¸ºç”¨æˆ·è§†è§’ä¸‹ï¼Œæ•…è¡Œä¸åˆ—å‡-1
-// åº§ä½  0 ï¼šä¸åœ¨å½±é™¢åº§æ¬¡èŒƒå›´å†…
-//       1 ï¼šå¯è´­ä¹°
-//       2 ï¼šå·²å”®å‡º
-//       3 ï¼šå› ä¸å·²å”®å‡ºçš„åº§ä½ç›¸éš”ä¸€ä¸ªåº§ä½å¯¼è‡´æ— æ³•å”®å‡º
-//status 1 : ç”Ÿæˆè®¢å•å·²ä»˜æ¬¾
-//       2 ï¼šç”Ÿæˆè®¢å•æœªä»˜æ¬¾
-//       3 ï¼šå–æ¶ˆè®¢å•
-//       4 ï¼šé€€æ¬¾
+//¶©×ùÎ»£¬seatsÎªÓÃ»§ÊÓ½ÇÏÂ£¬¹ÊĞĞÓëÁĞ¾ù-1
+// ×ùÎ»  0 £º²»ÔÚÓ°Ôº×ù´Î·¶Î§ÄÚ
+//       1 £º¿É¹ºÂò
+//       2 £ºÒÑÊÛ³ö
+//       3 £ºÒòÓëÒÑÊÛ³öµÄ×ùÎ»Ïà¸ôÒ»¸ö×ùÎ»µ¼ÖÂÎŞ·¨ÊÛ³ö
+//status 1 : Éú³É¶©µ¥ÒÑ¸¶¿î
+//       2 £ºÉú³É¶©µ¥Î´¸¶¿î
+//       3 £ºÈ¡Ïû¶©µ¥
+//       4 £ºÍË¿î
 Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, const char* user_id, Movie* movie, const char* movie_id,
                     Theater* theater, Cinema* cinema, const char* seats, int seat_number,int status, const char* time) {
     Order* new_order = (Order*)malloc(sizeof(Order));
@@ -47,7 +47,7 @@ Order* order_create(Order_hash_table *hashTable,const char* orderID, User* usr, 
     insert_order_to_hash_table(hashTable,new_order);
     return new_order;
 }
-// å°†ä¸€ä¸ªè®¢å•æ·»åŠ åˆ°é“¾è¡¨ä¸­
+// ½«Ò»¸ö¶©µ¥Ìí¼Óµ½Á´±íÖĞ
 void order_add_to_list(Order** head, Order* new_order) {
     if (*head == NULL) {
         *head = new_order;
@@ -59,7 +59,7 @@ void order_add_to_list(Order** head, Order* new_order) {
     (*head) = temp;
 }
 
-// é€šè¿‡è®¢å•IDæŸ¥æ‰¾è®¢å•
+// Í¨¹ı¶©µ¥ID²éÕÒ¶©µ¥
 Order* order_find_by_id(Order* head, char* orderID) {
     while (head != NULL) {
         if (strcmp(head->orderID,orderID)==0) {
@@ -70,7 +70,7 @@ Order* order_find_by_id(Order* head, char* orderID) {
     return NULL;
 }
 
-// æ˜¾ç¤ºå•ä¸ªè®¢å•ä¿¡æ¯
+// ÏÔÊ¾µ¥¸ö¶©µ¥ĞÅÏ¢
 void order_show(const Order* order) {
 	if (order == NULL) {
 		printf("Order not found.\n");
@@ -84,10 +84,10 @@ void order_show(const Order* order) {
 	printf("Status: %d\n", order->status);
 	printf("Time: %s\n", order->time);
 	//movie_show(order->movie);
-	// å¯ä»¥æ ¹æ®éœ€è¦æ˜¾ç¤ºæ›´å¤šçš„è®¢å•ä¿¡æ¯
+	// ¿ÉÒÔ¸ù¾İĞèÒªÏÔÊ¾¸ü¶àµÄ¶©µ¥ĞÅÏ¢
 }
 
-// æ˜¾ç¤ºæ‰€æœ‰è®¢å•ä¿¡æ¯
+// ÏÔÊ¾ËùÓĞ¶©µ¥ĞÅÏ¢
 void order_show_all(Order* head) {
 	while (head != NULL) {
 		order_show(head);
@@ -96,14 +96,14 @@ void order_show_all(Order* head) {
 	}
 }
 
-// åˆå§‹åŒ–å“ˆå¸Œè¡¨ï¼Œå°†æ‰€æœ‰çš„æŒ‡é’ˆè®¾ç½®ä¸º NULL
+// ³õÊ¼»¯¹şÏ£±í£¬½«ËùÓĞµÄÖ¸ÕëÉèÖÃÎª NULL
 void init_order_hash_table(Order_hash_table* ht) {
 	for (int i = 0; i < HASH_TABLE_SIZE; i++) {
 		ht->table[i] = NULL;
 	}
 }
 
-// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ª Order_hash_table
+// ´´½¨²¢³õÊ¼»¯Ò»¸ö Order_hash_table
 Order_hash_table* order_hash_table_create() {
 	Order_hash_table* ht = (Order_hash_table*)malloc(sizeof(Order_hash_table));
 	if (!ht) {
@@ -113,28 +113,28 @@ Order_hash_table* order_hash_table_create() {
 	return ht;
 }
 
-// ä½¿ç”¨å“ˆå¸Œè¡¨å°†è®¢å•æ’å…¥è¡¨ä¸­
+// Ê¹ÓÃ¹şÏ£±í½«¶©µ¥²åÈë±íÖĞ
 void insert_order_to_hash_table(Order_hash_table* ht, Order* order) {
 	uint32_t index = hash(order->orderID, strlen(order->orderID), 0x9747b28c);
 	//printf("add key%s\n",order->orderID);
-	order->hash_next = ht->table[index];  // å¤„ç†å“ˆå¸Œå†²çªï¼Œå°†æ–°è®¢å•æ’å…¥å“ˆå¸Œé“¾è¡¨å¤´éƒ¨
+	order->hash_next = ht->table[index];  // ´¦Àí¹şÏ£³åÍ»£¬½«ĞÂ¶©µ¥²åÈë¹şÏ£Á´±íÍ·²¿
 	ht->table[index] = order;
 }
 
-// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾è®¢å•ï¼Œé€šè¿‡ orderID æŸ¥æ‰¾
+// ÔÚ¹şÏ£±íÖĞ²éÕÒ¶©µ¥£¬Í¨¹ı orderID ²éÕÒ
 Order* find_order_in_hash_table(Order_hash_table* ht, char* orderID) {
 	uint32_t index = hash(orderID, strlen(orderID), 0x9747b28c);
 	Order* order = ht->table[index];
 	while (order) {
 		if (strcmp(order->orderID, orderID) == 0) {
-			return order;  // æ‰¾åˆ°åŒ¹é…çš„è®¢å•ï¼Œè¿”å›æŒ‡é’ˆ
+			return order;  // ÕÒµ½Æ¥ÅäµÄ¶©µ¥£¬·µ»ØÖ¸Õë
 		}
-		order = order->hash_next;  // ä½¿ç”¨ hash_next æŒ‡é’ˆç»§ç»­æŸ¥æ‰¾å“ˆå¸Œé“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªè®¢å•
+		order = order->hash_next;  // Ê¹ÓÃ hash_next Ö¸Õë¼ÌĞø²éÕÒ¹şÏ£Á´±íÖĞµÄÏÂÒ»¸ö¶©µ¥
 	}
-	return NULL;  // å¦‚æœæœªæ‰¾åˆ°ï¼Œè¿”å› NULL
+	return NULL;  // Èç¹ûÎ´ÕÒµ½£¬·µ»Ø NULL
 }
 
-//åˆ›å»ºå¹¶åˆå§‹åŒ–åº§ä½å›¾
+//´´½¨²¢³õÊ¼»¯×ùÎ»Í¼
 int (*seat_map_generation())[26] {
 	int (*seat_map)[26] = (int(*)[26])malloc(9 * sizeof(*seat_map));
 	for (int line = 0; line < 9; line++) {
@@ -149,7 +149,7 @@ int (*seat_map_generation())[26] {
 	}
 	return seat_map;
 }
-//å±•ç¤ºåº§ä½å›¾
+//Õ¹Ê¾×ùÎ»Í¼
 void seat_map_show(int (*seat_map)[26]) {
 	printf("   ");
 	for (int i = 1; i <= 26; i++) {
@@ -175,7 +175,7 @@ void seat_map_show(int (*seat_map)[26]) {
 	}
 }
 
-//æŸ¥è¯¢åœºæ¬¡å‰©ä½™åº§ä½æ•°
+//²éÑ¯³¡´ÎÊ£Óà×ùÎ»Êı
 int get_remaining_ticket(int (*seat_map)[26]) {
 	int remaining_ticket = 0;
 	for (int line = 0; line < 9; line++) {
@@ -188,7 +188,7 @@ int get_remaining_ticket(int (*seat_map)[26]) {
 	return remaining_ticket++;
 }
 
-//ä»¥å­—ç¬¦ä¸²å½¢å¼è¿”å›å½“å‰å¹´æœˆæ—¥ï¼ˆ2024-8-31ï¼‰
+//ÒÔ×Ö·û´®ĞÎÊ½·µ»Øµ±Ç°ÄêÔÂÈÕ£¨2024-8-31£©
 char* get_current_day() {
     time_t now = time(0);
     struct tm* ltm = localtime(&now);
@@ -226,11 +226,11 @@ char* get_orderID() {
     char* orderID = strcat(get_current_time(), rand);
     return orderID;
 }
-//å†å²åœºæ¬¡æ—¶é—´å†²çªåˆ¤æ–­
-//return 0 :æŸ¥è¯¢å¤±è´¥
-//       1 :æ— å†²çª
-//       2 :å·²è´­ä¹°è¿‡è¯¥åœºæ¬¡çš„ç¥¨
-//       3 :å½“å¤©å·²ç»è´­ä¹°äº”ä¸ªåœºæ¬¡çš„ç¥¨
+//ÀúÊ·³¡´ÎÊ±¼ä³åÍ»ÅĞ¶Ï
+//return 0 :²éÑ¯Ê§°Ü
+//       1 :ÎŞ³åÍ»
+//       2 :ÒÑ¹ºÂò¹ı¸Ã³¡´ÎµÄÆ±
+//       3 :µ±ÌìÒÑ¾­¹ºÂòÎå¸ö³¡´ÎµÄÆ±
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
     int count = 0;
     int history_order_year[100];
@@ -271,9 +271,9 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
     return 1;
 }
 
-//é€šè¿‡seatsè®¡ç®—åº§ä½æ•°
-//retunr 0 : è®¡ç®—å¤±è´¥
-//       >=1ï¼šè®¡ç®—æˆåŠŸ
+//Í¨¹ıseats¼ÆËã×ùÎ»Êı
+//retunr 0 : ¼ÆËãÊ§°Ü
+//       >=1£º¼ÆËã³É¹¦
 int get_seat_number(char* seats) {
 	int seat_number = 0;
 	char* seats_copy = strdup(seats);
@@ -290,14 +290,14 @@ int get_seat_number(char* seats) {
 	return seat_number;
 }
 
-//åº§ä½æ•°å†²çªåˆ¤æ–­
-//return 0 : è·å–ä½ç½®ä¿¡æ¯å¤±è´¥
-//       1 ; è®¢åº§æˆåŠŸ 
-//       4 : å‰©ä½™åº§ä½æ•°ä¸è¶³æˆ–è¶…è¿‡æœ€å¤§è´­ç¥¨é™é¢
-//       5 ï¼šè¾“å…¥ä¸¤ä¸ªç›¸åŒçš„åº§ä½å·ã€‚
-//       6ï¼šä¸åœ¨å½±é™¢åº§æ¬¡èŒƒå›´å†…
-//       7 ï¼šåº§ä½å·²å”®å‡º
-//       8 ï¼šä¸å·²å”®å‡ºçš„åº§ä½ç›¸éš”ä¸€ä¸ªåº§ä½
+//×ùÎ»Êı³åÍ»ÅĞ¶Ï
+//return 0 : »ñÈ¡Î»ÖÃĞÅÏ¢Ê§°Ü
+//       1 ; ¶©×ù³É¹¦ 
+//       4 : Ê£Óà×ùÎ»Êı²»×ã»ò³¬¹ı×î´ó¹ºÆ±ÏŞ¶î
+//       5 £ºÊäÈëÁ½¸öÏàÍ¬µÄ×ùÎ»ºÅ¡£
+//       6£º²»ÔÚÓ°Ôº×ù´Î·¶Î§ÄÚ
+//       7 £º×ùÎ»ÒÑÊÛ³ö
+//       8 £ºÓëÒÑÊÛ³öµÄ×ùÎ»Ïà¸ôÒ»¸ö×ùÎ»
 int saets_check(char* seats, int (*seat_map)[26]) {
 	int seat_number;
 	if (get_seat_number(seats)) {
@@ -348,16 +348,16 @@ int saets_check(char* seats, int (*seat_map)[26]) {
 
 }
 
-//åˆ¤æ–­è®¢å•èƒ½å¦ç”Ÿæˆ
-//return 0 :æŸ¥è¯¢å¤±è´¥
-//       1 :ç”Ÿæˆè®¢å•æˆåŠŸ
-//       2 :å½“å¤©å·²ç»è´­ä¹°äº”ä¸ªåœºæ¬¡çš„ç¥¨
-//       3 :å·²ç»è´­ä¹°è¿‡è¯¥å½±ç‰‡çš„ç¥¨
-//       4 : å‰©ä½™åº§ä½æ•°ä¸è¶³æˆ–è¶…è¿‡æœ€å¤§è´­ç¥¨é™é¢
-//       5 ï¼šè¾“å…¥ä¸¤ä¸ªç›¸åŒçš„åº§ä½å·ã€‚
-//       6ï¼šä¸åœ¨å½±é™¢åº§æ¬¡èŒƒå›´å†…
-//       7 ï¼šåº§ä½å·²å”®å‡º
-//       8 ï¼šä¸å·²å”®å‡ºçš„åº§ä½ç›¸éš”ä¸€ä¸ªåº§ä½
+//ÅĞ¶Ï¶©µ¥ÄÜ·ñÉú³É
+//return 0 :²éÑ¯Ê§°Ü
+//       1 :Éú³É¶©µ¥³É¹¦
+//       2 :µ±ÌìÒÑ¾­¹ºÂòÎå¸ö³¡´ÎµÄÆ±
+//       3 :ÒÑ¾­¹ºÂò¹ı¸ÃÓ°Æ¬µÄÆ±
+//       4 : Ê£Óà×ùÎ»Êı²»×ã»ò³¬¹ı×î´ó¹ºÆ±ÏŞ¶î
+//       5 £ºÊäÈëÁ½¸öÏàÍ¬µÄ×ùÎ»ºÅ¡£
+//       6£º²»ÔÚÓ°Ôº×ù´Î·¶Î§ÄÚ
+//       7 £º×ùÎ»ÒÑÊÛ³ö
+//       8 £ºÓëÒÑÊÛ³öµÄ×ùÎ»Ïà¸ôÒ»¸ö×ùÎ»
 int order_generation(User* usr, char* seats, Movie* movie, int (*seat_map)[26], Order_hash_table* hashTable) {
 	if (history_order_time_check(usr, movie, hashTable) != 1) {
 		return history_order_time_check(usr, movie, hashTable);
@@ -368,10 +368,10 @@ int order_generation(User* usr, char* seats, Movie* movie, int (*seat_map)[26], 
 	return 1;
 }
 
-//discountè®¡ç®—
+//discount¼ÆËã
 //discount = 1 - 0.05 * history_seat_number
-//return 0      :è®¡ç®—å¤±è´¥
-//       >=0ã€‚5 :è®¡ç®—æˆåŠŸ
+//return 0      :¼ÆËãÊ§°Ü
+//       >=0¡£5 :¼ÆËã³É¹¦
 double get_discount(Order* order, Order_hash_table* hashTable) {
 	Linked_string_list* order_find = order->usr->my_order;
 	int history_seat_number = 0;
@@ -402,9 +402,9 @@ double get_discount(Order* order, Order_hash_table* hashTable) {
 	return discount;
 }
 
-//å–æ¶ˆè®¢å•
-//return 2 ï¼šè®¢å•çŠ¶æ€ä¸åˆæ³•
-//       1 ï¼šå–æ¶ˆæˆåŠŸ
+//È¡Ïû¶©µ¥
+//return 2 £º¶©µ¥×´Ì¬²»ºÏ·¨
+//       1 £ºÈ¡Ïû³É¹¦
 int order_cancel(Order* order) {
 	if (order->status != 2) {
 		return 0;
@@ -415,15 +415,15 @@ int order_cancel(Order* order) {
 	}
 }
 
-//å……å€¼
+//³äÖµ
 void recharge(Order* order, double money) {
 	order->usr->user_balance += money;
 }
 
-//åˆ¤æ–­ä½™é¢æ˜¯å¦å……è¶³
-//return 0 : æŸ¥è¯¢å¤±è´¥
-//       1 ï¼šä½™é¢å……è¶³
-//       2 ï¼šä½™é¢ä¸è¶³
+//ÅĞ¶ÏÓà¶îÊÇ·ñ³ä×ã
+//return 0 : ²éÑ¯Ê§°Ü
+//       1 £ºÓà¶î³ä×ã
+//       2 £ºÓà¶î²»×ã
 int balanece_check(Order* order, Order_hash_table* hashTable) {
 	double discount;
 	if (get_discount(order, hashTable)) {
@@ -440,11 +440,11 @@ int balanece_check(Order* order, Order_hash_table* hashTable) {
 	}
 }
 
-//ä»˜æ¬¾
-//return 0 ï¼šæŸ¥è¯¢é”™è¯¯
-//       1 : ä»˜æ¬¾æˆåŠŸ
-//       2 ï¼šè®¢å•çŠ¶æ€ä¸åˆæ³•
-//       3 : ä½™é¢ä¸è¶³
+//¸¶¿î
+//return 0 £º²éÑ¯´íÎó
+//       1 : ¸¶¿î³É¹¦
+//       2 £º¶©µ¥×´Ì¬²»ºÏ·¨
+//       3 : Óà¶î²»×ã
 int process_pay(Order* order, int (*seat_map)[26], Order_hash_table* hashTable) {
 	if (order->status != 2) {
 		return 2;
@@ -501,12 +501,12 @@ int process_pay(Order* order, int (*seat_map)[26], Order_hash_table* hashTable) 
 	}
 }
 
-//å±•ç¤ºç”¨æˆ·æ‰€æœ‰è®¢å•ï¼ˆä¸åŒ…æ‹¬å·²ç»å–æ¶ˆçš„è®¢å•ï¼‰
+//Õ¹Ê¾ÓÃ»§ËùÓĞ¶©µ¥£¨²»°üÀ¨ÒÑ¾­È¡ÏûµÄ¶©µ¥£©
 void order_show_mini(User* usr, Order_hash_table* hashTable) {
 	if (usr->my_order = NULL) {
-		printf("æ‚¨æ²¡æœ‰å†å²è®¢å•ã€‚\n");
+		printf("ÄúÃ»ÓĞÀúÊ·¶©µ¥¡£\n");
 	}
-	printf("æ‚¨çš„å†å²è®¢å•å¦‚ä¸‹ï¼š\n");
+	printf("ÄúµÄÀúÊ·¶©µ¥ÈçÏÂ£º\n");
 	int history_order_count = 0;
 	Linked_string_list* order = usr->my_order;
 	while (order != NULL) {
@@ -524,13 +524,13 @@ void order_show_mini(User* usr, Order_hash_table* hashTable) {
 		printf("seat_number:%d\n", order_find->seat_number);
 		switch (order_find->status) {
 		case 1:
-			printf("è®¢å•å·²ä»˜æ¬¾\n");
+			printf("¶©µ¥ÒÑ¸¶¿î\n");
 			break;
 		case 2:
-			printf("è®¢å•æœªä»˜æ¬¾\n");
+			printf("¶©µ¥Î´¸¶¿î\n");
 			break;
 		case 4:
-			printf("è®¢å•å·²é€€æ¬¾\n");
+			printf("¶©µ¥ÒÑÍË¿î\n");
 			break;
 		}
 		printf("time:%s\n", order_find->time);
@@ -539,10 +539,10 @@ void order_show_mini(User* usr, Order_hash_table* hashTable) {
 }
 
 
-//é€€ç¥¨
-//return 0 ï¼šæŸ¥è¯¢é”™è¯¯
-//       1 : é€€æ¬¾æˆåŠŸ
-//       2 ï¼šè®¢å•çŠ¶æ€ä¸åˆæ³•
+//ÍËÆ±
+//return 0 £º²éÑ¯´íÎó
+//       1 : ÍË¿î³É¹¦
+//       2 £º¶©µ¥×´Ì¬²»ºÏ·¨
 int ticket_refund(Order* order, int (*seat_map)[26], Order_hash_table* hashTable) {
 	if (order->seat_number != 1) {
 		return 2;
@@ -599,7 +599,7 @@ int ticket_refund(Order* order, int (*seat_map)[26], Order_hash_table* hashTable
 	return 1;
 }
 
-//è®¡ç®—å½±å…æ”¶å…¥
+//¼ÆËãÓ°ÌüÊÕÈë
 double get_movie_income(User* usr, Movie* movie, Order_hash_table* hashTable) {
 	User* head = usr;
 	double movie_income = 0;
