@@ -81,22 +81,22 @@ static bool getPassword(char *password, int maxLen) {
     int i = 0;
     char ch;
     while (i < maxLen - 1) {
-        ch =_getch(); // è¯»å–ä¸€ä¸ªå­—ç¬¦ä½†ä¸æ˜¾ç¤º
+        ch =_getch(); // ¶ÁÈ¡Ò»¸ö×Ö·ûµ«²»ÏÔÊ¾
         if(ch==26||ch==3) return 0;
-        if (ch == '\r') { // æ£€æµ‹åˆ°å›žè½¦ç¬¦ï¼ˆEnteré”®ï¼‰
+        if (ch == '\r') { // ¼ì²âµ½»Ø³µ·û£¨Enter¼ü£©
             break;
-        } else if (ch == '\b') { // å¤„ç†é€€æ ¼é”®
+        } else if (ch == '\b') { // ´¦ÀíÍË¸ñ¼ü
             if (i > 0) {
                 i--;
-                printf("\b \b"); // åˆ é™¤ä¸€ä¸ªå­—ç¬¦
+                printf("\b \b"); // É¾³ýÒ»¸ö×Ö·û
             }
         } else {
             password[i++] = ch;
 
-            printf("*"); // æ˜¾ç¤ºæ˜Ÿå·
+            printf("*"); // ÏÔÊ¾ÐÇºÅ
         }
     }
-    password[i] = '\0'; // å­—ç¬¦ä¸²æœ«å°¾æ·»åŠ ç»ˆæ­¢ç¬¦
+    password[i] = '\0'; // ×Ö·û´®Ä©Î²Ìí¼ÓÖÕÖ¹·û
     return 1;
 }
 int get_user_input_int(int max) {
@@ -106,11 +106,11 @@ int get_user_input_int(int max) {
     while (1) {
         printf("enter your option 0-%d:", max);
 
-        // å°è¯•è¯»å–ä¸€ä¸ªæ•´æ•°è¾“å…¥
+        // ³¢ÊÔ¶ÁÈ¡Ò»¸öÕûÊýÊäÈë
         if (scanf("%d", &option) == 1) {
-            // æ£€æŸ¥è¾“å…¥æ˜¯å¦åœ¨æŒ‡å®šèŒƒå›´å†…
+            // ¼ì²éÊäÈëÊÇ·ñÔÚÖ¸¶¨·¶Î§ÄÚ
             if (option >= 0 && option <= max) {
-                // æ¸…ç†è¾“å…¥ç¼“å†²åŒº
+                // ÇåÀíÊäÈë»º³åÇø
                 while ((c = getchar()) != '\n' && c != EOF) {}
                 return option;
             }
@@ -122,7 +122,7 @@ int get_user_input_int(int max) {
         else {
             printf("invalid input please enter number between 0 to %d.\n",max);
             
-            // æ¸…ç†è¾“å…¥ç¼“å†²åŒºï¼Œå¤„ç†éžæ•´æ•°è¾“å…¥
+            // ÇåÀíÊäÈë»º³åÇø£¬´¦Àí·ÇÕûÊýÊäÈë
             while ((c = getchar()) != '\n' && c != EOF) {}
         }
     }
