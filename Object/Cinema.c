@@ -21,7 +21,7 @@ Cinema *cinema_create(const char *name, const char *location, char* id) {
     cinema->cinema_id = strdup(id);
     cinema->next=NULL;
     cinema->my_theater=NULL;
-    cinema->peek_time = NULL;
+    cinema->peak_time = NULL;
     return cinema;
 }
 void cinema_show(const Cinema* cinema) {

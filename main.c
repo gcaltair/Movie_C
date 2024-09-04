@@ -7,7 +7,7 @@ int main() {
     admin_now = admin_find_by_id(admin_list, "A001"); 
     
 
-    //admin_opreation();
+    admin_opreation();
     //while (1) {
     //    system("cls");
     //    do {
@@ -41,6 +41,7 @@ static void admin_opreation()
             break;
         case 3:
             admin_movie_manage();
+            break;
         default:
             return;
         }
@@ -56,14 +57,34 @@ static void admin_movie_manage()//排片管理
         int option = get_user_input_int(3);
         switch (option)
         {
-        case 1:
+        case 2:
+            Movie * movie_list_new = movie_list_create_by_cinema(admin_now->cinema,theaterHashTable,movieHashTable);
+            movie_list_print(movie_list_new);
+            press_zero_to_continue();
+            movie_list_free(movie_list_new);
+            break;
+        case 3:
             Theater * theater_new_list = theater_list_create_by_cinema(admin_now->cinema, theaterHashTable);
             Film* film_choosed = film_choose(film_list);
             if (!film_choosed) break;
-            Theater* theater_choosed=theater_choose_for_admin(theater_new_list);
+            Theater* theater_choosed = theater_choose_for_admin(theater_new_list);
             if (!theater_choosed) break;
-            
+            int add_status = admin_add_a_movie_to_theater(theater_choosed, film_choosed, movie_list, movieHashTable);
+            switch (add_status)
+            {
+            case 1:
+                printf("场次添加成功\n"); break;
+            case 2:
+                printf("数据出错...\n"); break;
+            case 0:
+                printf("已取消添加\n"); break;
+            }
+            press_zero_to_continue();
+            theater_free_copied_list(theater_new_list);
+            theater_new_list = NULL;
+            break;
         default:
+            return;
             break;
         }
     }
@@ -82,7 +103,7 @@ static void admin_theater_manage()//theater的删除没做
             switch (add_status)
             {
             case 1:
-                printf("场次添加成功\n"); break;
+                printf("影厅添加成功\n"); break;
             case 2:
                 printf("数据出错...\n"); break;
             case 0:

@@ -12,6 +12,7 @@ bool admin_password_check(Admin* admin,Admin* admin_list);
 bool user_password_check(User *usr,User_hash_table*userHashTable);
 
 void movie_print(const Movie* movie);
+void movie_list_print(const Movie* movie_list);
 void theater_print(const Theater* theater);
 void film_print(const Film* film);
 
@@ -22,8 +23,10 @@ int hhmm_to_minutes(const char* hhmm);
 void press_zero_to_continue();
 
 int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table);
+int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list, Movie_hash_table* movie_hash_table);
 
 int get_user_input_int(int max);
+double get_user_input_double(double min, double max);
 int get_valid_date_input(char* date);
 
 Movie* movie_choose(Movie* new_movie_list);

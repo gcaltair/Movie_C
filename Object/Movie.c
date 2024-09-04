@@ -33,12 +33,13 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     newMovie->discount = discount;
     newMovie->next = NULL;
     newMovie->hash_next = NULL;
-    insert_movie_to_hash_table(movieHashTable,newMovie);
+    insert_movie_to_hash_table(movieHashTable,newMovie);//插入哈希表
 
-    string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+    string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);//添加到影厅
+    int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->start_min);//添加起止时间到peaktime
+    int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->end_min);
 
-
-    theater->time_line = insert_interval(theater->time_line, newMovie->start_min, newMovie->end_min);//插入timeLine
+    theater->time_line = insert_interval(theater->time_line, newMovie->start_min, newMovie->end_min);//插入timeLine时间线
 
     string_direct_add_to_list(&(film->playing_movie), newMovie->movie_id);
 
@@ -192,7 +193,7 @@ Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
         new_head = movie_filter_by_not_played(head);
         break;
     case 4:  // 过滤当日日期
-        new_head = movie_filter_by_current_date((const char*)filter_param, head);  // filter_param should be a const char* representing the date
+        new_head = movie_filter_by_current_date(head);  // filter_param should be a const char* representing the date
         break;
     case 5:  // 过滤影片类型
         new_head = movie_filter_by_film_type(head, (const char*)filter_param);  // filter_param should be a const char* representing the film type
@@ -425,7 +426,7 @@ int is_same_date(const char* start_time, const char* input_date) {
 // Function to filter movies by date
 Movie* movie_filter_by_current_date( Movie* head) {
     Movie* filtered_head = NULL;
-    Movie* current = head;
+    Movie* current = head;  
     char* current_day=get_current_day();
     while (current != NULL) {
         if (is_same_date(current->start_time, current_day)) {
@@ -437,7 +438,21 @@ Movie* movie_filter_by_current_date( Movie* head) {
 
     return filtered_head;
 }
+int my_abs(int a, int b)
+{return a > b ? a - b : b - a;}
 
+int is_avoid_flow(Cinema* cinema, int start_min, int end_min)
+{
+    int count = 0;
+    Linked_int_list* head = cinema->peak_time;
+    while (head)
+    {
+        if (my_abs(head->value, start_min) >= 5 || my_abs(head->value, end_min) >= 5) count++;
+        head = head->next;
+    }
+    if (!count) return 0;
+    return (count + 1) / 2;
+}
 double caculate_movie_income(Movie* head)
 {
     if (!head)

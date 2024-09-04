@@ -44,6 +44,8 @@ double get_theater_income(Theater* theater, Movie_hash_table* hash_table);
 Theater* theater_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table);
 Theater* theater_copy_info(Theater* theater);
 
+void theater_free_copied_list(Theater* theater_list);
+
 typedef struct Theater_hash_table {
     Theater* table[HASH_TABLE_SIZE];
     int count;

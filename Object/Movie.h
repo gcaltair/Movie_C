@@ -98,7 +98,7 @@ int compare_movies_by_occupancy_rate(const void* a, const void* b);
 
 int compare_movies_by_price(const void* a, const void* b);
 
-
+int is_avoid_flow(Cinema* cinema, int start_min, int end_min);
 
 double caculate_movie_income(Movie* head);
 
