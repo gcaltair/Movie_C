@@ -13,6 +13,8 @@ bool user_password_check(User *usr,User_hash_table*userHashTable);
 
 void movie_print(const Movie* movie);
 void movie_list_print(const Movie* movie_list);
+int date_to_days(const char* date);
+void days_to_date(int days, char* date);
 void theater_print(const Theater* theater);
 void film_print(const Film* film);
 

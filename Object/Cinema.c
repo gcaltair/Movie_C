@@ -7,7 +7,7 @@
 #include "Cinema.h"
 #include "Theater.h"
 
-Cinema *cinema_create(const char *name, const char *location, char* id) {
+Cinema *cinema_create(const char *name, const char* cinema_alphabet,const char *location, char* id) {
     // 动态分配内存给Cinema结构体
     Cinema* cinema = (Cinema*)malloc(sizeof(Cinema));
     if (cinema == NULL) {
@@ -17,6 +17,7 @@ Cinema *cinema_create(const char *name, const char *location, char* id) {
 
     // 动态分配内存并复制参数内容到结构体字段
     cinema->cinema_name = strdup(name);
+    cinema->cinema_alphabet = strdup(cinema_alphabet);
     cinema->location = strdup(location);
     cinema->cinema_id = strdup(id);
     cinema->next=NULL;
@@ -31,6 +32,7 @@ void cinema_show(const Cinema* cinema) {
     }
 
     printf("Cinema Name: %s\n", cinema->cinema_name);
+    printf("Cinema Alphabet: %s\n", cinema->cinema_alphabet);
     printf("Location: %s\n", cinema->location);
     printf("Cinema ID: %s\n", cinema->cinema_id);
 }

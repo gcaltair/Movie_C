@@ -1,6 +1,6 @@
-cinema_name,location,cinema_id
-Grand Cinema,New York,C001
-Sunshine Theater,Los Angeles,C002
-Majestic Cinemas,Chicago,C003
-Cineplex Odeon,San Francisco,C004
-Empire Cinema,Houston,C005
+cinema_name,cinema_alphabet,location,cinema_id
+万达影城,wd,New York,C001
+Sunshine Theater,st,Los Angeles,C002
+Majestic Cinemas,mc,Chicago,C003
+Cineplex Odeon,co,San Francisco,C004
+Empire Cinema,ec,Houston,C005

@@ -120,6 +120,72 @@ interval_tree* delete_interval(interval_tree* tree, int start, int end) {
     return tree;
 }
 
+interval* find_free_times_interval(interval_tree* tree, int day_start, int day_end, int* num_intervals) {
+    *num_intervals = 0;  // 初始化区间计数
+    if (!tree) {
+        // 如果树为空，整个时间段都空闲
+        interval* intervals = (interval*)malloc(sizeof(interval));
+        intervals[0].start = day_start;
+        intervals[0].end = day_end;
+        *num_intervals = 1;
+        return intervals;
+    }
+
+    interval_node* node = tree->root;
+    int last_end = day_start;
+    interval_node* stack[100];  // 使用一个栈来存储节点
+    int top = -1;
+    interval* intervals = (interval*)malloc(100 * sizeof(interval));  // 初始分配，最多支持100个空闲区间
+
+    while (node != NULL || top >= 0) {
+        // 向左遍历所有节点
+        while (node != NULL) {
+            stack[++top] = node;
+            node = node->left;
+        }
+
+        // 取栈顶元素
+        node = stack[top--];
+
+        // 检查当前节点的起始时间与 last_end 之间是否有空闲时间
+        if (last_end < node->start) {
+            if (node->start - last_end >= 60) {  // 只有空闲时间段大于等于60分钟才记录
+                intervals[*num_intervals].start = last_end;
+                intervals[*num_intervals].end = node->start;
+                (*num_intervals)++;
+            }
+        }
+
+        // 更新 last_end
+        last_end = node->end > last_end ? node->end : last_end;
+
+        // 移动到右子树
+        node = node->right;
+    }
+
+    // 检查最后一个区间后的空闲时间
+    if (last_end < day_end) {
+        if (day_end - last_end >= 60) {
+            intervals[*num_intervals].start = last_end;
+            intervals[*num_intervals].end = day_end;
+            (*num_intervals)++;
+        }
+    }
+
+    // 返回动态分配的空闲区间数组
+    return intervals;
+}
+
+void print_intervals(interval* intervals, int num_intervals) {
+    for (int i = 0; i < num_intervals; i++) {
+        printf("空闲时间：%02d:%02d 到 %02d:%02d\n",
+            intervals[i].start / 60, intervals[i].start % 60,
+            intervals[i].end / 60, intervals[i].end % 60);
+    }
+}
+
+
+
 
 // 查找并输出一天中的所有空闲时间
 void find_free_times(interval_tree* tree, int day_start, int day_end) {

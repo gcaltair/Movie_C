@@ -445,9 +445,10 @@ int is_avoid_flow(Cinema* cinema, int start_min, int end_min)
 {
     int count = 0;
     Linked_int_list* head = cinema->peak_time;
+    
     while (head)
     {
-        if (my_abs(head->value, start_min) >= 5 || my_abs(head->value, end_min) >= 5) count++;
+        if (((my_abs(head->value, start_min) >= 5) && (my_abs(head->value, start_min)<=10))||(( my_abs(head->value, end_min) >= 5)&& my_abs(head->value, end_min) <=10)) count++;
         head = head->next;
     }
     if (!count) return 0;

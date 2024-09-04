@@ -5,8 +5,8 @@ int main() {
     hash_ini();
     load_file();
     admin_now = admin_find_by_id(admin_list, "A001"); 
-    
 
+    
     admin_opreation();
     //while (1) {
     //    system("cls");
@@ -42,6 +42,8 @@ static void admin_opreation()
         case 3:
             admin_movie_manage();
             break;
+        case 4:
+            movie_show_all(movie_list);
         default:
             return;
         }

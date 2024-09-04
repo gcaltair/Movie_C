@@ -17,6 +17,12 @@ typedef struct interval_node {
 typedef struct interval_tree {
     interval_node* root;          // 树的根节点
 } interval_tree;
+
+typedef struct {
+    int start;
+    int end;
+} interval;
+
 //检测是否重叠
 int is_overlapping(interval_node* root, int start, int end);
 // 创建一个新的区间树节点
@@ -27,6 +33,12 @@ interval_tree* insert_interval(interval_tree* tree, int start, int end);
 
 // 删除一个区间
 interval_tree* delete_interval(interval_tree* tree, int start, int end);
+
+//返回数对组的寻找空余时间(?待定
+interval* find_free_times_interval(interval_tree* tree, int day_start, int day_end, int* num_intervals);
+
+//打印数对(?待定
+void print_intervals(interval* intervals, int num_intervals);
 
 // 查找并输出一天中的所有空闲时间
 void find_free_times(interval_tree* tree, int day_start, int day_end);

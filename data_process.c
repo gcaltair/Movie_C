@@ -82,14 +82,15 @@ void handle_admin_data(char** fields, void* context) {
 void handle_cinema_data(char** fields, void* context) {
     if (fields[0] && fields[1] && fields[2]) {
         const char* cinema_name = fields[0];
-        const char* location = fields[1];
-        const char* cinema_id = fields[2];
+        const char* cinema_alphabet = fields[1];
+        const char* location = fields[2];
+        const char* cinema_id = fields[3];
 
         // 将 context 转换为 Cinema** 和 Theater_hash_table* 指针
         Cinema** cinema_list = ((Cinema ***)context)[0];
 
         // 创建新的 Cinema 实例
-        Cinema* new_cinema = cinema_create(cinema_name, location, (char*)cinema_id);
+        Cinema* new_cinema = cinema_create(cinema_name,cinema_alphabet, location, cinema_id);
 
 
         // 将新创建的 Cinema 添加到链表中

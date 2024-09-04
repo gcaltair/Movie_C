@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include<time.h>
 #include<ctype.h>
 #include <stdbool.h>
 #include <conio.h>
@@ -15,6 +16,7 @@
 #include "Object/User.h"
 #include "Object/admin.h"
 #include"Object/Film.h"
+#include"Object/Cinema.h"
 #include"Structure File/interval_tree.h"
 static bool getPassword(char *password, int maxLen);
 
@@ -311,6 +313,38 @@ int get_time_format_hours_and_minutes(const char* time_str) {
 
     return hours*60+minutes; // 合法时间格式
 }
+int date_to_days(const char* date) {
+    struct tm tm_date = { 0 };
+    // 解析日期字符串
+    if (sscanf(date, "%d-%d-%d", &tm_date.tm_year, &tm_date.tm_mon, &tm_date.tm_mday) != 3) printf("读取时间错误\n");
+
+    // 将年份调整为从1900年开始
+    tm_date.tm_year -= 1900;
+    // 月份从0开始，所以减去1
+    tm_date.tm_mon -= 1;
+
+    // 获取时间戳并转为天数
+    time_t time_since_epoch = mktime(&tm_date);
+    return (int)(time_since_epoch / (60 * 60 * 24));
+}
+void days_to_date(int days, char* date) {
+    // 确保缓冲区足够大，以防止溢出
+    // 先将 days 转换为 time_t 类型
+    time_t time_since_epoch = (time_t)days * 60 * 60 * 24;
+
+    // 使用 gmtime 转换为 tm 结构体
+    struct tm* tm_date = gmtime(&time_since_epoch);
+
+    // 确保 tm_date 非空
+    if (tm_date != NULL) {
+        // 格式化为字符串
+        strftime(date, 20, "%Y-%m-%d ", tm_date);
+    }
+    else {
+        // 如果 tm_date 是 NULL，则处理错误情况
+        strncpy(date, "Invalid Date", 20);
+    }
+}
 int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list, Movie_hash_table* movie_hash_table) {
 
     while (1) {
@@ -318,8 +352,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         char start_time[20];
         int remaining_ticket=theater->theater_capacity;
         double price, discount;
-        int temp_count = movie_hash_table->count + 1;
-        sprintf(movie_id, "T%05d", temp_count);
+        
         int start_min = 0;
         int end_min = 0;
         while (1) {
@@ -345,6 +378,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
                     return 0;
             }
             int status = is_avoid_flow(theater->cinema, start_min, end_min);
+            int_node_show_all(theater->cinema->peak_time);
             if (status)
             {
                 printf("未能避开人流,当前约与%d个场次有人流冲突，是否确认?(1/0)\n",status);
@@ -363,7 +397,10 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         discount = get_user_input_double(0, 1);
         //getchar(); // 清除缓冲区中的换行符
 
+        char start_date[20]="2024-09-04";
+        int start_day = date_to_days(start_date);
         
+        int duration_day = 10;
         
         char end_time[20];
         minutes_to_hhmm(end_min, end_time);
@@ -374,24 +411,41 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         printf("剩余票数: %d\n", remaining_ticket);
         printf("票价: %.2lf\n", price);
         printf("折扣: %.2lf\n", discount);
+        printf("开始日期：%s\n", start_date);
+        printf("持续天数：%d\n", duration_day);
         printf("确认添加吗? (1:确认 0:取消添加 2:重新输入): ");
         int option = get_user_input_int(2);
         if (option == 0) return 0;
         if (option == 2) continue;
+        for (int i = 0; i < duration_day; ++i)
+        {
+            // 确保Theater和Film存在
+            if (theater == NULL || film == NULL) {
+                printf("Theater或Film对象为空，无法添加电影。\n");
+                return 2;
+            }
+            char temp1_id[10];
+            strcpy(movie_id, theater->cinema->cinema_alphabet);
+            sprintf(temp1_id, "%05d", movie_hash_table->count+1);
+            strcat(movie_id, temp1_id);
 
-        // 确保Theater和Film存在
-        if (theater == NULL || film == NULL) {
-            printf("Theater或Film对象为空，无法添加电影。\n");
-            return 2;
+            char date_time_start[20]; char date_time_end[20];
+            printf("%d\n", start_day);
+            days_to_date(start_day, date_time_start);
+            days_to_date(start_day, date_time_end);
+            strcat(date_time_start, start_time);
+            strcat(date_time_end, end_time);
+            start_day++;
+
+            
+            Movie* new_movie = movie_create(movie_hash_table, movie_id, film->film_id, film, theater->theater_id, theater, date_time_start, date_time_end, remaining_ticket, price, discount);
+            if (new_movie == NULL) {
+                return 2;
+            }
+
+            // 将新电影加入链表
+            movie_add_to_list(&movie_list, new_movie);
         }
-
-        Movie* new_movie = movie_create(movie_hash_table, movie_id, film->film_id, film, theater->theater_id, theater, start_time, end_time, remaining_ticket, price, discount);
-        if (new_movie == NULL) {
-            return 2;
-        }
-
-        // 将新电影加入链表
-        movie_add_to_list(&movie_list, new_movie);
         return 1;
     }
 }
