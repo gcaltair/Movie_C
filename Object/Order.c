@@ -200,7 +200,7 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 		if (current_time == NULL) {
 			return NULL;
 		}
-		sprintf(current_time, "%d-%d-%d", current_year, current_month, current_day);//以字符串格式输出，方便后续读取
+		sprintf(current_time, "%02d-%02d-%02d", current_year, current_month, current_day);//以字符串格式输出，方便后续读取
 		return current_time;
 	}
 
@@ -218,7 +218,7 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 		if (current_time == NULL) {
 			return NULL;
 		}
-		sprintf(current_time, "%d-%d-%d %d:%d:%d", current_year, current_month, current_day, current_hour, current_min, current_sec);//以字符串格式输出，方便后续读取
+		sprintf(current_time, "%02d-%02d-%02d %02d:%02d:%02d", current_year, current_month, current_day, current_hour, current_min, current_sec);//以字符串格式输出，方便后续读取
 		return current_time;
 	}
 

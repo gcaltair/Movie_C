@@ -116,7 +116,9 @@ Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id) {
 }
 Movie *movie_copy_info(Movie* movie)
 {
-
+    /*if (!movie) {
+        printf("movie is null"); return;
+    }*/
     Movie* new_movie = (Movie*)malloc(sizeof(Movie));
     if (!new_movie) {
         printf("Memory allocation failed!\n");
@@ -126,7 +128,7 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->movie_id = strdup(movie->movie_id);
     new_movie->film_id = strdup(movie->film_id);
     new_movie->film = movie->film;
-    new_movie->theater_id = movie->theater_id;
+    new_movie->theater_id = strdup(movie->theater_id);
     new_movie->theater = movie->theater;
     new_movie->start_time = strdup(movie->start_time);
     new_movie->end_time = strdup(movie->end_time);
@@ -163,7 +165,7 @@ Movie* movie_operation_sort(Movie* head, int mode)
     }
     return new_head;
 }
-
+//1.时间段，2.已放映，3.未放映，4.当日日期，5.影片类型，6.电影院id
 Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
     Movie* new_head = NULL;
 
@@ -172,8 +174,7 @@ Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
     
         char** time_period = (char**)filter_param;  // filter_param should be a char* array with two elements: [start_time, end_time]
         new_head = movie_filter_by_time_period(head, time_period[0], time_period[1]);
-    
-    break;
+        break;
     case 2:  // 过滤已放映
         new_head = movie_filter_by_played(head);
         break;
@@ -181,7 +182,7 @@ Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
         new_head = movie_filter_by_not_played(head);
         break;
     case 4:  // 过滤当日日期
-        new_head = movie_filter_by_date((const char*)filter_param, head);  // filter_param should be a const char* representing the date
+        new_head = movie_filter_by_current_date((const char*)filter_param, head);  // filter_param should be a const char* representing the date
         break;
     case 5:  // 过滤影片类型
         new_head = movie_filter_by_film_type(head, (const char*)filter_param);  // filter_param should be a const char* representing the film type
@@ -237,7 +238,9 @@ Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_h
         Linked_string_list* head_movie = theater->my_movie;
         while (head_movie)
         {
-            Movie* new_movie = movie_copy_info(find_movie_in_hash_table(movie_hash_table, head_movie->id));
+            Movie* movie_find = find_movie_in_hash_table(movie_hash_table, head_movie->id);
+            if (!movie_find) { printf("movie id %s movie list create failed",head_movie->id); _sleep(10000); }
+            Movie* new_movie = movie_copy_info(movie_find);
             movie_add_to_list(&new_head, new_movie);
             head_movie = head_movie->next;
         }
@@ -275,10 +278,11 @@ Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time
 Movie* movie_filter_by_not_played(Movie* head)
 {
     char* time = get_current_time();
+    printf("%s", time);
     Movie* new_head = NULL;
     while (head)
     {
-        if (strcmp(head->start_time,time))
+        if (strcmp(head->start_time,time)>=0)
         {
             movie_add_to_list(&new_head, movie_copy_info(head));
         }
@@ -292,7 +296,7 @@ Movie* movie_filter_by_played(Movie* head)
     Movie* new_head = NULL;
     while (head)
     {
-        if (strcmp(time, head->end_time))
+        if (strcmp(time, head->end_time)>=0)
         {
             movie_add_to_list(&new_head, movie_copy_info(head));
         }
@@ -409,12 +413,12 @@ int is_same_date(const char* start_time, const char* input_date) {
 }
 
 // Function to filter movies by date
-Movie* movie_filter_by_date(const char* input_date, Movie* head) {
+Movie* movie_filter_by_current_date( Movie* head) {
     Movie* filtered_head = NULL;
     Movie* current = head;
-
+    char* current_day=get_current_day();
     while (current != NULL) {
-        if (is_same_date(current->start_time, input_date)) {
+        if (is_same_date(current->start_time, current_day)) {
             Movie* new_movie = movie_copy_info(current);
             movie_add_to_list(&filtered_head, new_movie);
         }
@@ -422,6 +426,22 @@ Movie* movie_filter_by_date(const char* input_date, Movie* head) {
     }
 
     return filtered_head;
+}
+
+double caculate_movie_income(Movie* head)
+{
+    if (!head)
+    {
+        printf("Data is NULL!");
+        return 0;
+    }
+    double res = 0;
+    while (head)
+    {
+        res += head->price * head->discount*(head->theater->theater_capacity-head->remaining_ticket);
+        head = head->next;
+    }
+    return res;
 }
 void movie_list_free(Movie* head) {
     Movie* temp = head;

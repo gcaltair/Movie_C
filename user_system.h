@@ -9,10 +9,13 @@ typedef struct User_hash_table User_hash_table;
 typedef struct Admin Admin;
 bool admin_password_check(Admin* admin,Admin* admin_list);
 bool user_password_check(User *usr,User_hash_table*userHashTable);
+void movie_print(const Movie* movie);
 int get_user_input_int(int max);
+int get_valid_date_input(char* date);
 void display_movie_operate_main_menu();
 void admin_greet();
 void admin_order_manage_greet();
 //管理员排序菜单
 void display_admin_sort_menu();
+void display_admin_filter_menu();
 #endif //MOVIE_C_USER_SYSTEM_H

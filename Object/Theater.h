@@ -17,7 +17,7 @@ typedef struct Theater {
     char* cinema_id;
     // 缺少座位图和座位号的定义
     char* theater_type;
-    struct Movie* movie;
+
     struct Theater* next;
     struct Theater* hash_next;
     Linked_string_list * my_movie;

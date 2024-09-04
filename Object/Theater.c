@@ -26,7 +26,6 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     theater->cinema = cinema_;
     theater->cinema_id= strdup(cinema_id_);
     theater->theater_type = strdup(type);
-    theater->movie = NULL;  // 需要另外赋值
     theater->next = NULL;
     theater->hash_next=NULL;
     theater->my_movie=NULL;

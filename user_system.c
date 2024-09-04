@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include<ctype.h>
 #include <stdbool.h>
 #include <conio.h>
 //#include <unistd.h>
@@ -104,7 +105,11 @@ int get_user_input_int(int max) {
     char c;
 
     while (1) {
+        if(max!=0)
         printf("enter your option 0-%d:", max);
+        else
+            printf("输入0以继续...\n");
+        
 
         // 尝试读取一个整数输入
         if (scanf("%d", &option) == 1) {
@@ -115,17 +120,91 @@ int get_user_input_int(int max) {
                 return option;
             }
             else {
-                printf("invalid input please enter number between 0 to %d.", max);
-                
+                printf("invalid input,"); 
             }
         }
         else {
-            printf("invalid input please enter number between 0 to %d.\n",max);
+            printf("invalid input,");
             
             // 清理输入缓冲区，处理非整数输入
             while ((c = getchar()) != '\n' && c != EOF) {}
         }
     }
+}
+// 检查日期格式是否为 YYYY-MM-DD
+bool is_valid_date_format(const char* date) {
+    // 长度必须为 10
+    if (strlen(date) != 10) {
+        return false;
+    }
+
+    // 检查每一部分是否符合要求
+    for (int i = 0; i < 10; i++) {
+        if (i == 4 || i == 7) {
+            if (date[i] != '-') {
+                return false;
+            }
+        }
+        else {
+            if (!isdigit(date[i])) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// 获取用户输入并确保格式正确
+int get_valid_date_input(char* date) {
+    while (true) {
+        printf("请输入日期（格式: YYYY-MM-DD）：");
+        scanf("%s", date);
+
+        if (is_valid_date_format(date)) {
+            break;
+        }
+        //else if (strcmp(date, "exit") == 0)
+        //{
+        //    return 1;
+        //}
+        else {
+            printf("输入格式错误，请重新输入。\n");
+        }
+    }
+    return 0;
+}
+void movie_print(const Movie* movie) {
+    if (movie == NULL) { printf("当前信息为空"); return; }
+    printf("场次ID: %s\n", movie->movie_id);
+    printf("电影ID: %s\n", movie->film_id);
+    printf("影厅ID: %s\n", movie->theater_id);
+    printf("开始时间: %s\n", movie->start_time);
+    printf("结束时间: %s\n", movie->end_time);
+    printf("余票数: %d\n", movie->remaining_ticket);
+    printf("价格: %.2f\n", movie->price);
+    printf("折扣: %.2f\n", movie->discount);
+    printf("------------\n");
+}
+Movie* movie_choose(Movie* new_movie_list)
+{
+    int count = 0;
+    Movie* new_head_for_option = new_movie_list;
+    while (new_movie_list)
+    {
+        count++;
+        printf("序号 %d:\n", count);
+        movie_print(new_movie_list);
+        new_movie_list = new_movie_list->next;
+    }
+    printf("请输入你的选择(输入0退出):");
+    int option = get_user_input_int(count);
+    if (option == 0) return NULL;
+    for (int i = 1; i < option; ++i)
+    {
+        new_head_for_option = new_head_for_option->next;
+    }
+    return new_head_for_option;
 }
 
 void admin_greet()
@@ -145,11 +224,22 @@ void admin_greet()
 void admin_order_manage_greet()
 {
     printf("*************************************************\n");
-    printf("*                 订单管理                      *\n");
+    printf("*                  订单管理                     *\n");
     printf("*************************************************\n");
-    printf("* 1. 查看用户订单                               *\n");
-    printf("* 2. 统计用户订单                               *\n");
-    printf("* 3. 订单搜索                                   *\n");
+    printf("* 1. 查看与统计用户订单                         *\n");
+    printf("* 2. 订单搜索                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+void admin_theater_manage_greet()
+{
+    printf("*************************************************\n");
+    printf("*                  影厅管理                     *\n");
+    printf("*************************************************\n");
+    printf("* 1. 添加影厅                                   *\n");
+    printf("* 2. 查看影厅                                   *\n");
+    printf("* 3. 删除影厅                                   *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");
@@ -157,10 +247,11 @@ void admin_order_manage_greet()
 //场次操作菜单
 void display_movie_operate_main_menu() {
     printf("\n==== 操作主菜单 ====\n");
-    printf("1. Sort\n");
-    printf("2. Filter\n");
-    printf("3. 选择场次\n\n");
-    printf("0. 返回订单管理（reset排序结果）\n");
+    printf("1. 排序\n");
+    printf("2. 筛选\n");
+    printf("3. 查看与选择场次\n");
+    printf("4. 查看影院在当前结果的收入\n\n");
+    printf("0. 返回订单管理（重置操作结果）\n");
     
 }
 //管理员排序菜单
@@ -171,5 +262,16 @@ void display_admin_sort_menu() {
     printf("3. 场次收入 (降序)\n");
     printf("4. 开始时间 (升序)\n");
     printf("5. 剩余票数 (升序)\n\n");
-    printf("0. 返回主菜单\n");
+    printf("0. 返回操作主菜单\n");
 }
+void display_admin_filter_menu() {
+    printf("\n==== 筛选菜单 ====\n");
+    printf("1. 时间段\n");
+    printf("2. 已放映\n");
+    printf("3. 未放映\n");
+    printf("4. 当日日期\n");
+    printf("5. 影片类型\n");
+    printf("6. 电影院ID\n\n");
+    printf("0. 返回操作主菜单\n");
+}
+

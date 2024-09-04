@@ -32,6 +32,8 @@ void movie_add_to_list(Movie** head, Movie* newMovie);
 // 显示单个 Movie 的信息  
 void movie_show(const Movie* movie);
 
+
+
 // 显示链表中所有 Movie 的信息  
 void movie_show_all(Movie* head);
 
@@ -58,7 +60,7 @@ Movie* movie_filter_by_played(Movie* head);
 //筛选未播放的场次
 Movie* movie_filter_by_not_played(Movie* head);
 
-Movie* movie_filter_by_date(const char* input_date, Movie* head);
+Movie* movie_filter_by_current_date(Movie* head);
 
 Movie* movie_filter_by_film_type(Movie* head, const char* film_type);
 
@@ -94,6 +96,8 @@ int compare_movies_by_occupancy_rate(const void* a, const void* b);
 int compare_movies_by_price(const void* a, const void* b);
 
 
+
+double caculate_movie_income(Movie* head);
 
 void movie_list_free(Movie* head);
 

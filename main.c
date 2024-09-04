@@ -25,7 +25,7 @@ int main() {
 static void admin_opreation()
 {
     while (1) {
-        system("cls");
+        //system("cls");
         admin_greet();
         int option = get_user_input_int(5);
         switch (option)
@@ -45,13 +45,13 @@ static void admin_order_manage()
 {
     while (1)
     {
-        system("cls");
+        //system("cls");
         admin_order_manage_greet();
         int option = get_user_input_int(2);
         switch (option)
         {
         case 1:
-            admin_view_order();
+            admin_view_and_count_order();
         case 2:
 
         default:
@@ -60,30 +60,35 @@ static void admin_order_manage()
     }
 
 }
-static void admin_view_order(){
-    Movie* my_cinema_movie_list = movie_list_create_by_cinema(admin_now->cinema, theaterHashTable, movieHashTable);
-    Movie* new_movie_list = movie_list;
-    Movie* free_temp = NULL;
-    Movie* para_temp = NULL;
+static void admin_view_and_count_order(){
+    
+    Movie* new_movie_list = movie_list_create_by_cinema(admin_now->cinema, theaterHashTable, movieHashTable);
+    
     while (1)
     {
-        system("cls");
+        //system("cls");
         display_movie_operate_main_menu();
-        int option = get_user_input_int(3);
+        int option = get_user_input_int(4);
         switch (option)
         {
         case 1://选择了排序
             new_movie_list = for_admin_movie_sort(new_movie_list);//进入排序界面
             break;
         case 2://选择了筛选
-            para_temp = new_movie_list;
-            free_temp = new_movie_list;
+            new_movie_list= for_admin_movie_filter(new_movie_list);
             break;
         case 3:
-            movie_show_all(new_movie_list);
-            _sleep(10000);
+            Movie * movie_choice = movie_choose(new_movie_list);
+            movie_print(movie_choice);
+            //order_show_all //然后输出所有当前场次的订单
+            break;
+        case 4:
+            printf("当前时间区段总收入为:%.2lf", caculate_movie_income(new_movie_list));
+            while (get_user_input_int(0));
             break;
         default:
+            movie_list_free(new_movie_list);
+            new_movie_list = NULL;
             return;
         }
     }  
@@ -102,54 +107,100 @@ Movie* for_admin_movie_sort(Movie* new_movie_list)//进入排序子菜单
         case 1:
             new_movie_list=movie_operation_sort(new_movie_list, 1);
             printf("按上座率排序完成");
-            /*movie_list_free(temp);*/
-            _sleep(1000);
-            //temp = NULL;
             break;
         case 2:
             new_movie_list = movie_operation_sort(new_movie_list,2);
             printf("按价格排序完成");
-            //movie_list_free(temp);
-            _sleep(1000);
-            //temp = NULL;
             break;
         case 3:
             new_movie_list = movie_operation_sort(new_movie_list, 3);
             printf("按场次收入排序完成");
-            //movie_list_free(temp);
-            _sleep(1000);
-            //temp = NULL;
             break;
         case 4:
             new_movie_list = movie_operation_sort(new_movie_list, 4);
             printf("按开始时间排序完成");
-            //movie_list_free(temp);
-            _sleep(1000);
-            //temp = NULL;
             break;
         case 5:
             new_movie_list = movie_operation_sort(new_movie_list, 5);
             printf("按剩余票数排序完成");
-            //movie_list_free(temp);
-            _sleep(1000);
-            //temp = NULL;
             break;
         default:
             return new_movie_list;
         }
+        _sleep(1000);
     }
 }
 Movie* for_admin_movie_filter(Movie* new_movie_list)
 {
     while (1)
     {
-
+        system("cls");
+        display_admin_filter_menu();
+        int option = get_user_input_int(6);
+        Movie* free_temp = new_movie_list;
+        //时间段，已放映，未放映，当日日期，影片类型，电影院id
+        char start_time[20]; char end_time[20]; char text[20];
+        switch (option)
+        {
+        case 1:
+            printf("请分别输入起止时间\n");
+            //if (get_valid_date_input(start_time) == 1 || get_valid_date_input(end_time) == 1) { break; }
+            get_valid_date_input(start_time);
+            get_valid_date_input(end_time);
+            printf("对时间段 %s-%s 的筛选已完成", start_time, end_time);
+            strcat(start_time, " 00:00:00");
+            strcat(end_time, " 00:00:00");
+            char* context[] = { start_time,end_time };
+            new_movie_list = movie_operation_filter(new_movie_list, 1, context);
+            break;
+            
+        case 2: 
+            new_movie_list = movie_filter_by_played(new_movie_list);
+            printf("已筛选已放映场次\n");
+            break;
+        case 3:
+            new_movie_list = movie_filter_by_not_played(new_movie_list);
+            printf("已筛选未放映场次\n");
+            break;
+        case 4:
+            new_movie_list = movie_filter_by_current_date(new_movie_list);
+            printf("已筛选当日场次\n");
+            break;
+        case 5:
+            printf("请输入影片类型:");
+            scanf("%s", text);
+            new_movie_list = movie_operation_filter(new_movie_list, 5, text);
+            printf("已筛选影片类型: %s\n",text);
+            break;
+        case 6:
+            printf("请输入电影院id:");
+            scanf("%s", text);
+            new_movie_list = movie_operation_filter(new_movie_list, 6, text);
+            printf("已筛选电影院id: %s\n",text);
+            break;
+        default:
+            return new_movie_list; //可能返回NULL
+        }
+        int count = 0; Movie* temp_head = new_movie_list;
+        while (temp_head)
+        {
+            count++; temp_head = temp_head->next;
+        }
+        printf("当前筛选得到 %d条数据", count);
+        //if (count != 0)
+        //{
+            movie_list_free(free_temp);
+            free_temp = NULL;
+        //}
+        //else
+        //{
+        //    printf(",已回退,请重新筛选");
+        //    new_movie_list = free_temp;
+        //}
+        _sleep(1000);
     }
 }
-Movie* movie_choose(Movie* head, Movie_hash_table* movie_hash_table)
-{
 
-}
 static int login()
 {
     char password[20]; char id[20]; bool key = 0;
