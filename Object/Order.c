@@ -281,7 +281,7 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 			}
 			movie_id_list = movie_id_list->next;
 		}
-		free_list(movie_id_list);//释放内存空间
+		//free_list(movie_id_list);//释放内存空间
 
 		if (history_order_count >= 5) {
 			return 3;

@@ -4,11 +4,10 @@ int main() {
     int mode;
     hash_ini();
     load_file();
-
     admin_now = admin_find_by_id(admin_list, "A001"); 
     
-    
-    admin_opreation();
+
+    //admin_opreation();
     //while (1) {
     //    system("cls");
     //    do {

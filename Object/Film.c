@@ -7,7 +7,7 @@
 
 // 创建新电影
 Film* film_create(Film_hash_table* hashTable, const char* id, const char* name, const char* type,
-    const char* language, const char* summary, int rating) {
+    const char* language, const char* summary, int time,int rating) {
     Film* new_film = (Film*)malloc(sizeof(Film));
     if (!new_film) return NULL;
 
@@ -16,6 +16,7 @@ Film* film_create(Film_hash_table* hashTable, const char* id, const char* name, 
     new_film->film_type = strdup(type);
     new_film->film_language = strdup(language);
     new_film->film_summary = strdup(summary);
+    new_film->film_time = time;
     new_film->film_rating = rating;
     new_film->next = NULL;
     new_film->hash_next_id = NULL;
@@ -57,6 +58,7 @@ void film_show(const Film* film) {
         printf("Type: %s\n", film->film_type);
         printf("Language: %s\n", film->film_language);
         printf("Summary: %s\n", film->film_summary);
+        printf("Time:%d\n", film->film_time);
         printf("Rating: %d\n", film->film_rating);
     }
 }

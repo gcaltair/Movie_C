@@ -251,7 +251,7 @@ Theater* theater_choose_for_admin(Theater* new_theater_list)
     }
     return new_head_for_option;  
 }
-int admin_add_a_movie_to_theater();
+int admin_add_a_movie_to_theater(Theater* theater,Film* film);
 
 Film* film_choose(Film* new_film_list)
 {

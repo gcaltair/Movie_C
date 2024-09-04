@@ -12,6 +12,7 @@ typedef struct Film {
     char* film_type;
     char* film_language;
     char* film_summary;
+    int film_time;
     int film_rating;
     struct Film* next;
     struct Film* hash_next_id;
@@ -21,7 +22,7 @@ typedef struct Film {
 
 // 创建新电影
 Film* film_create(Film_hash_table* hashTable, const char* id, const char* name, const char* type,
-    const char* language, const char* summary, int rating);
+    const char* language, const char* summary, int time,int rating);
 
 // 将电影添加到链表中
 void film_add_to_list(Film** head, Film* new_film);

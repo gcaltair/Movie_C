@@ -190,10 +190,11 @@ void handle_film_data(char** fields, void* context) {
     const char* film_type = fields[2];
     const char* film_language = fields[3];
     const char* film_summary = fields[4];
-    int film_rating = atoi(fields[5]);
-
+    int film_time = atoi(fields[5]);
+    int film_rating = atoi(fields[6]);
+    
     // 创建新的 Film 实例
-    Film* new_film = film_create(hash_table, film_id, film_name, film_type, film_language, film_summary, film_rating);
+    Film* new_film = film_create(hash_table, film_id, film_name, film_type, film_language, film_summary, film_time,film_rating);
     if (!new_film) {
         printf("Failed to create film: %s\n", film_name);
         return;
