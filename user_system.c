@@ -14,7 +14,8 @@
 #include "user_system.h"
 #include "Object/User.h"
 #include "Object/admin.h"
-
+#include"Object/Film.h"
+#include"Structure File/interval_tree.h"
 static bool getPassword(char *password, int maxLen);
 
 
@@ -186,6 +187,16 @@ void movie_print(const Movie* movie) {
     printf("折扣: %.2f\n", movie->discount);
     printf("------------\n");
 }
+void film_print(const Film* film) {
+    if (film) {
+        printf("Film ID: %s\n", film->film_id);
+        printf("Name: %s\n", film->film_name);
+        printf("Type: %s\n", film->film_type);
+        printf("Language: %s\n", film->film_language);
+        printf("Summary: %s\n", film->film_summary);
+        printf("Rating: %d\n", film->film_rating);
+    }
+}
 Movie* movie_choose(Movie* new_movie_list)
 {
     int count = 0;
@@ -217,15 +228,73 @@ void theater_print(const Theater* theater) {
     printf("Capacity: %d\n", theater->theater_capacity);
     printf("Cinema ID: %s\n", theater->cinema_id);
     printf("Theater Type: %s\n", theater->theater_type);
-    printf("\n");
+    printf("------------\n");
+}
+Theater* theater_choose_for_admin(Theater* new_theater_list)
+{
+    int count = 0;
+    Theater* new_head_for_option = new_theater_list;
+    while (new_theater_list)
+    {
+        count++;
+        printf("序号 %d:\n", count);
+        printf("影厅名:%s\n", new_theater_list->theater_name);  
+        find_free_times(new_theater_list->time_line,0,1440);
+        new_theater_list = new_theater_list->next;
+    }
+    printf("请输入你的选择(输入0退出): ");
+    int option = get_user_input_int(count);  
+    if (option == 0) return NULL;  
+    for (int i = 1; i < option; ++i)
+    {
+        new_head_for_option = new_head_for_option->next; 
+    }
+    return new_head_for_option;  
+}
+int admin_add_a_movie_to_theater();
+
+Film* film_choose(Film* new_film_list)
+{
+    int count = 0;
+    Film* new_head_for_option = new_film_list;
+
+    // 打印所有 Film 的信息，并计算总数
+    while (new_film_list)
+    {
+        count++;
+        printf("序号 %d:\n", count);
+        film_print(new_film_list);  // 打印每个 Film 的详细信息
+        new_film_list = new_film_list->next;
+    }
+
+    // 获取用户输入的选择
+    printf("请输入你的选择(输入0退出): ");
+    int option = get_user_input_int(count);  // 获取用户输入的整数
+    if (option == 0) return NULL;  // 如果用户选择退出，则返回 NULL
+
+    // 根据用户的选择找到对应的 Film
+    for (int i = 1; i < option; ++i)
+    {
+        new_head_for_option = new_head_for_option->next;
+    }
+
+    return new_head_for_option;  // 返回用户选择的 Film
 }
 
+void minutes_to_hhmm(int minutes, char* buffer) {
+    int hours = minutes / 60;
+    int mins = minutes % 60;
+    sprintf(buffer, "%02d:%02d", hours, mins);
+}
+int hhmm_to_minutes(const char* hhmm) {
+    int hours, minutes;
+    sscanf(hhmm, "%d:%d", &hours, &minutes);
+    return hours * 60 + minutes;
+}
 void press_zero_to_continue()
 {
     while (get_user_input_int(0));
     return;
-    
-
 }
 int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table) {
     while (1) {
@@ -303,6 +372,18 @@ void admin_theater_manage_greet()
     printf("* 1. 添加影厅                                   *\n");
     printf("* 2. 查看影厅                                   *\n");
     //printf("* 3. 删除影厅                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+void display_admin_movie_manage_greet()
+{
+    printf("*************************************************\n");
+    printf("*                  场次管理                     *\n");
+    printf("*************************************************\n");
+    printf("* 1. 智能排片                                   *\n");
+    printf("* 2. 查看排片                                   *\n");
+    printf("* 3. 自定义排片                                 *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");

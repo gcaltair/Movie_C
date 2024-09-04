@@ -9,7 +9,7 @@
 #include "Cinema.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
-
+#include"../Structure File/interval_tree.h"
 // 创建并初始化一个新的 Theater 结构体
 Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
     // 动态分配内存给 Theater 结构体
@@ -29,6 +29,8 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     theater->next = NULL;
     theater->hash_next=NULL;
     theater->my_movie=NULL;
+
+    theater->time_line = NULL;
     insert_theater_to_hash_table(hashTable,theater);
 
     string_direct_add_to_list(&(cinema_->my_theater),theater->theater_id);
@@ -81,6 +83,79 @@ void theater_show_all(Theater* head) {
         temp = temp->next;
     }
 }
+
+Theater* theater_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table)
+{
+    Theater* new_head = NULL;
+    Linked_string_list* head_theater = cinema->my_theater;  
+    while (head_theater)
+    {
+        Theater* theater_find = find_theater_in_hash_table(theater_hash_table, head_theater->id);  
+        if (!theater_find)
+        {
+            printf("theater id %s theater list create failed\n", head_theater->id);
+            _sleep(10000);
+        }
+        else
+        {
+            Theater* new_theater = theater_copy_info(theater_find);  
+            theater_add_to_list(&new_head, new_theater);  
+        }
+        head_theater = head_theater->next;  
+    }
+    return new_head;
+}
+Theater* theater_copy_info(Theater* theater)
+{
+    if (!theater) {
+        printf("Theater is null!\n");
+        return NULL;
+    }
+
+    Theater* new_theater = (Theater*)malloc(sizeof(Theater));
+    if (!new_theater) {
+        printf("Memory allocation failed!\n");
+        return NULL;
+    }
+
+    // 复制当前 Theater 的信息到新节点
+    new_theater->theater_id = strdup(theater->theater_id);
+    new_theater->theater_name = strdup(theater->theater_name);
+    new_theater->theater_capacity = theater->theater_capacity;
+    new_theater->cinema = theater->cinema;  // 如果需要复制 Cinema 信息，需要另行实现
+    new_theater->cinema_id = strdup(theater->cinema_id);
+    new_theater->theater_type = strdup(theater->theater_type);
+
+    new_theater->my_movie = NULL; 
+    Linked_string_list* head_movie = theater->my_movie;
+
+    new_theater->time_line = theater->time_line; 
+
+    new_theater->next = NULL;
+    new_theater->hash_next = NULL;
+
+    return new_theater;
+}
+void theater_free_copied_list(Theater* theater_list)
+{
+    Theater* current_theater = theater_list;
+    Theater* next_theater;
+
+    while (current_theater != NULL)
+    {
+        // 释放与当前 Theater 相关的内存
+        free(current_theater->theater_id);
+        free(current_theater->theater_name);
+        free(current_theater->cinema_id);
+        free(current_theater->theater_type);
+
+        // 移动到下一个 Theater
+        next_theater = current_theater->next;
+        free(current_theater);
+        current_theater = next_theater;
+    }
+}
+
 
 double get_theater_income(Theater* theater, Movie_hash_table* hash_table)
 {

@@ -14,7 +14,9 @@ typedef struct Movie {
     Theater* theater; // 指向在哪个影厅播放  
     
     char* start_time;
+    int start_min;
     char* end_time;
+    int end_min;
     int remaining_ticket;
     double price;
     double discount;
@@ -70,6 +72,7 @@ Movie* movie_filter_by_cinema_id(char* id, Movie* head);
 Movie* movie_filter_by_film_name(char* name, Movie* head);
 typedef struct Movie_hash_table{
     Movie *table[HASH_TABLE_SIZE];
+    int count;
 }Movie_hash_table;
 
 Movie_hash_table* movie_hash_table_create();
@@ -98,6 +101,8 @@ int compare_movies_by_price(const void* a, const void* b);
 
 
 double caculate_movie_income(Movie* head);
+
+int datetime_to_minutes(const char* datetime);
 
 void movie_list_free(Movie* head);
 

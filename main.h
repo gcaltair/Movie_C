@@ -18,6 +18,7 @@
 #include"Object/Film.h"
 #include "data_process.h"
 #include "Structure File/linked_list.h"
+#include "Structure File/interval_tree.h"
 #include "user_system.h"
 User *user_now;
 Admin *admin_now;
@@ -48,7 +49,8 @@ static int login();
 static void admin_opreation();
 static void admin_theater_manage();
 static void admin_view_and_count_order();
+static void admin_movie_manage();
 Movie* for_admin_movie_sort(Movie* new_movie_list);
 Movie* for_admin_movie_filter(Movie* new_movie_list);
-Movie* movie_choose(Movie* new_movie_list);
+
 #endif //MOVIE_C_TEST_H

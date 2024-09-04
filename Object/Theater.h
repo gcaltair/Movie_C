@@ -9,6 +9,7 @@ typedef struct Cinema Cinema;
 typedef struct Theater_hash_table Theater_hash_table;
 typedef struct Movie_hash_table Movie_hash_table;
 typedef struct Linked_string_list Linked_string_list;
+typedef struct interval_tree interval_tree;
 typedef struct Theater {
     char* theater_id;
     char* theater_name;
@@ -21,6 +22,9 @@ typedef struct Theater {
     struct Theater* next;
     struct Theater* hash_next;
     Linked_string_list * my_movie;
+
+    interval_tree* time_line;
+    
 }Theater;
 
 // 添加新影厅
@@ -36,6 +40,9 @@ void theater_show_all(Theater* head);
 int compare_theaters_by_income(const void* a, const void* b, const void* context); 
 
 double get_theater_income(Theater* theater, Movie_hash_table* hash_table);
+
+Theater* theater_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table);
+Theater* theater_copy_info(Theater* theater);
 
 typedef struct Theater_hash_table {
     Theater* table[HASH_TABLE_SIZE];

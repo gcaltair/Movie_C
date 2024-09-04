@@ -23,7 +23,7 @@ add_executable(Movie_C main.c
         user_system.c
         user_system.h
         "main.h"
- "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h")
+ "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h" "Structure File/interval_tree.h" "Structure File/interval_tree.c")
 add_executable(test1
         test.c
         Object/User.c
@@ -45,4 +45,4 @@ add_executable(test1
         user_system.c
         user_system.h
         "main.h"
- "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h")
+ "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h" "Structure File/interval_tree.h" "Structure File/interval_tree.c")

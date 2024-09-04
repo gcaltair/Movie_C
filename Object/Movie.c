@@ -7,6 +7,7 @@
 #include "Order.h"
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
+#include"../Structure File/interval_tree.h"
 #include"Film.h"
 // 创建新的 Movie 节点  
 Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const char* film_id,Film* film,const char* theater_id,Theater* theater, const char* start_time, const char* end_time,
@@ -22,8 +23,11 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     newMovie->movie_id= strdup(movie_id); // 使用 strdup 简化内存分配和复制
     newMovie->film_id = strdup(film_id);
     newMovie->theater_id = strdup(theater_id);
+    newMovie->theater = theater;
     newMovie->start_time = strdup(start_time);
+    newMovie->start_min = datetime_to_minutes(start_time);
     newMovie->end_time = strdup(end_time);
+    newMovie->end_min = datetime_to_minutes(end_time);
     newMovie->remaining_ticket = remaining_ticket;
     newMovie->price = price;
     newMovie->discount = discount;
@@ -32,6 +36,10 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     insert_movie_to_hash_table(movieHashTable,newMovie);
 
     string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);
+
+
+    theater->time_line = insert_interval(theater->time_line, newMovie->start_min, newMovie->end_min);//插入timeLine
+
     string_direct_add_to_list(&(film->playing_movie), newMovie->movie_id);
 
     return newMovie;
@@ -93,13 +101,15 @@ void movie_hash_table_init(Movie_hash_table* ht) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         ht->table[i] = NULL;
     }
+    ht->count = 0;
 }
 
 // 插入 Movie 到哈希表
 void insert_movie_to_hash_table(Movie_hash_table* ht, Movie* movie) {
     unsigned int index = hash(movie->movie_id, strlen(movie->movie_id), 0x9747b28c); // 使用MurmurHash2生成索引
     movie->hash_next = ht->table[index];  // 将当前的哈希表索引处的元素放在新电影的后面
-    ht->table[index] = movie;             // 将新电影放在链表的头部
+    ht->table[index] = movie;// 将新电影放在链表的头部
+    ht->count++;
 }
 
 // 在哈希表中查找 Movie，通过 movie_id 查找
@@ -442,6 +452,17 @@ double caculate_movie_income(Movie* head)
         head = head->next;
     }
     return res;
+}
+int datetime_to_minutes(const char* datetime) 
+{
+    int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
+    if (sscanf(datetime, "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &minute, &second) == 6) {
+        return hour * 60 + minute;
+    }
+    else {
+        // 如果解析失败，返回一个错误标志
+        return -1;
+    }
 }
 void movie_list_free(Movie* head) {
     Movie* temp = head;

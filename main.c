@@ -1,27 +1,28 @@
 #include "main.h"
-#include "main.h"
-#include "main.h"
 static void admin_order_manage();
 int main() {
     int mode;
     hash_ini();
     load_file();
+
     admin_now = admin_find_by_id(admin_list, "A001"); 
+    
+    
     admin_opreation();
-    /*while (1) {
-        system("cls");
-        do {
-            mode = login();
-        } while (!mode);
-        if (mode == admin_mode)
-        {
-            admin_opreation();
-        }
-        else if (mode == user_mode)
-        {
-            printf("\nWelcome user");
-        }
-    }*/
+    //while (1) {
+    //    system("cls");
+    //    do {
+    //        mode = login();
+    //    } while (!mode);
+    //    if (mode == admin_mode)
+    //    {
+    //        admin_opreation();
+    //    }
+    //    else if (mode == user_mode)
+    //    {
+    //        printf("\nWelcome user");
+    //    }
+    //}
 }
 static void admin_opreation()
 {
@@ -40,9 +41,31 @@ static void admin_opreation()
             admin_theater_manage(); 
             break;
         case 3:
-            
+            admin_movie_manage();
         default:
             return;
+        }
+    }
+}
+
+static void admin_movie_manage()//排片管理
+{
+    while (1)
+    {
+        //system("cls");
+        display_admin_movie_manage_greet();
+        int option = get_user_input_int(3);
+        switch (option)
+        {
+        case 1:
+            Theater * theater_new_list = theater_list_create_by_cinema(admin_now->cinema, theaterHashTable);
+            Film* film_choosed = film_choose(film_list);
+            if (!film_choosed) break;
+            Theater* theater_choosed=theater_choose_for_admin(theater_new_list);
+            if (!theater_choosed) break;
+            
+        default:
+            break;
         }
     }
 }
@@ -122,6 +145,7 @@ static void admin_view_and_count_order(){
             break;
         case 3:
             Movie * movie_choice = movie_choose(new_movie_list);
+            if (movie_choice == NULL) break;
             movie_print(movie_choice);
             //order_show_all //然后输出所有当前场次的订单
             break;
