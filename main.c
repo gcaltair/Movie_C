@@ -1,11 +1,12 @@
 #include "main.h"
 #include "main.h"
+#include "main.h"
 static void admin_order_manage();
 int main() {
     int mode;
     hash_ini();
     load_file();
-    admin_now = admin_find_by_id(admin_list, "A001");
+    admin_now = admin_find_by_id(admin_list, "A001"); 
     admin_opreation();
     /*while (1) {
         system("cls");
@@ -35,7 +36,48 @@ static void admin_opreation()
         case 1:
             admin_order_manage();
             break;
-
+        case 2:
+            admin_theater_manage(); 
+            break;
+        case 3:
+            
+        default:
+            return;
+        }
+    }
+}
+static void admin_theater_manage()//theater的删除没做
+{
+    while (1)
+    {
+        //system("cls");
+        admin_theater_manage_greet();
+        int option = get_user_input_int(3);
+        switch (option)
+        {
+        case 1:
+            int add_status=admin_add_a_theater(admin_now,theater_list,theaterHashTable);
+            switch (add_status)
+            {
+            case 1:
+                printf("场次添加成功\n"); break;
+            case 2:
+                printf("数据出错...\n"); break;
+            case 0:
+                printf("已取消添加\n"); break;
+            }
+            press_zero_to_continue();
+            break;
+        case 2:
+            Linked_string_list * head = admin_now->cinema->my_theater;
+            while (head)
+            {
+                theater_print(find_theater_in_hash_table(theaterHashTable,head->id));
+                head = head->next;
+            }
+            printf("已展示所有影厅\n");
+            press_zero_to_continue();
+            break;
         default:
             return;
         }
@@ -53,13 +95,14 @@ static void admin_order_manage()
         case 1:
             admin_view_and_count_order();
         case 2:
-
+            
         default:
             return;
         }
     }
 
 }
+
 static void admin_view_and_count_order(){
     
     Movie* new_movie_list = movie_list_create_by_cinema(admin_now->cinema, theaterHashTable, movieHashTable);

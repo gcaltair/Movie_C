@@ -206,7 +206,70 @@ Movie* movie_choose(Movie* new_movie_list)
     }
     return new_head_for_option;
 }
+void theater_print(const Theater* theater) {
+    if (theater == NULL) {
+        printf("Theater Data is NULL.\n");
+        return;
+    }
 
+    printf("Theater ID: %s\n", theater->theater_id);
+    printf("Theater Name: %s\n", theater->theater_name);
+    printf("Capacity: %d\n", theater->theater_capacity);
+    printf("Cinema ID: %s\n", theater->cinema_id);
+    printf("Theater Type: %s\n", theater->theater_type);
+    printf("\n");
+}
+
+void press_zero_to_continue()
+{
+    while (get_user_input_int(0));
+    return;
+    
+
+}
+int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table) {
+    while (1) {
+        char theater_id[50];
+        char name[100];
+        int capacity;
+        char* cinema_id = admin_now->cinema_id;
+        char type[50];
+        int temp_count = theater_hash_table->count + 1;
+        sprintf(theater_id, "T%05d", temp_count);
+        printf("Enter Theater Name: ");
+        fgets(name, sizeof(name), stdin);
+        name[strcspn(name, "\n")] = 0;
+        printf("Enter Theater Capacity: ");
+        capacity = get_user_input_int(500);
+        
+        printf("Enter Theater Type:");
+        fgets(type, sizeof(type), stdin);
+        type[strcspn(type, "\n")] = 0;
+
+        printf("您的信息是:\n");
+        printf("%s\n", name);
+        printf("%d\n", capacity);
+        printf("%s\n", type);
+        printf("确认添加吗? (1:确认 0:取消添加 2:重新输入):");
+        int option = get_user_input_int(2);
+        if (option == 0) return 0;
+        if (option == 2) continue;
+        // 获取 Cinema 结构体的指针，根据 Cinema ID 查找
+        Cinema* cinema = admin_now->cinema;
+        if (cinema == NULL) {
+            return 2;
+        }
+
+        // 创建新 Theater 并加入链表和哈希表
+        Theater* new_theater = theater_create(theater_hash_table, theater_id, name, capacity, cinema, cinema_id, type);
+        if (new_theater == NULL) {        
+            return 2;
+        }
+
+        theater_add_to_list(&theater_list, new_theater);
+        return 1;
+    }
+}
 void admin_greet()
 {
     printf("*************************************************\n");
@@ -239,7 +302,7 @@ void admin_theater_manage_greet()
     printf("*************************************************\n");
     printf("* 1. 添加影厅                                   *\n");
     printf("* 2. 查看影厅                                   *\n");
-    printf("* 3. 删除影厅                                   *\n");
+    //printf("* 3. 删除影厅                                   *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");

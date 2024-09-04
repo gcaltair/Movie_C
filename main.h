@@ -46,6 +46,7 @@ static void hash_ini();
 static void load_file();
 static int login();
 static void admin_opreation();
+static void admin_theater_manage();
 static void admin_view_and_count_order();
 Movie* for_admin_movie_sort(Movie* new_movie_list);
 Movie* for_admin_movie_filter(Movie* new_movie_list);

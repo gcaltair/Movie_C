@@ -149,6 +149,7 @@ void init_theater_hash_table(Theater_hash_table* ht) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         ht->table[i] = NULL;
     }
+    ht->count = 0;
 }
 
 // 创建并初始化一个 Theater_hash_table
@@ -166,6 +167,7 @@ void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater) {
     uint32_t index = hash(theater->theater_id, strlen(theater->theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
     theater->hash_next = ht->table[index];  // 处理哈希冲突，将新剧院插入哈希链表头部
     ht->table[index] = theater;
+    ht->count++;
 }
 
 // 在哈希表中查找剧院，通过 theater_id 查找

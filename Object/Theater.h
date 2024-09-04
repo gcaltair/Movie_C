@@ -39,6 +39,7 @@ double get_theater_income(Theater* theater, Movie_hash_table* hash_table);
 
 typedef struct Theater_hash_table {
     Theater* table[HASH_TABLE_SIZE];
+    int count;
 } Theater_hash_table;
 Theater_hash_table* theater_hash_table_create();
 void init_theater_hash_table(Theater_hash_table* ht);
