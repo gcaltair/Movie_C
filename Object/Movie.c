@@ -235,7 +235,8 @@ Movie* movie_list_create_by_film(Film* film,Movie_hash_table* movie_hash_table)
 
     while (string_head)
     {
-        Movie* target = movie_copy_info(find_movie_in_hash_table(movie_hash_table, string_head->id));
+        Movie* find = find_movie_in_hash_table(movie_hash_table, string_head->id);
+        Movie* target = movie_copy_info(find);
         movie_add_to_list(&new_head, target);
         string_head = string_head->next;
     }

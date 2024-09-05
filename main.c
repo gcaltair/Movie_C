@@ -110,7 +110,7 @@ static void sub_purchase_by_name_and_cinema()
             printf("未找到电影院，是否重新输入?(1/0)");
             if (!get_user_input_int(1)) return;
         }
-
+        if (target_cinema) break;
     }
     while (1)
     {
@@ -122,8 +122,10 @@ static void sub_purchase_by_name_and_cinema()
             printf("未找到电影，是否重新输入?(1/0)");
             if (!get_user_input_int(1)) return;
         }
+        if (target_film) break;
     }
-    Movie* raw_movie_list = movie_list_create_by_film(target_film, filmHashTable);
+    
+    Movie* raw_movie_list = movie_list_create_by_film(target_film, movieHashTable);
     Movie* cinema_film_movie_list = movie_filter_by_cinema_name(film_name, raw_movie_list);
     Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list, movieHashTable);
     if (!choosed_movie) return;
