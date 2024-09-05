@@ -58,8 +58,7 @@ void admin_show(const Admin *admin) {
 
 }
 //修改用户信息
-Admin* admin_modify(Admin* head, char* id, int modify_mode, char* arg) {
-    Admin* admin = admin_find_by_id(head, id);
+Admin* admin_modify(Admin* admin, int modify_mode, char* arg) {
     if (admin == NULL) {
         printf("The admin is not existed!");
         return NULL; // 如果找不到管理员，则直接返回

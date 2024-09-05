@@ -46,10 +46,11 @@ enum system_mode
 static void hash_ini();
 static void load_file();
 static int login();
-static void admin_opreation();
+static void admin_operation();
 static void admin_theater_manage();
 static void admin_view_and_count_order();
 static void admin_movie_manage();
+static void admin_modify_self_info();
 Movie* for_admin_movie_sort(Movie* new_movie_list);
 Movie* for_admin_movie_filter(Movie* new_movie_list);
 

@@ -27,7 +27,7 @@ void admin_show_all(Admin* head);
 //查询管理员信息
 Admin* admin_find_by_id(Admin* head, char* id);
 //修改管理员信息
-Admin* admin_modify(Admin* head, char* id, int mode, char* arg);
+Admin* admin_modify(Admin* admin, int mode, char* arg);
 char* admin_delete(Admin** head, char* id);
 void admin_free_list(Admin** head);
 #endif //MOVIE_C_ADMIN_H

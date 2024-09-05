@@ -8,7 +8,7 @@ int main() {
     admin_now = admin_find_by_id(admin_list, "A001"); 
 
     
-    admin_opreation();
+    admin_operation();
     //while (1) {
     //    system("cls");
     //    do {
@@ -24,7 +24,11 @@ int main() {
     //    }
     //}
 }
-static void admin_opreation()
+static void user_operation()
+{
+
+}
+static void admin_operation()
 {
     while (1) {
         //system("cls");
@@ -44,13 +48,62 @@ static void admin_opreation()
             admin_movie_manage();
             break;
         case 4:
-            movie_show_all(movie_list);
+            admin_modify_self_info();
+            break;
         default:
             return;
         }
     }
 }
-
+static void admin_modify_self_info()
+{
+    while (1)
+    {
+        system("cls");
+        display_admin_modify_info_menu();
+        int option = get_user_input_int(5);
+        char* buffter[24];
+        switch (option)
+        {
+        case 1:
+            printf("请输入新的id：\n");
+            get_user_input_string(buffter, 20);
+            printf("确认将id从%s 修改为", admin_now->admin_id);
+            break;
+        case 2:
+            printf("请输入新的姓名：\n");
+            get_user_input_string(buffter, 20);
+            printf("确认将姓名从%s 修改为", admin_now->admin_name);
+            break;
+        case 3:
+            strcpy(buffter, get_valid_phone_number());
+            printf("确认将电话号码从%s 修改为", admin_now->admin_telephone);
+            break;
+        case 4:
+            while (!change_password(admin_now->admin_password, buffter));
+            printf("确认将密码修改为");
+            break;
+        case 5:
+            get_valid_email(buffter, 20);
+            printf("确认将邮箱从%s 修改为", admin_now->admin_email);
+            break;
+        case 0:
+            return;
+        default:
+            return;
+        }
+        printf(" %s\n", buffter);
+        int certify = get_user_input_int(1);
+        
+        if (certify) {
+            admin_modify(admin_now, option, buffter);
+            printf("修改成功\n");
+            
+        }
+         else printf("已取消");
+        press_zero_to_continue();
+    }
+}
 static void admin_movie_manage()//排片管理
 {
     while (1)

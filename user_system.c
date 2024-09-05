@@ -24,6 +24,7 @@ static bool getPassword(char *password, int maxLen);
 
 
 
+
 bool user_password_check(User *usr,User_hash_table*userHashTable)
 {
     if(!usr) return 0;
@@ -105,6 +106,54 @@ static bool getPassword(char *password, int maxLen) {
     password[i] = '\0'; // 字符串末尾添加终止符
     return 1;
 }
+bool change_password(const char* current_password,char* new_password) {
+    char input_password[20]; // 用于存储用户输入的当前密码
+    char new_password1[20];  // 用于存储用户第一次输入的新密码
+    char new_password2[20];  // 用于存储用户第二次输入的新密码
+
+    // 输入当前密码
+    printf("请输入当前密码: ");
+    if (!getPassword(input_password, sizeof(input_password))) {
+        printf("\n密码输入失败。\n");
+        return false;
+    }
+    printf("\n");
+
+    // 验证当前密码是否正确
+    if (strcmp(input_password, current_password) != 0) {
+        printf("当前密码错误！\n");
+        return false;
+    }
+
+    // 输入新密码（第一次）
+    printf("请输入新密码: ");
+    if (!getPassword(new_password1, sizeof(new_password1))) {
+        printf("\n密码输入失败。\n");
+        return false;
+    }
+    printf("\n");
+
+    // 输入新密码（第二次）
+    printf("请再次输入新密码: ");
+    if (!getPassword(new_password2, sizeof(new_password2))) {
+        printf("\n密码输入失败。\n");
+        return false;
+    }
+    printf("\n");
+
+    // 验证两次新密码是否一致
+    if (strcmp(new_password1, new_password2) != 0) {
+        printf("两次输入的新密码不一致！\n");
+        return false;
+    }
+
+    
+    // 在这里可以保存新密码
+    strcpy(new_password, new_password1);
+
+    return true;
+}
+
 double get_user_input_double(double min, double max) {
     double option;
     char c;
@@ -525,6 +574,7 @@ int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_tabl
 {
     int time = film->film_time;
     Theater* copied_theater_list = theater_list_create_by_cinema(cinema, theater_hash_table);
+    Theater* free_copied_list = copied_theater_list;
     Theater* re__iterate_head = copied_theater_list;
     int list_cout = 1;
 
@@ -561,7 +611,7 @@ int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_tabl
             start_min = i; 
         }
     }
-    //最后得到pre_flow_thater和start_min
+    //最后得到pre_flow_theater和start_min
 
 
     for (int i = 1; i < list_cout; ++i) //遍历获得影厅信息
@@ -572,6 +622,10 @@ int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_tabl
     printf("系统为您选择的时段是：\n");
     theater_print(re__iterate_head);
     print_start_and_end_time(start_min, end_min);
+    if (pre_flow_theater)
+    {
+        printf("存在%d个人流冲突场次", pre_flow_theater);
+    }
     printf("是否确认?(1/0)\n");
     int option = get_user_input_int(1);
     if (!option) return 0;
@@ -580,6 +634,7 @@ int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_tabl
     minutes_to_hhmm(start_min, start_time);
     minutes_to_hhmm(end_min, end_time);
     int status = add_movie_to_theater_dev(film, find_theater_in_hash_table(theater_hash_table, re__iterate_head->theater_id), start_time, end_time, movie_hash_table, movie_list);
+    theater_free_copied_list(free_copied_list);
     if (status == 0) return 0;
     return 1;
 }
@@ -677,6 +732,116 @@ int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_ta
         return 1;
     }
 }
+// 判断电话号码是否合法的函数
+int is_valid_phone_number(const char* phone) {
+    // 判断长度是否为11位
+    if (strlen(phone) != 11) {
+        return 0; // 长度不合法
+    }
+
+    // 判断首位是否为1
+    if (phone[0] != '1') {
+        return 0; // 首位不是1
+    }
+
+    // 判断是否全为数字
+    for (int i = 0; i < 11; i++) {
+        if (!isdigit(phone[i])) {
+            return 0; // 发现非数字字符
+        }
+    }
+
+    return 1; // 合法电话号码
+}
+// 获取合法的电话号码，并返回char*类型
+char* get_valid_phone_number() {
+    char* phone = (char*)malloc(12 * sizeof(char)); // 11位数字加1个结束符'\0'
+
+    while (1) {
+        printf("请输入新的电话号码: ");
+        scanf("%s", phone);
+
+        if (is_valid_phone_number(phone)) {
+            return phone; // 合法，返回电话号码
+        }
+        else {
+            printf("输入不合法，请重新输入。\n");
+        }
+    }
+}
+// 验证邮箱是否合法的函数
+bool is_valid_email(const char* email) {
+    int at_pos = -1;
+    int dot_pos = -1;
+    int len = strlen(email);
+
+    // 邮箱长度至少需要有 5 个字符（如 a@b.co）
+    if (len < 5) {
+        return false;
+    }
+
+    // 遍历邮箱字符串
+    for (int i = 0; i < len; i++) {
+        if (email[i] == '@') {
+            // 如果有多个 '@' 符号，则不合法
+            if (at_pos != -1) {
+                return false;
+            }
+            at_pos = i;
+        }
+        if (email[i] == '.') {
+            // 记录最后一个 '.' 符号的位置
+            dot_pos = i;
+        }
+    }
+
+    // 检查 '@' 符号的位置及其后面是否有 '.'
+    if (at_pos == -1 || dot_pos == -1 || at_pos == 0 || dot_pos <= at_pos + 1 || dot_pos == len - 1) {
+        return false;
+    }
+
+    // 进一步检查是否包含无效字符（非字母、数字、下划线、点和连字符）
+    for (int i = 0; i < len; i++) {
+        if (!isalnum(email[i]) && email[i] != '@' && email[i] != '.' && email[i] != '_' && email[i] != '-') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// 获取合法邮箱输入的函数
+void get_valid_email(char* email, int max_length) {
+    while (1) {
+        printf("请输入您的邮箱地址: ");
+        fgets(email, max_length, stdin);
+
+        // 去除末尾的换行符
+        size_t len = strlen(email);
+        if (len > 0 && email[len - 1] == '\n') {
+            email[len - 1] = '\0';
+        }
+
+        // 验证邮箱是否合法
+        if (is_valid_email(email)) {
+            printf("邮箱地址合法。\n");
+            break;
+        }
+        else {
+            printf("邮箱地址不合法，请重新输入。\n");
+        }
+    }
+}
+void get_user_input_string(char* input, int max_length) {
+    printf("请输入最多%d位的字符串: ", max_length);
+    fgets(input, max_length + 1, stdin);  // 读取输入，最多max_length个字符
+
+    // 去除末尾的换行符（如果有）
+    size_t len = strlen(input);
+    if (len > 0 && input[len - 1] == '\n') {
+        input[len - 1] = '\0';
+    }
+}
 void admin_greet()
 {
     printf("*************************************************\n");
@@ -691,6 +856,21 @@ void admin_greet()
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");
 }
+void display_admin_modify_info_menu()
+{
+    printf("*************************************************\n");
+    printf("*               修改管理员信息                  *\n");
+    printf("*************************************************\n");
+    printf("* 1. 修改ID                                     *\n");
+    printf("* 2. 修改姓名                                   *\n");
+    printf("* 3. 修改电话                                   *\n");
+    printf("* 4. 修改密码                                   *\n");
+    printf("* 5. 修改邮箱                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0. 退出                                       *\n");
+    printf("*************************************************\n");
+}
+
 void admin_order_manage_greet()
 {
     printf("*************************************************\n");
