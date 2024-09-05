@@ -223,7 +223,7 @@ Film* film_list_free(Film* head)
         if (temp->film_language) free(temp->film_language);
         if (temp->film_name) free(temp->film_name);
         if (temp->film_summary) free(temp->film_summary);
-        if (temp->film_time) free(temp->film_time);
+
         if (temp->film_type) free(temp->film_type);
 
         free(temp);

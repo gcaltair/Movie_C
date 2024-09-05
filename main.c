@@ -28,11 +28,14 @@ int main() {
 }
 static Film* hot_films()//ÓÐÎÊÌâ
 {
-    Film* film_list_hot = film_sort(film_copy_list(film_list), compare_films_by_ratings);
+    Film* copied_list = film_copy_list(film_list);
+    Film* film_list_hot = film_sort(copied_list, compare_films_by_ratings);
     static int t = 0;
-    while (t > 0) film_list_hot = film_list_hot->next;
+    for (int i = 0; i < t; ++i)
+        film_list_hot = film_list_hot->next;
     ++t;
     if (t >= 5) t %= 5;
+    film_list_free(copied_list);
     return film_list_hot;
 }
 static void user_operation()
