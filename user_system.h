@@ -41,8 +41,14 @@ Movie* movie_choose(Movie* new_movie_list, Movie_hash_table* hash_table);
 Theater* theater_choose_for_admin(Theater* new_theater_list,Theater_hash_table* hash_table);
 Film* film_choose(Film* new_film_list,Film_hash_table* hash_table);
 
+int for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table);
+
+
 void display_movie_operate_main_menu();
+void display_user_movie_operate_main_menu();
 void display_admin_modify_info_menu();
+void display_user_greet();
+void display_purchase_ticket();
 void admin_greet();
 void admin_order_manage_greet();
 void admin_theater_manage_greet();

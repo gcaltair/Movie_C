@@ -20,6 +20,8 @@ Cinema* cinema_create_list(Cinema* new_cinema); //创建链表头节点
 void cinema_add_to_list(Cinema** head, Cinema* new_cinema);//添加一个元素到链表，头插法
 Cinema* cinema_find_by_id(Cinema* head, const char* id);
 
+Cinema* cinema_find_by_name(Cinema* head, const char* name);
+
 void cinema_show(const Cinema* cinema);
 void cinema_show_all(Cinema* head);
 

@@ -200,7 +200,7 @@ Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
         new_head = movie_filter_by_film_type(head, (const char*)filter_param);  // filter_param should be a const char* representing the film type
         break;
     case 6:  // 过滤电影院ID
-        new_head = movie_filter_by_cinema_id((char*)filter_param, head);  // filter_param should be a char* representing the cinema ID
+        new_head = movie_filter_by_cinema_id((char*)filter_param, head);  
         break;
     default:
         return head;  // 如果 mode 不在 1-6 之间，直接返回原链表
@@ -228,15 +228,16 @@ Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
     return result_head;  // 返回结果链表的头节点
 }
 
-Movie* movie_list_create_by_film_name(char* name,Film_hash_table* film_hash_table,Movie_hash_table* movie_hash_table)
+Movie* movie_list_create_by_film(Film* film,Movie_hash_table* movie_hash_table)
 {
     Movie* new_head = NULL;
-    Film* film = find_film_in_hash_table_by_name(film_hash_table, name);
     Linked_string_list* string_head = film->playing_movie;
+
     while (string_head)
     {
         Movie* target = movie_copy_info(find_movie_in_hash_table(movie_hash_table, string_head->id));
         movie_add_to_list(&new_head, target);
+        string_head = string_head->next;
     }
     return new_head;
 }
@@ -273,6 +274,46 @@ Movie* movie_filter_by_cinema_id(char* id, Movie* head)
     }
     return new_head;
 }
+Movie* movie_filter_by_cinema_name(char* name, Movie* head)
+{
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (!strcmp(head->theater->cinema->cinema_name, name))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
+
+Movie* movie_filter_by_film_language(char* language, Movie* head)
+{
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (!strcmp(head->film->film_language,language))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
+Movie* movie_filter_by_theater_type(char* type, Movie* head)
+{
+    Movie* new_head = NULL;
+    while (head)
+    {
+        if (!strcmp(head->theater->theater_type, type))
+        {
+            movie_add_to_list(&new_head, movie_copy_info(head));
+        }
+        head = head->next;
+    }
+    return new_head;
+}
 Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time)
 {
     Movie* new_head = NULL;
@@ -290,7 +331,6 @@ Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time
 Movie* movie_filter_by_not_played(Movie* head)
 {
     char* time = get_current_time();
-    printf("%s", time);
     Movie* new_head = NULL;
     while (head)
     {

@@ -52,9 +52,11 @@ Movie* movie_sort(Movie* head, int* compare(void*, void*));
 int compare_movies_by_income(const void* a, const void* b);
 
 //创建一个根据电影名所查到的场次链表
-Movie* movie_list_create_by_film_name(char* name, Film_hash_table* film_hash_table, Movie_hash_table* movie_hash_table);
+Movie* movie_list_create_by_film(Film* film, Movie_hash_table* movie_hash_table);
 
 Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table, Movie_hash_table* movie_hash_table);
+
+Movie* movie_filter_by_theater_type(char* type, Movie* head);
 
 Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time);
 //筛选已经播放的场次
@@ -67,6 +69,8 @@ Movie* movie_filter_by_current_date(Movie* head);
 Movie* movie_filter_by_film_type(Movie* head, const char* film_type);
 
 Movie* movie_filter_by_cinema_id(char* id, Movie* head);
+
+Movie* movie_filter_by_cinema_name(char* name, Movie* head);
 
 //根据电影名筛选场次
 Movie* movie_filter_by_film_name(char* name, Movie* head);

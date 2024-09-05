@@ -30,6 +30,11 @@ void film_add_to_list(Film** head, Film* new_film);
 // 按名字查找电影
 Film* film_find_by_name(Film* head, const char* name);
 
+Film* film_copy_list(Film* head);
+
+Film* film_sort(Film* head, int* compare(void*, void*));
+
+int compare_films_by_ratings(const void* a, const void* b);
 // 显示单个电影的信息
 void film_show(const Film* film);
 
@@ -56,5 +61,7 @@ Film* find_film_in_hash_table_by_id(Film_hash_table* ht, const char* film_id);
 
 // 按名字查找哈希表中的电影
 Film* find_film_in_hash_table_by_name(Film_hash_table* ht, const char* film_name);
+
+Film* film_list_free(Film* head);
 
 #endif //MOVIE_C_FILM_H

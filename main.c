@@ -6,9 +6,11 @@ int main() {
     hash_ini();
     load_file();
     admin_now = admin_find_by_id(admin_list, "A001"); 
-
-    
-    admin_operation();
+    user_now = find_user_in_hash_table(userHashTable, "U001");
+    /*Film* target_film = find_film_in_hash_table_by_name(filmHashTable, "Inception");
+    Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);*/
+    user_operation();
+    //admin_operation();
     //while (1) {
     //    system("cls");
     //    do {
@@ -24,10 +26,141 @@ int main() {
     //    }
     //}
 }
+static Film* hot_films()
+{
+    Film* film_list_hot = film_sort(film_copy_list(film_list), compare_films_by_ratings);
+    static int t = 0;
+    while (t > 0) film_list_hot = film_list_hot->next;
+    ++t;
+    if (t >= 5) t %= 5;
+    return film_list_hot;
+}
 static void user_operation()
 {
-
+    while (1)
+    {
+        //system("cls");
+        display_user_greet();
+        int option = get_user_input_int(4);
+        switch (option)
+        {
+        case 1:
+            user_purchase_ticket();
+            break;
+        case 2:
+            printf("推荐影片:\n");
+            Film* hot_film = hot_films();
+            film_print(hot_film);
+            printf("是否进入购票>(1/0)");
+            if (!get_user_input_int(1)) break;
+            Movie* choosed_movie = search_target_film_and_choose_movie(hot_film);
+            if (!choosed_movie) break;
+            //然后购票
+            break;
+        default:
+            return;
+        }
+    }
 }
+Movie* search_target_film_and_choose_movie(Film* target_film)
+{
+    Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);
+    Movie* movie_filtered_list_temp = movie_filter_by_current_date(movie_raw_list);
+    Movie* movie_filtered_list = movie_filter_by_not_played(movie_filtered_list_temp);//得到当天未放映场次
+    if (movie_filtered_list == NULL)
+    {
+        printf("暂无当日场次\n");
+        press_zero_to_continue();
+        movie_list_free(movie_raw_list);
+        movie_list_free(movie_filtered_list_temp);
+        return;
+    }
+    Movie* target_movie = for_user_movie_choose(movie_filtered_list, movie_raw_list); //得到target_movie
+    //选中了targetMovie后进行买单等操作
+    //随后买单返回值再给出提示
+    movie_list_free(movie_raw_list);
+    movie_list_free(movie_filtered_list);
+    return target_movie;
+}
+static void sub_purchase_by_name()
+{
+    Film* target_film;
+    while (1) {
+        printf("请输入电影名称：");
+        char scanf_movie_name[30]; get_user_input_string(scanf_movie_name, 20);
+        target_film = find_film_in_hash_table_by_name(filmHashTable, scanf_movie_name);
+        if (target_film == NULL) {
+            printf("无法找到当前影片,是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;  //如果输入0退出循环
+        }
+        if (target_film !=NULL) break;
+    }
+    Movie* target_movie = search_target_film_and_choose_movie(target_film); //得到target movie然后购买
+}
+static void sub_purchase_by_name_and_cinema()
+{
+    char cinema_name[20]; char film_name[20]; Cinema* target_cinema; Film* target_film;
+    while (1)
+    {
+        printf("请输入电影院名称：\n");
+        get_user_input_string(cinema_name, 15);
+        target_cinema = cinema_find_by_name(cinema_list, cinema_name);
+        if (!target_cinema)
+        {
+            printf("未找到电影院，是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;
+        }
+
+    }
+    while (1)
+    {
+        printf("请输入电影名称：\n");
+        get_user_input_string(film_name, 15);
+        target_film = find_film_in_hash_table_by_name(filmHashTable, film_name);
+        if (!target_film)
+        {
+            printf("未找到电影，是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;
+        }
+    }
+    Movie* raw_movie_list = movie_list_create_by_film(target_film, filmHashTable);
+    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(film_name, raw_movie_list);
+    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list, movieHashTable);
+    if (!choosed_movie) return;
+    //然后进入付款
+    movie_list_free(raw_movie_list);
+    movie_list_free(cinema_film_movie_list);
+}
+static void user_purchase_ticket()
+{
+    while (1)
+    {
+        //system("cls");
+        display_purchase_ticket();
+        int option = get_user_input_int(4);
+        switch (option)
+        {
+        case 1:
+            sub_purchase_by_name();
+            //购买
+            break;
+        case 2: 
+            sub_purchase_by_name_and_cinema();
+            break;
+        case 3://优惠折扣
+            
+
+        case 4://自定义查找
+            user_view_and_count_movie();
+            break;
+            
+        default:
+            return;
+            break;
+        }
+    }
+}
+
 static void admin_operation()
 {
     while (1) {
@@ -202,21 +335,63 @@ static void admin_order_manage()
     while (1)
     {
         //system("cls");
-        admin_order_manage_greet();
+        admin_order_manage_greet(); char text[20];
         int option = get_user_input_int(2);
         switch (option)
         {
         case 1:
             admin_view_and_count_order();
+            break;
         case 2:
-            
+            while (1)
+            {
+
+                printf("请输入订单号：\n");
+                get_user_input_string(text, 20);
+                Order* order = find_order_in_hash_table(orderHashTable, text);
+                if (!order)
+                {
+                    printf("未找到订单,是否重新输入?(1/0)");
+                    int cer = get_user_input_int(1);
+                    if (!cer) break;
+                }
+            }
+            break;
         default:
-            return;
+            return; break;
         }
     }
 
 }
-
+static void user_view_and_count_movie()
+{
+    Movie* new_movie_list = movie_filter_by_not_played(movie_list);
+    while (1)
+    {
+        //system("cls");
+        display_user_movie_operate_main_menu();
+        int option = get_user_input_int(3);
+        switch (option)
+        {
+        case 1://选择了排序
+            new_movie_list = for_user_movie_sort(new_movie_list);//进入排序界面
+            break;
+        case 2://选择了筛选
+            new_movie_list = for_user_movie_filter(new_movie_list);
+            break;
+        case 3:
+            Movie * movie_choice = movie_choose(new_movie_list, movieHashTable);
+            if (movie_choice == NULL) break;
+            movie_print(movie_choice);
+            //然后进入购票，会有返回值
+            break;
+        default:
+            movie_list_free(new_movie_list);
+            new_movie_list = NULL;
+            return;
+        }
+    }
+}
 static void admin_view_and_count_order(){
     
     Movie* new_movie_list = movie_list_create_by_cinema(admin_now->cinema, theaterHashTable, movieHashTable);
@@ -250,6 +425,35 @@ static void admin_view_and_count_order(){
             return;
         }
     }  
+}
+Movie* for_user_movie_sort(Movie* new_movie_list)
+{
+    while (1)
+    {
+        //Movie* temp = new_movie_list;
+        system("cls");
+        display_user_sort_menu();
+        int option = get_user_input_int(3);
+        //价格，开始时间，余票数
+        switch (option)
+        {
+        case 1:
+            new_movie_list = movie_operation_sort(new_movie_list, 2);
+            printf("按价格排序完成");
+            break;
+        case 2:
+            new_movie_list = movie_operation_sort(new_movie_list, 4);
+            printf("按开始时间排序完成");
+            break;
+        case 3:
+            new_movie_list = movie_operation_sort(new_movie_list, 5);
+            printf("按剩余票数排序完成");
+            break;
+        default:
+            return new_movie_list;
+        }
+        press_zero_to_continue();
+    }
 }
 Movie* for_admin_movie_sort(Movie* new_movie_list)//进入排序子菜单
 {
@@ -285,9 +489,69 @@ Movie* for_admin_movie_sort(Movie* new_movie_list)//进入排序子菜单
         default:
             return new_movie_list;
         }
-        _sleep(1000);
+        press_zero_to_continue();
     }
 }
+Movie* for_user_movie_filter(Movie* new_movie_list)
+{
+    system("cls");
+    display_user_filter_menu();
+    int option = get_user_input_int(6);
+    Movie* free_temp = new_movie_list;
+    //时间段，影片类型，电影院，影厅类型
+    char start_time[20]; char end_time[20]; char text[20];
+    switch (option)
+    {
+    case 1:
+        printf("请分别输入起止时间\n");
+        get_valid_date_input(start_time);
+        get_valid_date_input(end_time);
+        printf("对时间段 %s-%s 的筛选已完成", start_time, end_time);
+        strcat(start_time, " 00:00:00");
+        strcat(end_time, " 00:00:00");
+        char* context[] = { start_time,end_time };
+        new_movie_list = movie_operation_filter(new_movie_list, 1, context);
+        break;
+    case 2:
+        printf("请输入影片类型:");
+        scanf("%s", text);
+        new_movie_list = movie_operation_filter(new_movie_list, 5, text);
+        printf("已筛选影片类型: %s\n", text);
+        break;
+    case 3:
+        printf("请输入电影院:");
+        scanf("%s", text);
+        new_movie_list = movie_filter_by_cinema_name(text, new_movie_list);
+        printf("已筛选电影院: %s\n", text);
+        break;
+    case 4:
+        printf("请输入影厅类型：");
+        get_user_input_string(text, 20);
+        new_movie_list = movie_filter_by_theater_type(text, new_movie_list);
+        printf("已筛选影厅类型：%s\n", text);
+        break;
+    default:
+        return new_movie_list; //可能返回NULL
+    }
+    int count = 0; Movie* temp_head = new_movie_list;
+    while (temp_head)
+    {
+        count++; temp_head = temp_head->next;
+    }
+    printf("当前筛选得到 %d条数据", count);
+    if (count != 0)
+    {
+        movie_list_free(free_temp);
+        free_temp = NULL;
+    }
+    else
+    {
+        printf(",已回退,请重新筛选\n");
+        new_movie_list = free_temp;
+    }
+    press_zero_to_continue();
+}
+
 Movie* for_admin_movie_filter(Movie* new_movie_list)
 {
     while (1)
@@ -345,17 +609,17 @@ Movie* for_admin_movie_filter(Movie* new_movie_list)
             count++; temp_head = temp_head->next;
         }
         printf("当前筛选得到 %d条数据", count);
-        //if (count != 0)
-        //{
+        if (count != 0)
+        {
             movie_list_free(free_temp);
             free_temp = NULL;
-        //}
-        //else
-        //{
-        //    printf(",已回退,请重新筛选");
-        //    new_movie_list = free_temp;
-        //}
-        _sleep(1000);
+        }
+        else
+        {
+            printf(",已回退,请重新筛选\n");
+            new_movie_list = free_temp;
+        }
+        press_zero_to_continue();
     }
 }
 

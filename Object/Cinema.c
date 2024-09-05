@@ -63,7 +63,17 @@ Cinema* cinema_find_by_id(Cinema* head, const char* id) {
         }
         temp = temp->next;
     }
-    printf("Not found Cinema ID %s\n",id);
+    return NULL; // 如果没有找到匹配的ID，返回NULL
+}
+Cinema* cinema_find_by_name(Cinema* head, const char* name) {
+    Cinema* temp = head;
+    //if(!temp->cinema_id&&(!temp))
+    while (temp != NULL) {
+        if (strcmp(temp->cinema_name, name) == 0) {
+            return temp;
+        }
+        temp = temp->next;
+    }
     return NULL; // 如果没有找到匹配的ID，返回NULL
 }
 void cinema_show_all(Cinema* head) {

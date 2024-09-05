@@ -267,6 +267,20 @@ void movie_print(const Movie* movie) {
     printf("折扣: %.2f\n", movie->discount);
     printf("------------\n");
 }
+void movie_print_for_user(const Movie* movie)
+{
+    if (movie == NULL) { printf("当前信息为空"); return; }
+    printf("影院名称：%s\n", movie->theater->cinema->cinema_name);
+    printf("影厅名称：%s\n", movie->theater->theater_name);
+    printf("影厅类型：%s\n", movie->theater->theater_type);
+    printf("场次类型：%s\n", movie->film->film_language);
+    printf("开始时间: %s\n", movie->start_time);
+    printf("结束时间: %s\n", movie->end_time);
+    printf("余票数: %d\n", movie->remaining_ticket);
+    printf("价格: %.2f\n", movie->price);
+    printf("折扣: %.2f\n", movie->discount);
+    printf("------------\n");
+}
 void movie_list_print(const Movie* movie_list)
 {
     while (movie_list)
@@ -304,6 +318,27 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
         new_head_for_option = new_head_for_option->next;
     }
     return find_movie_in_hash_table(hash_table,new_head_for_option->movie_id);
+}
+int for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
+{
+    int count = 0;
+    Movie* new_head_for_option = new_movie_list;
+    while (new_movie_list)
+    {
+        count++;
+        printf("序号 %d:\n", count);
+        movie_print_for_user(new_movie_list);
+        new_movie_list = new_movie_list->next;
+    }
+    printf("请输入你的选择(输入0退出):");
+    int option = get_user_input_int(count);
+    if (option == 0) return NULL;
+    for (int i = 1; i < option; ++i)
+    {
+        new_head_for_option = new_head_for_option->next;
+    }
+    return find_movie_in_hash_table(movie_hash_table, new_head_for_option->movie_id);
+    
 }
 void theater_print(const Theater* theater) {
     if (theater == NULL) {
@@ -842,10 +877,36 @@ void get_user_input_string(char* input, int max_length) {
         input[len - 1] = '\0';
     }
 }
+void display_user_greet()
+{
+    printf("*************************************************\n");
+    printf("*               欢迎使用云上影院                *\n");
+    printf("*************************************************\n");
+    printf("* 1. 电影购票                                   *\n");
+    printf("* 2. 正在热映                                   *\n");
+    printf("* 3. 我的订单                                   *\n");
+    printf("* 4. 个人中心                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+void display_purchase_ticket()
+{
+    printf("*************************************************\n");
+    printf("*                 电影购票                      *\n");
+    printf("*************************************************\n");
+    printf("* 1. 影片查询                                   *\n");
+    printf("* 2. 影片+影院查询                              *\n");
+    printf("* 3. 优惠折扣                                   *\n");
+    printf("* 4. 自定义查询                                 *\n");
+    printf("*                                               *\n");
+    printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
 void admin_greet()
 {
     printf("*************************************************\n");
-    printf("*               欢迎使用电影院管理系统          *\n");
+    printf("*             欢迎使用电影院管理系统            *\n");
     printf("*************************************************\n");
     printf("* 1. 订单管理                                   *\n");
     printf("* 2. 影厅管理                                   *\n");
@@ -916,6 +977,16 @@ void display_movie_operate_main_menu() {
     printf("0. 返回订单管理（重置操作结果）\n");
     
 }
+
+void display_user_movie_operate_main_menu() {
+    printf("\n==== 操作主菜单 ====\n");
+    printf("1. 排序\n");
+    printf("2. 筛选\n");
+    printf("3. 查看与选择场次\n\n");
+    printf("0. 返回购票（重置操作结果）\n");
+
+}
+
 //管理员排序菜单
 void display_admin_sort_menu() {
     printf("\n==== 排序菜单 ====\n");
@@ -924,6 +995,13 @@ void display_admin_sort_menu() {
     printf("3. 场次收入 (降序)\n");
     printf("4. 开始时间 (升序)\n");
     printf("5. 剩余票数 (升序)\n\n");
+    printf("0. 返回操作主菜单\n");
+}
+void display_user_sort_menu() {
+    printf("\n==== 排序菜单 ====\n");
+    printf("1. 价格 (升序)\n");
+    printf("2. 开始时间 (升序)\n");
+    printf("3. 剩余票数 (升序)\n\n");
     printf("0. 返回操作主菜单\n");
 }
 void display_admin_filter_menu() {
@@ -936,4 +1014,11 @@ void display_admin_filter_menu() {
     printf("6. 电影院ID\n\n");
     printf("0. 返回操作主菜单\n");
 }
-
+void display_user_filter_menu() {
+    printf("\n==== 筛选菜单 ====\n");
+    printf("1. 时间段\n");
+    printf("2. 影片类型\n");
+    printf("3. 电影院\n");
+    printf("4. 影厅类型\n\n");
+    printf("0. 返回操作主菜单\n");
+}
