@@ -319,7 +319,7 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
     }
     return find_movie_in_hash_table(hash_table,new_head_for_option->movie_id);
 }
-int for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
+Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
 {
     int count = 0;
     if (!new_movie_list)

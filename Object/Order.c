@@ -483,19 +483,16 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 	}
 
 	//判断余额是否充足
-	//return 0 : 查询失败
+	//return 0 : 余额不足
 	//       1 ：余额充足
-	//       2 ：余额不足
 	int balance_check(Order* order, Order_hash_table* hashTable) {
-		double order_price = get_order_price(order, hashTable);
-		if (order_price) {//确保计算成功
-			return 0;
-		}
+		double order_price = order->price;
+
 		if (order->usr->user_balance >= order_price) {//比较订单价格与用户余额大小
 			return 1;
 		}
 		else {
-			return 2;
+			return 0;
 		}
 	}
 

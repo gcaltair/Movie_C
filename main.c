@@ -26,7 +26,7 @@ int main() {
     //    }
     //}
 }
-static Film* hot_films()
+static Film* hot_films()//有问题
 {
     Film* film_list_hot = film_sort(film_copy_list(film_list), compare_films_by_ratings);
     static int t = 0;
@@ -76,6 +76,7 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
         return;
     }
     Movie* target_movie = for_user_movie_choose(movie_filtered_list,movieHashTable ); //得到target_movie
+    movie_show(target_movie);
     order_generate_main(user_now, target_movie, orderHashTable);
    
     movie_list_free(movie_raw_list);
@@ -719,7 +720,13 @@ int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //
         // 订单生成并添加到列表中  
         Order* new_order = order_create(hashTable, get_orderID(), usr, usr->userID, movie, movie->movie_id, movie->theater, movie->theater->cinema, seats, get_seat_number(seats), 2, get_current_time);
         order_add_to_list(&order_list, new_order);
-        printf("订单生成成功，您的orderID是:%s\n", get_orderID());
+        printf("订单生成成功，您的orderID是:%s\n", new_order->orderID);
+        printf("是否付款?(1/0)\n");
+        int cer=get_user_input_int(1);
+        if (cer)
+        {
+            process_pay_main(new_order);
+        }
         return 1;
     }
     else
@@ -733,34 +740,32 @@ int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //
 //return 0 ： 输入无效订单或用户信息获取失败
 //       1 ： 付款成功
 //       2 ： 付款失败  
-int process_pay_main(Order_hash_table* hashTable) {
-    printf("请输入您要支付的orderID.\n");
-    char* orderID;
-    while (1) {
-        if (scanf("%s", orderID) != 1) {
-            printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n');
-            continue;
-        }
-        break;
-    }
-    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
-        printf("您输入的订单号无效.\n");
-        return 0;
-    }
-    else {
-        Order* order = find_order_in_hash_table(hashTable, orderID);
+int process_pay_main(Order* order) {
+    //printf("请输入您要支付的orderID.\n");
+    //char* orderID;
+    //while (1) {
+    //    if (scanf("%s", orderID) != 1) {
+    //        printf("输入无效，请重新输入。\n");
+    //        while (getchar() != '\n');
+    //        continue;
+    //    }
+    //    break;
+    //}
+    //if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+    //    printf("您输入的订单号无效.\n");
+    //    return 0;
+    //}
+    //else {
+        //Order* order = find_order_in_hash_table(hashTable, orderID);
         if (order->status != 2) {// 检查订单状态并尝试付款
             printf("订单状态不合法.\n");
             return 2;
         }
-        int judge = balance_check(order, hashTable); // 检查余额并付款  
+
+        int judge = balance_check(order, orderHashTable); // 检查余额并付款  
         switch (judge) {
-        case 0:
-            printf("余额查询失败.\n");
-            return 0;
         case 1:
-            if (process_pay(order, order->movie->seat_map, hashTable) == 0) {
+            if (process_pay(order, order->movie->seat_map, orderHashTable) == 0) {
                 printf("订单查询失败.\n");
                 return 0;
             }
@@ -769,8 +774,8 @@ int process_pay_main(Order_hash_table* hashTable) {
                 return 1;
             }
         default:// 余额不足，提示用户并询问是否充值  
-            while (balance_check(order, hashTable) == 2) {
-                printf("余额不足,您还需充值%f元`.继续充值请按1，放弃充值请按0\n", get_debt(order, hashTable));
+            while (balance_check(order, orderHashTable) == 2) {
+                printf("余额不足,您还需充值%f元`.继续充值请按1，放弃充值请按0\n", get_debt(order, orderHashTable));
                 int j;
                 while (1) {
                     if (scanf("%d", &j) != 1 || (j != 0 && j != 1)) {
@@ -781,11 +786,11 @@ int process_pay_main(Order_hash_table* hashTable) {
                     break;
                 }
                 if (j) {
-                    if (balance_check(order, hashTable) != 1) {
+                    if (balance_check(order, orderHashTable) != 1) {
                         continue;
                     }
                     else {
-                        process_pay(order, order->movie->seat_map, hashTable);
+                        process_pay(order, order->movie->seat_map, orderHashTable);
                         printf("付款成功.\n");
                         return 1;
                     }
@@ -796,7 +801,7 @@ int process_pay_main(Order_hash_table* hashTable) {
             }
         }
     }
-}
+//}
 
 //充值
 void recharge_main(Order_hash_table* hashTable) {

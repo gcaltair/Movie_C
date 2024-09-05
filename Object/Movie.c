@@ -527,7 +527,7 @@ int datetime_to_minutes(const char* datetime)
 }
 void movie_list_free(Movie* head) {
     Movie* temp = head;
-
+    if (!head) return;
     while (head != NULL) {
         temp = head;
         head = head->next;
