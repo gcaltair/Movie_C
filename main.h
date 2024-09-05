@@ -60,7 +60,10 @@ Movie* for_user_movie_sort(Movie* new_movie_list);
 Movie* for_admin_movie_sort(Movie* new_movie_list);
 Movie* for_admin_movie_filter(Movie* new_movie_list);
 
-int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable);
-int process_pay_main(Order_hash_table* hashTable);
-void recharge_main(Order_hash_table* hashTable);
+int order_generate_main(User* usr, Movie* movie);
+int process_pay_main_order(Order* order);
+int process_pay_main( );
+int order_cancle_main( );
+void recharge_main( );
+int ticket_refund_main( );
 #endif //MOVIE_C_TEST_H
