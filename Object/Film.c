@@ -79,6 +79,7 @@ Film* film_copy_list(Film* head)
         new_film->hash_next_id = NULL;
         new_film->hash_next_name = NULL;
 
+        new_film->playing_movie = current->playing_movie;
         film_add_to_list(&new_head, new_film);
         current = current->next;
     }

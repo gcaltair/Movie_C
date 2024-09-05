@@ -75,7 +75,7 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
         movie_list_free(movie_filtered_list_temp);
         return;
     }
-    Movie* target_movie = for_user_movie_choose(movie_filtered_list, movie_raw_list); //得到target_movie
+    Movie* target_movie = for_user_movie_choose(movie_filtered_list,movieHashTable ); //得到target_movie
     //选中了targetMovie后进行买单等操作
     //随后买单返回值再给出提示
     movie_list_free(movie_raw_list);
@@ -149,10 +149,9 @@ static void user_purchase_ticket()
         case 2: 
             sub_purchase_by_name_and_cinema();
             break;
-        case 3://优惠折扣
             
 
-        case 4://自定义查找
+        case 3://自定义查找
             user_view_and_count_movie();
             break;
             

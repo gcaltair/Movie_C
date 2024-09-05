@@ -231,7 +231,7 @@ Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
 Movie* movie_list_create_by_film(Film* film,Movie_hash_table* movie_hash_table)
 {
     Movie* new_head = NULL;
-    Linked_string_list* string_head = film->playing_movie;
+    Linked_string_list* string_head = film->playing_movie; //string_head有误
 
     while (string_head)
     {
