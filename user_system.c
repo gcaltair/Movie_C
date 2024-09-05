@@ -16,8 +16,10 @@
 #include "Object/User.h"
 #include "Object/admin.h"
 #include"Object/Film.h"
+#include"Object/Theater.h"
 #include"Object/Cinema.h"
 #include"Structure File/interval_tree.h"
+#include"Structure File/linked_list.h"
 static bool getPassword(char *password, int maxLen);
 
 
@@ -234,7 +236,7 @@ void film_print(const Film* film) {
         printf("Rating: %d\n", film->film_rating);
     }
 }
-Movie* movie_choose(Movie* new_movie_list)
+Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
 {
     int count = 0;
     Movie* new_head_for_option = new_movie_list;
@@ -252,7 +254,7 @@ Movie* movie_choose(Movie* new_movie_list)
     {
         new_head_for_option = new_head_for_option->next;
     }
-    return new_head_for_option;
+    return find_movie_in_hash_table(hash_table,new_head_for_option->movie_id);
 }
 void theater_print(const Theater* theater) {
     if (theater == NULL) {
@@ -267,7 +269,7 @@ void theater_print(const Theater* theater) {
     printf("Theater Type: %s\n", theater->theater_type);
     printf("------------\n");
 }
-Theater* theater_choose_for_admin(Theater* new_theater_list)
+Theater* theater_choose_for_admin(Theater* new_theater_list,Theater_hash_table* hash_table)
 {
     int count = 0;
     Theater* new_head_for_option = new_theater_list;
@@ -286,7 +288,7 @@ Theater* theater_choose_for_admin(Theater* new_theater_list)
     {
         new_head_for_option = new_head_for_option->next; 
     }
-    return new_head_for_option;  
+    return find_theater_in_hash_table(hash_table,new_head_for_option->theater_id);  
 }
 int get_time_format_hours_and_minutes(const char* time_str) {
     // 检查时间字符串的长度是否为5，并且第三个字符是否为 ':'
@@ -378,7 +380,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
                     return 0;
             }
             int status = is_avoid_flow(theater->cinema, start_min, end_min);
-            int_node_show_all(theater->cinema->peak_time);
+            
             if (status)
             {
                 printf("未能避开人流,当前约与%d个场次有人流冲突，是否确认?(1/0)\n",status);
@@ -430,7 +432,6 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
             strcat(movie_id, temp1_id);
 
             char date_time_start[20]; char date_time_end[20];
-            printf("%d\n", start_day);
             days_to_date(start_day, date_time_start);
             days_to_date(start_day, date_time_end);
             strcat(date_time_start, start_time);
@@ -442,7 +443,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
             if (new_movie == NULL) {
                 return 2;
             }
-
+            
             // 将新电影加入链表
             movie_add_to_list(&movie_list, new_movie);
         }
@@ -450,7 +451,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
     }
 }
 
-Film* film_choose(Film* new_film_list)
+Film* film_choose(Film* new_film_list,Film_hash_table* hash_table)
 {
     int count = 0;
     Film* new_head_for_option = new_film_list;
@@ -475,7 +476,7 @@ Film* film_choose(Film* new_film_list)
         new_head_for_option = new_head_for_option->next;
     }
 
-    return new_head_for_option;  // 返回用户选择的 Film
+    return find_film_in_hash_table_by_id(hash_table,new_head_for_option->film_id);  // 返回用户选择的 Film
 }
 
 void minutes_to_hhmm(int minutes, char* buffer) {

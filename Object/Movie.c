@@ -36,6 +36,7 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     insert_movie_to_hash_table(movieHashTable,newMovie);//插入哈希表
 
     string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);//添加到影厅
+    //printf("theater id:%s movie_id:%s\n", theater->theater_id, movie_id);
     int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->start_min);//添加起止时间到peaktime
     int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->end_min);
 

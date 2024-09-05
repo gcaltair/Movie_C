@@ -99,6 +99,7 @@ Theater* theater_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theat
         else
         {
             Theater* new_theater = theater_copy_info(theater_find);  
+            string_node_show_all(new_theater->my_movie);
             theater_add_to_list(&new_head, new_theater);  
         }
         head_theater = head_theater->next;  
@@ -122,12 +123,11 @@ Theater* theater_copy_info(Theater* theater)
     new_theater->theater_id = strdup(theater->theater_id);
     new_theater->theater_name = strdup(theater->theater_name);
     new_theater->theater_capacity = theater->theater_capacity;
-    new_theater->cinema = theater->cinema;  // 如果需要复制 Cinema 信息，需要另行实现
+    new_theater->cinema = theater->cinema;  
     new_theater->cinema_id = strdup(theater->cinema_id);
     new_theater->theater_type = strdup(theater->theater_type);
 
-    new_theater->my_movie = NULL; 
-    Linked_string_list* head_movie = theater->my_movie;
+    new_theater->my_movie = theater->my_movie; 
 
     new_theater->time_line = theater->time_line; 
 

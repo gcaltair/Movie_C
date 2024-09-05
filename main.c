@@ -2,6 +2,7 @@
 static void admin_order_manage();
 int main() {
     int mode;
+    printf("test\n");
     hash_ini();
     load_file();
     admin_now = admin_find_by_id(admin_list, "A001"); 
@@ -66,11 +67,12 @@ static void admin_movie_manage()//排片管理
             movie_list_free(movie_list_new);
             break;
         case 3:
-            Theater * theater_new_list = theater_list_create_by_cinema(admin_now->cinema, theaterHashTable);
-            Film* film_choosed = film_choose(film_list);
+            Film* film_choosed = film_choose(film_list,filmHashTable);
             if (!film_choosed) break;
-            Theater* theater_choosed = theater_choose_for_admin(theater_new_list);
+            Theater* theater_new_list = theater_list_create_by_cinema(admin_now->cinema, theaterHashTable);
+            Theater* theater_choosed = theater_choose_for_admin(theater_new_list,theaterHashTable);
             if (!theater_choosed) break;
+            
             int add_status = admin_add_a_movie_to_theater(theater_choosed, film_choosed, movie_list, movieHashTable);
             switch (add_status)
             {
@@ -166,7 +168,7 @@ static void admin_view_and_count_order(){
             new_movie_list= for_admin_movie_filter(new_movie_list);
             break;
         case 3:
-            Movie * movie_choice = movie_choose(new_movie_list);
+            Movie * movie_choice = movie_choose(new_movie_list,movieHashTable);
             if (movie_choice == NULL) break;
             movie_print(movie_choice);
             //order_show_all //然后输出所有当前场次的订单
