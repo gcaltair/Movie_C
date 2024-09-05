@@ -637,28 +637,22 @@ Movie* for_admin_movie_filter(Movie* new_movie_list)
 //生成订单
 //return 0 : 生成失败
 //       1 : 生成成功
-int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //判断当前时间是否早于电影开始时间
+int order_generate_main(User* usr, Movie* movie) //判断当前时间是否早于电影开始时间
 {                           
-    printf("1212");
     char* seats;
     while (1) {
         printf("请输入您想购买的座位号(形如A1-B1-C1).\n");
         seats = seats_input_check();
         if (seats == NULL) {
             printf("输入无效，请重新输入.\n");
-
             continue;
         }
-        else {
-
             break;
-        }
     }
-    
     int judge = strcmp(get_current_time(), movie->start_time);
-    if(judge<=0)  
+    if(judge <= 0)  
     {
-        int check = order_generation(usr, seats, movie, movie->seat_map, hashTable);
+        int check = order_generation(usr, seats, movie, movie->seat_map, orderHashTable);
         switch (check) {// 根据生成订单的结果进行不同处理  
         case 0:
             printf("查询失败.\n");
@@ -674,7 +668,6 @@ int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //
             while (1) {
                 if (scanf("%d", &i) != 1 || (i != 0 && i != 1)) {//输入容错机制
                     printf("输入无效，请重新输入.\n");
-                    while (getchar() != '\n');
                     continue;
                 }
                 break;
@@ -721,10 +714,9 @@ int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //
             return 0;
         }
         // 订单生成并添加到列表中  
-        Order* new_order = order_create(hashTable, get_orderID(), usr, usr->userID, movie, movie->movie_id, movie->theater, movie->theater->cinema, seats, get_seat_number(seats), 2, get_current_time);
+        Order* new_order = order_create(orderHashTable, get_orderID(), usr, usr->userID, movie, movie->movie_id, movie->theater, movie->theater->cinema, seats, get_seat_number(seats), 2, get_current_time);
         order_add_to_list(&order_list, new_order);
-        printf("订单生成成功，您的orderID是:%s\n", new_order->orderID);
-        printf("是否付款?(1/0)\n");
+        printf("订单生成成功，您的orderID是:%s\n是否付款，确认付款请按1，放弃付款请按0.\n", new_order->orderID);
         int cer=get_user_input_int(1);
         if (cer)
         {
@@ -939,17 +931,17 @@ static void hash_ini()
 static void load_file()
 {
     void* context1[] = { userHashTable,&user_list };
-    load_data_from_csv("D:\\cccc\\Data\\users.csv", handle_user_data, context1);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
     void* context2[] = { &film_list,filmHashTable };
-    load_data_from_csv("D:\\cccc\\Data\\films.csv", handle_film_data, context2);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
     void* context3[] = { &cinema_list };
-    load_data_from_csv("D:\\cccc\\Data\\cinemas.csv", handle_cinema_data, context3);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\cinemas.csv", handle_cinema_data, context3);
     void* context4[] = { cinema_list,&admin_list };
-    load_data_from_csv("D:\\cccc\\Data\\admins.csv", handle_admin_data, context4);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\admins.csv", handle_admin_data, context4);
     void* context5[] = { &theater_list,&cinema_list,theaterHashTable };
-    load_data_from_csv("D:\\cccc\\Data\\theaters.csv", handle_theater_data, context5);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\theaters.csv", handle_theater_data, context5);
     void* context6[] = { &movie_list,movieHashTable,theaterHashTable,filmHashTable };
-    load_data_from_csv("D:\\cccc\\Data\\movies.csv", handle_movie_data, context6);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
 
     void* context7[] = {
             orderHashTable,   // 订单哈希表
@@ -957,6 +949,6 @@ static void load_file()
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-    load_data_from_csv("D:\\cccc\\Data\\order.csv", handle_order_data, context7);
+    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
 }
 

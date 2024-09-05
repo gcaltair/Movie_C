@@ -74,12 +74,8 @@ char* get_current_time();
 //生成orderID
 char* get_orderID();
 
-
-//时间大小比较
-//return 0 ： a在b之前
-//       1 ： a与b同时
-//       2 ： a在b之后
-int time_compare(char* a, char* b);
+//判断当前时间是否和传入时间是同一天
+int is_current_date(char* time);
 
 //历史场次时间冲突判断
 //return 0 :查询失败
@@ -87,6 +83,7 @@ int time_compare(char* a, char* b);
 //       2 :已购买过该场次的票
 //       3 :当天已经购买五个场次的票
 //       4 :购买多个影片场次时间冲突
+//       5 :已购买过该场次的票且购买多个影片场次时间冲突
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
 
 //通过seats计算座位数
@@ -101,11 +98,11 @@ char* seats_input_check();
 //座位数冲突判断
 //return 0 : 获取位置信息失败
 //       1 ; 订座成功 
-//       5 : 剩余座位数不足或超过最大购票限额
-//       6 ：输入两个相同的座位号。
-//       7 ：不在影院座次范围内
-//       8 ：座位已售出
-//       9 ：与已售出的座位相隔一个座位
+//       6 : 剩余座位数不足或超过最大购票限额
+//       7 ：输入两个相同的座位号。
+//       8 ：不在影院座次范围内
+//       9 ：座位已售出
+//       10 ：与已售出的座位相隔一个座位
 // 座位  0 ：不在影院座次范围内
 //       1 ：可购买
 //       2 ：已售出
@@ -118,11 +115,12 @@ int saets_check(char* seats, int(*seat_map)[26]);
 //       2 :当天已经购买五个场次的票
 //       3 :已经购买过该影片的票
 //       4 :购买多个影片场次时间冲突
-//       5 :剩余座位数不足或超过最大购票限额
-//       6 :输入两个相同的座位号。
-//       7 :不在影院座次范围内
-//       8 :座位已售出
-//       9 :与已售出的座位相隔一个座位
+//       5 :已购买过该场次的票且购买多个影片场次时间冲突
+//       6 :剩余座位数不足或超过最大购票限额
+//       7 :输入两个相同的座位号。
+//       8 :不在影院座次范围内
+//       9 :座位已售出
+//       10 :与已售出的座位相隔一个座位
 int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //订单价格计算
