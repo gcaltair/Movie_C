@@ -912,19 +912,17 @@ static void hash_ini()
 }
 static void load_file() {
     void* context1[] = { userHashTable,&user_list };
-
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
+    load_data_from_csv("D:\\cccc\\Data\\users.csv", handle_user_data, context1);
     void* context2[] = { &film_list,filmHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
+    load_data_from_csv("D:\\cccc\\Data\\films.csv", handle_film_data, context2);
     void* context3[] = { &cinema_list };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\cinemas.csv", handle_cinema_data, context3);
+    load_data_from_csv("D:\\cccc\\Data\\cinemas.csv", handle_cinema_data, context3);
     void* context4[] = { cinema_list,&admin_list };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\admins.csv", handle_admin_data, context4);
+    load_data_from_csv("D:\\cccc\\Data\\admins.csv", handle_admin_data, context4);
     void* context5[] = { &theater_list,&cinema_list,theaterHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\theaters.csv", handle_theater_data, context5);
+    load_data_from_csv("D:\\cccc\\Data\\theaters.csv", handle_theater_data, context5);
     void* context6[] = { &movie_list,movieHashTable,theaterHashTable,filmHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
-
+    load_data_from_csv("D:\\cccc\\Data\\movies.csv", handle_movie_data, context6);
 
     void* context7[] = {
             orderHashTable,   // 订单哈希表
@@ -932,8 +930,7 @@ static void load_file() {
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
+    load_data_from_csv("D:\\cccc\\Data\\order.csv", handle_order_data, context7);
 }
 
 
