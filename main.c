@@ -368,6 +368,11 @@ static void admin_order_manage()
 static void user_view_and_count_movie()
 {
     Movie* new_movie_list = movie_filter_by_not_played(movie_list);
+    if (!new_movie_list)
+    {
+        printf("当前无可用场\n");
+        press_zero_to_continue();
+    }
     while (1)
     {
         //system("cls");
