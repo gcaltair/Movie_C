@@ -12,6 +12,7 @@
 #include "Object/Movie.h"
 #include "Object/Order.h"
 #include"Object/Film.h"
+#include"Object/Theater.h"
 #define MAX_LINE_LENGTH 1024
 
 void load_data_from_csv(const char* filename, DataHandler handler, void* context) {
@@ -203,4 +204,188 @@ void handle_film_data(char** fields, void* context) {
 
     // 将 Film 添加到链表中
     film_add_to_list(film_list, new_film);
+}
+void write_users_to_csv(const char* filename, User** user_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "userID,user_name,gender,telephone,password,email,user_balance\n");
+
+    // 遍历用户列表，将每个用户的信息写入文件
+    User* current_user = user_list;
+    while (current_user != NULL) {
+        fprintf(file, "%s,%s,%s,%s,%s,%s,%.2f\n",
+            current_user->userID,
+            current_user->user_name,
+            current_user->gender,
+            current_user->telephone,
+            current_user->password,
+            current_user->email,
+            current_user->user_balance);
+
+        current_user = current_user->next;
+    }
+
+    fclose(file);
+}
+void write_admins_to_csv(const char* filename, Admin* admin_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "admin_id,admin_name,admin_telephone,admin_password,admin_email,cinema_id\n");
+
+    // 遍历管理员列表，将每个管理员的信息写入文件
+    Admin* current_admin = admin_list;
+    while (current_admin != NULL) {
+        fprintf(file, "%s,%s,%s,%s,%s,%s\n",
+            current_admin->admin_id,
+            current_admin->admin_name,
+            current_admin->admin_telephone,
+            current_admin->admin_password,
+            current_admin->admin_email,
+            current_admin->cinema_id);
+
+        current_admin = current_admin->next;
+    }
+
+    fclose(file);
+}
+void write_cinemas_to_csv(const char* filename, Cinema* cinema_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "cinema_name,cinema_alphabet,location,cinema_id\n");
+
+    // 遍历电影院列表，将每个电影院的信息写入文件
+    Cinema* current_cinema = cinema_list;
+    while (current_cinema != NULL) {
+        fprintf(file, "%s,%s,%s,%s\n",
+            current_cinema->cinema_name,
+            current_cinema->cinema_alphabet,
+            current_cinema->location,
+            current_cinema->cinema_id);
+
+        current_cinema = current_cinema->next;
+    }
+
+    fclose(file);
+}
+void write_orders_to_csv(const char* filename, Order* order_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "orderID,user_id,movie_id,seats,seat_number,status,time\n");
+
+    // 遍历订单列表，将每个订单的信息写入文件
+    Order* current_order = order_list;
+    while (current_order != NULL) {
+        fprintf(file, "%s,%s,%s,%s,%d,%d,%s\n",
+            current_order->orderID,
+            current_order->user_id,
+            current_order->movie_id,
+            current_order->seats,
+            current_order->seat_number,
+            current_order->status,
+            current_order->time);
+
+        current_order = current_order->next;
+    }
+
+    fclose(file);
+}
+void write_theaters_to_csv(const char* filename, Theater* theater_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "theater_id,theater_name,capacity,cinema_id,theater_type\n");
+
+    // 遍历影厅列表，将每个影厅的信息写入文件
+    Theater* current_theater = theater_list;
+    while (current_theater != NULL) {
+        fprintf(file, "%s,%s,%d,%s,%s\n",
+            current_theater->theater_id,
+            current_theater->theater_name,
+            current_theater->theater_capacity,
+            current_theater->cinema_id,
+            current_theater->theater_type);
+
+        current_theater = current_theater->next;
+    }
+
+    fclose(file);
+}
+void write_films_to_csv(const char* filename, Film* film_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "film_id,film_name,film_type,film_language,film_summary,film_time,film_rating\n");
+
+    // 遍历电影列表，将每个电影的信息写入文件
+    Film* current_film = film_list;
+    while (current_film != NULL) {
+        fprintf(file, "%s,%s,%s,%s,%s,%d,%d\n",
+            current_film->film_id,
+            current_film->film_name,
+            current_film->film_type,
+            current_film->film_language,
+            current_film->film_summary,
+            current_film->film_time,
+            current_film->film_rating);
+
+        current_film = current_film->next;
+    }
+
+    fclose(file);
+}
+void write_movies_to_csv(const char* filename, Movie* movie_list) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to open file for writing: %s\n", filename);
+        return;
+    }
+
+    // 写入标题行
+    fprintf(file, "movie_id,film_id,theater_id,start_time,end_time,remaining_ticket,price,discount\n");
+
+    // 遍历电影场次列表，将每个电影场次的信息写入文件
+    Movie* current_movie = movie_list;
+    while (current_movie != NULL) {
+        fprintf(file, "%s,%s,%s,%s,%s,%d,%.2f,%.2f\n",
+            current_movie->movie_id,
+            current_movie->film_id,
+            current_movie->theater_id,
+            current_movie->start_time,
+            current_movie->end_time,
+            current_movie->remaining_ticket,
+            current_movie->price,
+            current_movie->discount);
+
+        current_movie = current_movie->next;
+    }
+
+    fclose(file);
 }
