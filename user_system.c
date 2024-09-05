@@ -18,6 +18,7 @@
 #include"Object/Film.h"
 #include"Object/Theater.h"
 #include"Object/Cinema.h"
+#include"Object/Order.h"
 #include"Structure File/interval_tree.h"
 #include"Structure File/linked_list.h"
 static bool getPassword(char *password, int maxLen);
@@ -280,6 +281,23 @@ void movie_print_for_user(const Movie* movie)
     printf("价格: %.2f\n", movie->price);
     printf("折扣: %.2f\n", movie->discount);
     printf("------------\n");
+}
+void order_print_for_user(const Order* order)
+{
+    if (order == NULL) {//order找不到提示
+        printf("Order not found.\n");
+        return;
+    }
+    printf("OrderID: %s\n", order->orderID);//展示order内容
+    printf("UserID: %s\n", order->user_id);//展示order内容
+    printf("Movie ID: %s\n", order->movie_id);//展示order内容
+    printf("Seats: %s\n", order->seats);//展示order内容
+    printf("Seat number: %d\n", order->seat_number);//展示order内容
+    printf("Status: %d\n", order->status);//展示order内容
+    printf("Time: %s\n", order->time);//展示order内容
+    printf("Price:%f\n", order->price);//展示order内容
+    movie_show(order->movie);//展示order内容
+    // 可以根据需要显示更多的订单信息
 }
 void movie_list_print(const Movie* movie_list)
 {

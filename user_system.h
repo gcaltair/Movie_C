@@ -8,10 +8,12 @@ typedef struct User User;
 typedef struct User_hash_table User_hash_table;
 typedef struct Admin Admin;
 typedef struct Film Film;
+typedef struct Order Order;
 bool admin_password_check(Admin* admin,Admin* admin_list);
 bool user_password_check(User *usr,User_hash_table*userHashTable);
 
 void movie_print(const Movie* movie);
+void order_print_for_user(const Order* order);
 void movie_list_print(const Movie* movie_list);
 int date_to_days(const char* date);
 void days_to_date(int days, char* date);
