@@ -449,7 +449,8 @@ int is_avoid_flow(Cinema* cinema, int start_min, int end_min)
     
     while (head)
     {
-        if (((my_abs(head->value, start_min) >= 5) && (my_abs(head->value, start_min)<=10))||(( my_abs(head->value, end_min) >= 5)&& my_abs(head->value, end_min) <=10)) count++;
+        if ((
+            (head->value, start_min)<=5)||(my_abs(head->value, end_min) <=5)) count++;
         head = head->next;
     }
     if (!count) return 0;

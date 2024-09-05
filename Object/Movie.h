@@ -106,5 +106,6 @@ int datetime_to_minutes(const char* datetime);
 
 void movie_list_free(Movie* head);
 
+int my_abs(int a, int b);
 
 #endif // MOVIE_C_MOVIE_H

@@ -389,7 +389,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
             }
             break;
         }
-        // 输入价格 没做输入保护(
+
         printf("输入票价: ");
         price=get_user_input_double(0, 1000);
         //getchar(); // 清除缓冲区中的换行符
@@ -450,7 +450,147 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         return 1;
     }
 }
+int my_min(int a,int b)
+{
+    return a < b ? a : b;
+}
 
+//传入真实Film和Theater
+int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, char* end_time, Movie_hash_table* movie_hash_table, Movie* movie_list)
+{
+    char movie_id[50];
+    int remaining_ticket = theater->theater_capacity;
+    double price, discount;
+    while (1)
+    {
+        printf("输入票价: ");
+        price = get_user_input_double(0, 1000);
+        //getchar(); // 清除缓冲区中的换行符
+
+        // 输入折扣
+        printf("输入折扣 (例如 0.9 表示九折): ");
+        discount = get_user_input_double(0, 1);
+        //getchar(); // 清除缓冲区中的换行符
+
+        char start_date[20] = "2024-09-04";
+        int start_day = date_to_days(start_date);
+
+        int duration_day = 10;
+
+        // 显示信息确认
+        printf("您的信息是:\n");
+        printf("开始时间: %s\n", start_time);
+        printf("结束时间: %s\n", end_time);
+        printf("剩余票数: %d\n", remaining_ticket);
+        printf("票价: %.2lf\n", price);
+        printf("折扣: %.2lf\n", discount);
+        printf("开始日期：%s\n", start_date);
+        printf("持续天数：%d\n", duration_day);
+        printf("确认添加吗? (1:确认 0:取消添加 2:重新输入): ");
+        int option = get_user_input_int(2);
+        if (option == 0) return 0;
+        if (option == 2) continue;
+        for (int i = 0; i < duration_day; ++i)
+        {
+            // 确保Theater和Film存在
+            if (theater == NULL || film == NULL) {
+                printf("Theater或Film对象为空，无法添加电影。\n");
+                return 2;
+            }
+            char temp1_id[10];
+            strcpy(movie_id, theater->cinema->cinema_alphabet);
+            sprintf(temp1_id, "%05d", movie_hash_table->count + 1);
+            strcat(movie_id, temp1_id);
+
+            char date_time_start[20]; char date_time_end[20];
+            days_to_date(start_day, date_time_start);
+            days_to_date(start_day, date_time_end);
+            strcat(date_time_start, start_time);
+            strcat(date_time_end, end_time);
+            start_day++;
+
+
+            Movie* new_movie = movie_create(movie_hash_table, movie_id, film->film_id, film, theater->theater_id, theater, date_time_start, date_time_end, remaining_ticket, price, discount);
+            if (new_movie == NULL) {
+                return 2;
+            }
+
+            // 将新电影加入链表
+            movie_add_to_list(&movie_list, new_movie);
+        }
+        return 1;
+    }
+}
+int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_table* theater_hash_table,Movie_hash_table* movie_hash_table,Movie* movie_list)
+{
+    int time = film->film_time;
+    Theater* copied_theater_list = theater_list_create_by_cinema(cinema, theater_hash_table);
+    Theater* re__iterate_head = copied_theater_list;
+    int list_cout = 1;
+
+    int start_min = 0; int end_min = 1440;//最为合适的实际空闲时段
+    while (copied_theater_list) { //寻找最合适的时间
+        int count = 1;
+        
+        int number = 0;//用于获得时间段
+        interval* free_period = find_free_times_interval(copied_theater_list->time_line, 540, 1380, &number);//搜索9:00到23:00的空余时段
+        for (int i = 0; i < number; ++i)
+        {
+            free_period[i].start += 5; free_period[i].end -= 5; //获得实际空闲时段
+            int differ = free_period[i].end - free_period[i].start - time;
+            if (differ>0 && (differ< end_min - start_min))//如果新的实际空闲时段比之前的大
+            {
+                list_cout = count;
+                start_min = free_period[i].start;
+                end_min = free_period[i].end;
+            }
+        }
+        copied_theater_list = copied_theater_list->next;
+        count++;
+    }
+    //最终得到theater以及的实际最佳时段，下面在实际最佳时段中筛选人流最小
+    
+    int pre_flow_theater = 20;
+
+    for (int i = start_min; i + time <= end_min; i++)
+    {
+        int now_flow_theater = is_avoid_flow(cinema, start_min, start_min + time);//现在的人流场次
+        if ((pre_flow_theater -now_flow_theater ) > 0) //如果之前的比现在的多
+        {
+            pre_flow_theater = now_flow_theater;
+            start_min = i; 
+        }
+    }
+    //最后得到pre_flow_thater和start_min
+
+
+    for (int i = 1; i < list_cout; ++i) //遍历获得影厅信息
+    {
+        re__iterate_head = re__iterate_head->next;
+    }
+
+    printf("系统为您选择的时段是：\n");
+    theater_print(re__iterate_head);
+    print_start_and_end_time(start_min, end_min);
+    printf("是否确认?(1/0)\n");
+    int option = get_user_input_int(1);
+    if (!option) return 0;
+    //得到了电影，影厅，开始结束时段，现在排片
+    char start_time[20]; char end_time[20];
+    minutes_to_hhmm(start_min, start_time);
+    minutes_to_hhmm(end_min, end_time);
+    int status = add_movie_to_theater_dev(film, find_theater_in_hash_table(theater_hash_table, re__iterate_head->theater_id), start_time, end_time, movie_hash_table, movie_list);
+    if (status == 0) return 0;
+    return 1;
+}
+void print_start_and_end_time(int start_min, int end_min)
+{
+    char start_time[20]; char end_time[20];
+    minutes_to_hhmm(start_min, start_time);
+    minutes_to_hhmm(end_min, end_time);
+    printf("开始时间: %s\n", start_time);
+    printf("结束时间: %s\n", end_time);
+}
 Film* film_choose(Film* new_film_list,Film_hash_table* hash_table)
 {
     int count = 0;

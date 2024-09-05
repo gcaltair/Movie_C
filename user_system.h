@@ -19,13 +19,14 @@ void theater_print(const Theater* theater);
 void film_print(const Film* film);
 
 void minutes_to_hhmm(int minutes, char* buffer);
-
 int hhmm_to_minutes(const char* hhmm);
+void print_start_and_end_time(int start_min, int end_min);
 
 void press_zero_to_continue();
 
 int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table);
 int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list, Movie_hash_table* movie_hash_table);
+int admin_auto_find_movie_to_theater(Cinema* cinema, Film* film, Theater_hash_table* theater_hash_table, Movie_hash_table* movie_hash_table, Movie* movie_list);
 
 int get_user_input_int(int max);
 double get_user_input_double(double min, double max);

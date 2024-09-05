@@ -60,6 +60,20 @@ static void admin_movie_manage()//排片管理
         int option = get_user_input_int(3);
         switch (option)
         {
+        case 1:
+            Film * film_choosed2 = film_choose(film_list, filmHashTable);
+            int add_status2 = admin_auto_find_movie_to_theater(admin_now->cinema, film_choosed2, theaterHashTable, movieHashTable, movie_list);
+            switch (add_status2)
+            {
+            case 1:
+                printf("场次添加成功\n"); break;
+            case 2:
+                printf("数据出错...\n"); break;
+            case 0:
+                printf("已取消添加\n"); break;
+            }
+            press_zero_to_continue();
+            break;
         case 2:
             Movie * movie_list_new = movie_list_create_by_cinema(admin_now->cinema,theaterHashTable,movieHashTable);
             movie_list_print(movie_list_new);
