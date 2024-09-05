@@ -14,7 +14,7 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     int remaining_ticket, double price, double discount) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
-        printf("Memory allocation failed!\n");
+        printf("内存分配失败!\n");
         return NULL;
     }
     if (!theater) { printf("Movie %s's Theater is null\n",movie_id); newMovie->theater = NULL;}
@@ -65,14 +65,14 @@ void movie_add_to_list(Movie** head, Movie* newMovie) {
 // 显示单个 Movie 的信息  
 void movie_show(const Movie* movie) {
     if (movie == NULL) return;
-    printf("Movie ID: %s\n",movie->movie_id);
-    printf("Film ID: %s\n", movie->film_id);
-    printf("Theater ID: %s\n", movie->theater_id);
-    printf("Start Time: %s\n", movie->start_time);
-    printf("End Time: %s\n", movie->end_time);
-    printf("Remaining Tickets: %d\n", movie->remaining_ticket);
-    printf("Price: %.2f\n", movie->price);
-    printf("Discount: %.2f\n", movie->discount);
+    printf("场次 ID: %s\n",movie->movie_id);
+    printf("电影 ID: %s\n", movie->film_id);
+    printf("电影院 ID: %s\n", movie->theater_id);
+    printf("开始时间: %s\n", movie->start_time);
+    printf("结束时间: %s\n", movie->end_time);
+    printf("余票数: %d\n", movie->remaining_ticket);
+    printf("价格: %.2f\n", movie->price);
+    printf("折扣: %.2f\n", movie->discount);
     printf("----------\n");
 }
 
@@ -432,7 +432,7 @@ Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
     // 分配一个数组来存储所有电影的指针  
     movies = (Movie**)malloc(count * sizeof(Movie*));
     if (!movies) {
-        printf("Memory allocation failed!\n");
+        printf("内存分配失败!\n");
         return NULL;
     }
 
@@ -503,7 +503,7 @@ double caculate_movie_income(Movie* head)
 {
     if (!head)
     {
-        printf("Data is NULL!");
+        printf("数据不存在!");
         return 0;
     }
     double res = 0;

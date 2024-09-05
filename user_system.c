@@ -185,14 +185,11 @@ double get_user_input_double(double min, double max) {
 int get_user_input_int(int max) {
     int option;
     char c;
-
     while (1) {
         if(max!=0)
         printf("enter your option 0-%d:", max);
         else
             printf("输入0以继续...\n");
-        
-
         // 尝试读取一个整数输入
         if (scanf("%d", &option) == 1) {
             // 检查输入是否在指定范围内
@@ -207,7 +204,6 @@ int get_user_input_int(int max) {
         }
         else {
             printf("invalid input,");
-            
             // 清理输入缓冲区，处理非整数输入
             while ((c = getchar()) != '\n' && c != EOF) {}
         }

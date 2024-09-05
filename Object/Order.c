@@ -150,7 +150,7 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 	return seat_map;
 	}
 //展示座位图
-	void seat_map_show(int(*seat_map)[26]) {
+void seat_map_show(int(*seat_map)[26]) {
 	printf("  ");//座位图输出美观
 	for (int i = 1; i <= 26; i++) {
 		if (i > 9) {//考虑个位数比二位数占空间小，输出美观
@@ -232,69 +232,6 @@ char* get_orderID() {
 	return orderID;
 }
 
-//判断当前时间是否和传入时间是同一天
-//return 0 : 不是同一天
-//       1 ：是同一天
-int is_current_date(char* time){
-	char time_date[12];
-	strncpy(time_date, time, 10);
-	if (strcmp(time_date, get_current_day) == 0) {
-		return 1;
-	}
-	else {
-		return 0;
-	}
-}
-
-//历史场次时间冲突判断
-//return 0 :查询失败
-//       1 :无冲突
-//       2 :已购买过该场次的票
-//       3 :当天已经购买五个场次的票
-//       4 :购买多个影片场次时间冲突
-//       5 :已购买过该场次的票且购买多个影片场次时间冲突
-int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable){
-	StringSet* movie_id_set = create_string_set();
-	int count = 0;
-	int hint1 = 0;
-	int hint2 = 0;
-	if (usr == NULL){
-		printf("用户不存在.\n");
-		return;
-	}
-	Linked_string_list* order = usr->my_order;//复制头结点
-	while (order != NULL) {//遍历链表
-		Order* order_find = find_order_in_hash_table(hashTable, order->id);
-		if (order_find->status != 1) {//确定订单为已付款状态
-			order = order->next;
-			continue;
-		}
-		if (is_current_date(order_find->time) == 1){
-			string_set_add(movie_id_set, order_find->movie_id);
-			if (string_set_size(movie_id_set) == 5 && string_set_add(movie_id_set, movie->movie_id) == 1) {
-				return 3;
-			}
-		}
-		if (strcmp(order_find->movie_id, movie->movie_id) == 0) {
-			hint1 = 1;
-		}
-		if (strcmp(order_find->movie_id, movie->movie_id) != 0 && order_find->movie->start_min <= movie->start_min && order_find->movie->end_min >= movie->start_min) {
-			hint2 = 1;
-		}
-		order = order->next;
-	}
-	if (hint1 == 0 && hint2 == 1) {
-		return 4;
-	}
-	if (hint1 == 1 && hint2 == 0) {
-		return 2;
-	}
-	if (hint1 == 1 && hint2 == 1) {
-		return 5;
-	}
-	return 0;
-}
-
 //通过seats计算座位数
 //retunr 0 : 计算失败
 //       >=1：计算成功
@@ -359,11 +296,11 @@ char* seats_input_check() {
 //座位数冲突判断
 //return 0 : 获取位置信息失败
 //       1 ; 订座成功 
-//       6 : 剩余座位数不足或超过最大购票限额
-//       7 ：输入两个相同的座位号。
-//       8 ：不在影院座次范围内
-//       9 ：座位已售出
-//       10 ：与已售出的座位相隔一个座位
+//       2 : 剩余座位数不足或超过最大购票限额
+//       3 ：输入两个相同的座位号。
+//       4 ：不在影院座次范围内
+//       5 ：座位已售出
+//       6 ：与已售出的座位相隔一个座位
 // 座位  0 ：不在影院座次范围内
 //       1 ：可购买
 //       2 ：已售出
@@ -377,7 +314,7 @@ int saets_check(char* seats, int(*seat_map)[26]) {
 		return 0;
 	}
 	if (seat_number > get_remaining_ticket(seat_map) || seat_number > 3) {//同意订单包含座位数超过三个或大于场次剩余座位数
-		return 6;
+		return 2;
 	}
 
 	char* token = strtok(seats, "-");//利用strtok函数对其进行分段
@@ -395,26 +332,89 @@ int saets_check(char* seats, int(*seat_map)[26]) {
 	for (int i = 0; i < seat_number; i++) {
 		for (int j = i + 1; j < seat_number; j++) {
 			if (line[i] == line[j] && row[i] == row[j]) {//循环，判断是否输入两个相同座位号
-				return 7;
+				return 3;
 			}
 		}
 	}
 	for (int i = 0; i < seat_number; i++) {
 		if ((seat_map[line[i] - 1][row[i] - 1]) == 0) {//0代表座位图中梯形两侧位置
-			return 8;
+			return 4;
 		}
 		if ((seat_map[line[i] - 1][row[i] - 1]) == 1) {//1代表该座位可购买，故继续检验后续座位
 			continue;
 		}
 		if ((seat_map[line[i] - 1][row[i] - 1]) == 2) {//2代表已售出
-			return 9;
+			return 5;
 		}
 		if ((seat_map[line[i] - 1][row[i] - 1]) == 3) {//3代表与已售出的座位相隔一个座位
-			return 10;
+			return 6;
 		}
 	}
 	return 1;//循环结束座位都可选择即返回1
 
+}
+
+//判断当前时间是否和传入时间是同一天
+//return 0 : 不是同一天
+//       1 ：是同一天
+int is_current_date(char* time) {
+	char time_date[12];
+	strncpy(time_date, time, 10);
+	if (strcmp(time_date, get_current_day) == 0) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+//历史场次时间冲突判断
+//return 0 :查询失败
+//       1 :无冲突
+//       7 :已购买过该场次的票
+//       8 :当天已经购买五个场次的票
+//       9 :购买多个影片场次时间冲突
+//       10 :已购买过该场次的票且购买多个影片场次时间冲突
+int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
+	StringSet* movie_id_set = create_string_set();
+	int count = 0;
+	int hint1 = 0;
+	int hint2 = 0;
+	if (usr == NULL) {
+		printf("用户不存在.\n");
+		return;
+	}
+	Linked_string_list* order = usr->my_order;//复制头结点
+	while (order != NULL) {//遍历链表
+		Order* order_find = find_order_in_hash_table(hashTable, order->id);
+		if (order_find->status != 1) {//确定订单为已付款状态
+			order = order->next;
+			continue;
+		}
+		if (is_current_date(order_find->time) == 1) {
+			string_set_add(movie_id_set, order_find->movie_id);
+			if (string_set_size(movie_id_set) == 5 && string_set_add(movie_id_set, movie->movie_id) == 1) {
+				return 8;
+			}
+		}
+		if (strcmp(order_find->movie_id, movie->movie_id) == 0) {
+			hint1 = 1;
+		}
+		if (strcmp(order_find->movie_id, movie->movie_id) != 0 && order_find->movie->start_min <= movie->start_min && order_find->movie->end_min >= movie->start_min) {
+			hint2 = 1;
+		}
+		order = order->next;
+	}
+	if (hint1 == 0 && hint2 == 1) {
+		return 9;
+	}
+	if (hint1 == 1 && hint2 == 0) {
+		return 7;
+	}
+	if (hint1 == 1 && hint2 == 1) {
+		return 10;
+	}
+	return 0;
 }
 
 //判断订单能否生成
@@ -430,11 +430,11 @@ int saets_check(char* seats, int(*seat_map)[26]) {
 //       9 :座位已售出
 //       10 :与已售出的座位相隔一个座位
 int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable) {
-	if (history_order_time_check(usr, movie, hashTable) != 1) {//分别调用历史场次冲突判断函数和座位冲突函数判断两个函数，并返回对应值
-		return history_order_time_check(usr, movie, hashTable);
-	}
-	if (saets_check(seats, seat_map) != 1) {
+	if (saets_check(seats, seat_map) != 1) {//分别调用历史场次冲突判断函数和座位冲突函数判断两个函数，并返回对应值
 		return saets_check(seats, seat_map);
+	}
+	if (history_order_time_check(usr, movie, hashTable) != 1) {
+		return history_order_time_check(usr, movie, hashTable);
 	}
 	return 1;
 }

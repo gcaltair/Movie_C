@@ -7,6 +7,7 @@ int main() {
     load_file();
     admin_now = admin_find_by_id(admin_list, "A001"); 
     user_now = find_user_in_hash_table(userHashTable, "U001");
+    
     /*Film* target_film = find_film_in_hash_table_by_name(filmHashTable, "Inception");
     Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);*/
     user_operation();
@@ -25,6 +26,7 @@ int main() {
     //        printf("\nWelcome user");
     //    }
     //}
+    
 }
 static Film* hot_films()//ÓÐÎÊÌâ
 {
@@ -100,6 +102,7 @@ static void sub_purchase_by_name()
         if (target_film !=NULL) break;
     }
     Movie* target_movie = search_target_film_and_choose_movie(target_film); //µÃµ½target movieÈ»ºó¹ºÂò
+    order_generate_main(user_now, target_movie, orderHashTable);
 }
 static void sub_purchase_by_name_and_cinema()
 {
@@ -136,6 +139,10 @@ static void sub_purchase_by_name_and_cinema()
     //È»ºó½øÈë¸¶¿î
     movie_list_free(raw_movie_list);
     movie_list_free(cinema_film_movie_list);
+    if (choosed_movie) {
+        order_generate_main(user_now, choosed_movie, orderHashTable);
+        
+    }
 }
 static void user_purchase_ticket()
 {
@@ -160,8 +167,9 @@ static void user_purchase_ticket()
             break;
             
         default:
+            printf("ÎÞÐ§µÄÑ¡Ïî£¬ÇëÖØÐÂÑ¡Ôñ¡£\n");
             return;
-            break;
+            
         }
     }
 }
@@ -632,11 +640,13 @@ Movie* for_admin_movie_filter(Movie* new_movie_list)
         press_zero_to_continue();
     }
 }
+
 //Order main
 //
 //Éú³É¶©µ¥
 //return 0 : Éú³ÉÊ§°Ü
-//       1 : Éú³É³É¹¦
+//       1 : Éú³É³É¹¦£¬Ö§¸¶³É¹¦
+//       2 : Éú³É³É¹¦£¬Ö§¸¶Ê§°Ü
 int order_generate_main(User* usr, Movie* movie) //ÅÐ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔçÓÚµçÓ°¿ªÊ¼Ê±¼ä
 {                           
     char* seats;
@@ -645,72 +655,58 @@ int order_generate_main(User* usr, Movie* movie) //ÅÐ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔçÓÚµçÓ°¿ªÊ¼Ê
         seats = seats_input_check();
         if (seats == NULL) {
             printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë.\n");
+            while (getchar() != '\n');
             continue;
         }
             break;
     }
     int judge = strcmp(get_current_time(), movie->start_time);
-    if(judge <= 0)  
-    {
+    if(judge <= 0)  {
         int check = order_generation(usr, seats, movie, movie->seat_map, orderHashTable);
-        switch (check) {// ¸ù¾ÝÉú³É¶©µ¥µÄ½á¹û½øÐÐ²»Í¬´¦Àí  
+        switch (check) { //¸ù¾ÝÉú³É¶©µ¥µÄ½á¹û½øÐÐ²»Í¬´¦Àí  
         case 0:
             printf("²éÑ¯Ê§°Ü.\n");
             return 0;
         case 1:
             break;
         case 2:
-            printf("µ±ÌìÒÑ¹ºÂò¹ýÎå¸ö³¡´ÎµÄÆ±,ÇëÃ÷ÈÕÔÙÐÐ¹ºÂò.\n");
-            return 0;
-        case 3:
-            printf("ÄúÒÑ¾­¹ºÂò¹ý¸Ã³¡´ÎµÄÆ±,ÇëÈ·ÈÏÊÇ·ñ¼ÌÐø¹ºÂò,¼ÌÐø¹ºÂòÇë°´1,·ÅÆú¹ºÂòÇë°´0\n");
-            int i;
-            while (1) {
-                if (scanf("%d", &i) != 1 || (i != 0 && i != 1)) {//ÊäÈëÈÝ´í»úÖÆ
-                    printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë.\n");
-                    continue;
-                }
-                break;
-            }
-            if (i) {
-                break;
-            }
-            else {
-                return 0;
-
-            }
-        case 4:
-            printf("¸Ã³¡´ÎºÍÄúÒÑ¾­¹ºÂòµÄ³¡´ÎÊ±¼ä³åÍ»,ÇëÈ·ÈÏÊÇ·ñ¼ÌÐø¹ºÂò,¼ÌÐø¹ºÂòÇë°´1,·ÅÆú¹ºÂòÇë°´0\n");
-            int j;
-            while (1) {
-                if (scanf("%d", &j) != 1 || (j != 0 && j != 1)) {//ÊäÈëÈÝ´í»úÖÆ
-                    printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë¡£\n");
-                    while (getchar() != '\n');
-                    continue;
-                }
-                break;
-            }
-            if (j) {
-                break;
-            }
-            else {
-                return 0;
-
-            }
-        case 5:
             printf("ÄúÊäÈëµÄ×ùÎ»Êý³¬¹ýÁË×î´ó¹ºÆ±ÏÞ¶î.\n");
             return 0;
-        case 6:
+        case 3:
             printf("ÄúÊäÈëÁËÁ½¸öÏàÍ¬µÄ×ùÎ»ºÅ.\n");
             return 0;
-        case 7:
+        case 4:
             printf("ÄúÊäÈëµÄ×ùÎ»ºÅ²»ÔÚÓ°Ôº×ù´Î·¶Î§ÄÚ.\n");
             return 0;
-        case 8:
+        case 5:
             printf("×ùÎ»ÒÑ¾­ÊÛ³ö.\n");
             return 0;
-        case 9:
+        case 6:
             printf("×ùÎ»ÓëÒÑÊÛ³öµÄ×ùÎ»½ö¼ä¸ôÒ»¸ö×ùÎ».\n");
+            return 0;
+        case 7:
+            printf("ÄúÒÑ¾­¹ºÂò¹ý¸Ã³¡´ÎµÄÆ±,ÇëÈ·ÈÏÊÇ·ñ¼ÌÐø¹ºÂò,¼ÌÐø¹ºÂòÇë°´1,·ÅÆú¹ºÂòÇë°´0\n");
+            int cer = get_user_input_int(1);
+            if (cer) {
+                break;
+            }
+            return 0;
+        case 8:
+            printf("µ±ÌìÒÑ¹ºÂò¹ýÎå¸ö³¡´ÎµÄÆ±,ÇëÃ÷ÈÕÔÙÐÐ¹ºÂò.\n");
+            return 0;
+        case 9:
+            printf("¸Ã³¡´ÎºÍÄúÒÑ¾­¹ºÂòµÄ³¡´ÎÊ±¼ä³åÍ»,ÇëÈ·ÈÏÊÇ·ñ¼ÌÐø¹ºÂò,¼ÌÐø¹ºÂòÇë°´1,·ÅÆú¹ºÂòÇë°´0\n");
+            int cer1 = get_user_input_int(1);
+            if (cer1) {
+                break;
+            }
+            return 0;
+        case 10:
+            printf("ÒÑ¹ºÂò¹ý¸Ã³¡´ÎµÄÆ±ÇÒ¹ºÂò¶à¸öÓ°Æ¬³¡´ÎÊ±¼ä³åÍ»,ÇëÈ·ÈÏÊÇ·ñ¼ÌÐø¹ºÂò,¼ÌÐø¹ºÂòÇë°´1,·ÅÆú¹ºÂòÇë°´0\n");
+            int cer2 = get_user_input_int(1);
+            if (cer2) {
+                break;
+            }
             return 0;
         }
         // ¶©µ¥Éú³É²¢Ìí¼Óµ½ÁÐ±íÖÐ  
@@ -718,89 +714,58 @@ int order_generate_main(User* usr, Movie* movie) //ÅÐ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔçÓÚµçÓ°¿ªÊ¼Ê
         order_add_to_list(&order_list, new_order);
         printf("¶©µ¥Éú³É³É¹¦£¬ÄúµÄorderIDÊÇ:%s\nÊÇ·ñ¸¶¿î£¬È·ÈÏ¸¶¿îÇë°´1£¬·ÅÆú¸¶¿îÇë°´0.\n", new_order->orderID);
         int cer=get_user_input_int(1);
-        if (cer)
-        {
-            process_pay_main(new_order);
+        if (cer){
+            return process_pay_main_order(new_order);
         }
-        return 1;
+        else {
+            return 2;
+        }
     }
-    else
-    {
+    else{
         printf("Äú¹ºÂòµÄÓ°Æ¬ÒÑ¾­¿ªÊ¼.\n");
         return 0;// Ó°Æ¬ÒÑ¿ªÊ¼£¬ÎÞ·¨¹ºÂò  
     }
 }
 
 //¸¶¿î
-//return 0 £º ÊäÈëÎÞÐ§¶©µ¥»òÓÃ»§ÐÅÏ¢»ñÈ¡Ê§°Ü
-//       1 £º ¸¶¿î³É¹¦
-//       2 £º ¸¶¿îÊ§°Ü  
-int process_pay_main(Order* order) {
-    //printf("ÇëÊäÈëÄúÒªÖ§¸¶µÄorderID.\n");
-    //char* orderID;
-    //while (1) {
-    //    if (scanf("%s", orderID) != 1) {
-    //        printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë¡£\n");
-    //        while (getchar() != '\n');
-    //        continue;
-    //    }
-    //    break;
-    //}
-    //if (find_order_in_hash_table(hashTable, orderID) == NULL) {
-    //    printf("ÄúÊäÈëµÄ¶©µ¥ºÅÎÞÐ§.\n");
-    //    return 0;
-    //}
-    //else {
-        //Order* order = find_order_in_hash_table(hashTable, orderID);
-        if (order->status != 2) {// ¼ì²é¶©µ¥×´Ì¬²¢³¢ÊÔ¸¶¿î
-            printf("¶©µ¥×´Ì¬²»ºÏ·¨.\n");
-            return 2;
+//return 1 £º ¸¶¿î³É¹¦
+//       2 £º ¸¶¿îÊ§°Ü
+int process_pay_main_order(Order* order) {
+    if (order->status != 2) {// ¼ì²é¶©µ¥×´Ì¬²¢³¢ÊÔ¸¶¿î
+        printf("¶©µ¥×´Ì¬²»ºÏ·¨.\n");
+        return 2;
+    }
+    if (balance_check(order, orderHashTable) == 1) { // ¼ì²éÓà¶î²¢¸¶¿î  
+        if (process_pay(order, order->movie->seat_map, orderHashTable) == 0) {
+            printf("¶©µ¥²éÑ¯Ê§°Ü.\n");
+            return 0;
         }
-
-        int judge = balance_check(order, orderHashTable); // ¼ì²éÓà¶î²¢¸¶¿î  
-        switch (judge) {
-        case 1:
-            if (process_pay(order, order->movie->seat_map, orderHashTable) == 0) {
-                printf("¶©µ¥²éÑ¯Ê§°Ü.\n");
-                return 0;
-            }
-            else {
-                printf("¸¶¿î³É¹¦.\n");
-                return 1;
-            }
-        default:// Óà¶î²»×ã£¬ÌáÊ¾ÓÃ»§²¢Ñ¯ÎÊÊÇ·ñ³äÖµ  
-            while (balance_check(order, orderHashTable) == 2) {
-                printf("Óà¶î²»×ã,Äú»¹Ðè³äÖµ%fÔª`.¼ÌÐø³äÖµÇë°´1£¬·ÅÆú³äÖµÇë°´0\n", get_debt(order, orderHashTable));
-                int j;
-                while (1) {
-                    if (scanf("%d", &j) != 1 || (j != 0 && j != 1)) {
-                        printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë¡£\n");
-                        while (getchar() != '\n');
-                        continue;
-                    }
-                    break;
-                }
-                if (j) {
-                    if (balance_check(order, orderHashTable) != 1) {
-                        continue;
-                    }
-                    else {
-                        process_pay(order, order->movie->seat_map, orderHashTable);
-                        printf("¸¶¿î³É¹¦.\n");
-                        return 1;
-                    }
-                }
-                else {
-                    return 2;
-                }
-            }
+        else {
+            printf("¸¶¿î³É¹¦.\n");
+            return 1;
         }
     }
-//}
+    else {
+        while (balance_check(order, orderHashTable) == 2) {
+            printf("Óà¶î²»×ã,Äú»¹Ðè³äÖµ%fÔª`.¼ÌÐø³äÖµÇë°´1£¬·ÅÆú³äÖµÇë°´0\n", get_debt(order, orderHashTable));
+            int cer = get_user_input_int(1);
+            if (cer) {
+                if (balance_check(order, orderHashTable) != 1) {
+                    continue;
+                }
+                else {
+                    process_pay(order, order->movie->seat_map, orderHashTable);
+                    printf("¸¶¿î³É¹¦.\n");
+                    return 1;
+                }
+            }
+            return 2;
+        }
+    }
+}
 
 //³äÖµ
-void recharge_main(Order_hash_table* hashTable) {
-    printf("ÇëÊäÈëÄúÒªÖ§¸¶µÄuserID.\n");
+void recharge_main( ) {
     char* userID;
     while (1) {
         if (scanf("%s", userID) != 1) {
@@ -827,14 +792,10 @@ void recharge_main(Order_hash_table* hashTable) {
         }
         recharge(usr, money);
     }
-
 }
 
-//È¡Ïû¶©µ¥
-//return 0 £º ÊäÈëÎÞÐ§¶©µ¥»òÓÃ»§ÐÅÏ¢»ñÈ¡Ê§°Ü
-//       1 £º È¡Ïû³É¹¦
-//       2 £º È¡ÏûÊ§°Ü  
-int order_cancle_main(Order_hash_table* hashTable) {
+//ÓÃ»§¸ù¾Ý¶©µ¥¸¶¿î
+int process_pay_main( ) {
     printf("ÇëÊäÈëÄúÒªÈ¡ÏûµÄorderID.\n");
     char* orderID;
     while (1) {
@@ -845,12 +806,35 @@ int order_cancle_main(Order_hash_table* hashTable) {
         }
         break;
     }
-    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
+        printf("ÄúÊäÈëµÄ¶©µ¥ºÅÎÞÐ§.\n");
+        return 0;
+    }
+    Order* order = find_order_in_hash_table(orderHashTable, orderID);
+    return process_pay_main_order(order);
+}
+
+//È¡Ïû¶©µ¥
+//return 0 £º ÊäÈëÎÞÐ§¶©µ¥»òÓÃ»§ÐÅÏ¢»ñÈ¡Ê§°Ü
+//       1 £º È¡Ïû³É¹¦
+//       2 £º È¡ÏûÊ§°Ü  
+int order_cancle_main( ) {
+    printf("ÇëÊäÈëÄúÒªÈ¡ÏûµÄorderID.\n");
+    char* orderID;
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("ÊäÈëÎÞÐ§£¬ÇëÖØÐÂÊäÈë¡£\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
         printf("ÄúÊäÈëµÄ¶©µ¥ºÅÎÞÐ§.\n");
         return 0;
     }
     else {
-        Order* order = find_order_in_hash_table(hashTable, orderID);
+        Order* order = find_order_in_hash_table(orderHashTable, orderID);
         if (order->status != 2) {
             printf("¶©µ¥×´Ì¬²»ºÏ·¨,È¡ÏûÊ§°Ü.\n");// ¼ì²é¶©µ¥×´Ì¬²¢³¢ÊÔÈ¡Ïû  
             return 2;
@@ -867,7 +851,7 @@ int order_cancle_main(Order_hash_table* hashTable) {
 //return 0 £º ÊäÈëÎÞÐ§¶©µ¥»òÓÃ»§ÐÅÏ¢»ñÈ¡Ê§°Ü
 //       1 £º ÍË¿î³É¹¦
 //       2 £º ÍË¿îÊ§°Ü  
-int ticket_refund_main(Order_hash_table* hashTable) {
+int ticket_refund_main(  ) {
     printf("ÇëÊäÈëÄúÍË¿îµÄorderID.\n");
     char* orderID;
     while (1) {
@@ -878,12 +862,12 @@ int ticket_refund_main(Order_hash_table* hashTable) {
         }
         break;
     }
-    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
         printf("ÄúÊäÈëµÄ¶©µ¥ºÅÎÞÐ§.\n");
         return 0;
     }
     else {
-        Order* order = find_order_in_hash_table(hashTable, orderID);
+        Order* order = find_order_in_hash_table(orderHashTable, orderID);
         if (order->status != 1) {    // ¼ì²é¶©µ¥×´Ì¬²¢³¢ÊÔÍË¿î
             printf("¶©µ¥×´Ì¬²»ºÏ·¨.\n");
             return 2;
@@ -893,22 +877,20 @@ int ticket_refund_main(Order_hash_table* hashTable) {
             return 2;
         }
         else {
-            return ticket_refund(order, order->movie->seat_map, hashTable);
+            return ticket_refund(order, order->movie->seat_map, orderHashTable);
         }
     }
 }
-static int login()
-{
+static int login(){
     char password[20]; char id[20]; bool key = 0;
     do {
         printf("Enter your ID:");
         scanf("%s", id);
-        //²»ÖªÕ¦°ì
-        //if (id=='\n') { printf("ID don't found\n"); _sleep(500); system("cls"); continue; }
+        if (id=='\n') { printf("ID don't found\n"); _sleep(500); system("cls"); continue; }
         user_now = find_user_in_hash_table(userHashTable, id);
         admin_now = admin_find_by_id(admin_list, id);//×¢Òâ¿¼ÂÇÖØÃûÎÊÌâ
         if ((!user_now) && (!admin_now)) {
-            printf("ID don't found\n");
+            printf("ÎÞ·¨ÕÒµ½ID\n");
             _sleep(500);
             system("cls");
         }
@@ -928,9 +910,9 @@ static void hash_ini()
     movieHashTable = movie_hash_table_create();
     filmHashTable = film_hash_table_create();
 }
-static void load_file()
-{
+static void load_file() {
     void* context1[] = { userHashTable,&user_list };
+
     load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
     void* context2[] = { &film_list,filmHashTable };
     load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
@@ -943,12 +925,15 @@ static void load_file()
     void* context6[] = { &movie_list,movieHashTable,theaterHashTable,filmHashTable };
     load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
 
+
     void* context7[] = {
             orderHashTable,   // ¶©µ¥¹þÏ£±í
             userHashTable,    // ÓÃ»§¹þÏ£±í
             movieHashTable,   // µçÓ°¹þÏ£±í
             &order_list,      // ¶©µ¥Á´±í
     };
+
     load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
 }
+
 

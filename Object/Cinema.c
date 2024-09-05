@@ -11,7 +11,7 @@ Cinema *cinema_create(const char *name, const char* cinema_alphabet,const char *
     // 动态分配内存给Cinema结构体
     Cinema* cinema = (Cinema*)malloc(sizeof(Cinema));
     if (cinema == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("内存分配失败.\n");
         return NULL;
     }
 
@@ -27,14 +27,14 @@ Cinema *cinema_create(const char *name, const char* cinema_alphabet,const char *
 }
 void cinema_show(const Cinema* cinema) {
     if (cinema == NULL) {
-        printf("Cinema Data is NULL.\n");
+        printf("电影院数据不存在.\n");
         return;
     }
 
-    printf("Cinema Name: %s\n", cinema->cinema_name);
+    printf("电影院名字: %s\n", cinema->cinema_name);
     printf("Cinema Alphabet: %s\n", cinema->cinema_alphabet);
-    printf("Location: %s\n", cinema->location);
-    printf("Cinema ID: %s\n", cinema->cinema_id);
+    printf("地点: %s\n", cinema->location);
+    printf("电影院ID: %s\n", cinema->cinema_id);
 }
 void cinema_show_detail(const Cinema* cinema){
     cinema_show(cinema);

@@ -44,11 +44,11 @@ void theater_show(const Theater* theater) {
         return;
     }
 
-    printf("Theater ID: %s\n",theater->theater_id);
-    printf("Theater Name: %s\n", theater->theater_name);
-    printf("Capacity: %d\n", theater->theater_capacity);
-    printf("Cinema ID: %s\n",theater->cinema_id);
-    printf("Theater Type: %s\n", theater->theater_type);
+    printf("电影厅 ID: %s\n",theater->theater_id);
+    printf("电影厅名字: %s\n", theater->theater_name);
+    printf("电影厅容量: %d\n", theater->theater_capacity);
+    printf("电影院 ID: %s\n",theater->cinema_id);
+    printf("电影厅类型: %s\n", theater->theater_type);
     printf("\n");
 }
 

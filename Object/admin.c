@@ -11,7 +11,7 @@ Admin* Admin_create(const char* id, const char* name, const char* telephone,
     // 动态分配内存给Admin结构体
     Admin* admin = (Admin*)malloc(sizeof(Admin));
     if (admin == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("内存分配失败.\n");
         return NULL;
     }
 
@@ -48,11 +48,11 @@ void admin_show(const Admin *admin) {
         return;
     }
 
-    printf("Admin ID: %s\n", admin->admin_id);
-    printf("Name: %s\n", admin->admin_name);
-    printf("Telephone: %s\n", admin->admin_telephone);
+    printf("管理员 ID: %s\n", admin->admin_id);
+    printf("姓名: %s\n", admin->admin_name);
+    printf("电话: %s\n", admin->admin_telephone);
     printf("Password: %s\n", admin->admin_password);  // 注意：实际系统中通常不会打印密码
-    printf("Email: %s\n", admin->admin_email);
+    printf("邮箱: %s\n", admin->admin_email);
     cinema_show(admin->cinema);
     printf("\n");
 
@@ -60,7 +60,7 @@ void admin_show(const Admin *admin) {
 //修改用户信息
 Admin* admin_modify(Admin* admin, int modify_mode, char* arg) {
     if (admin == NULL) {
-        printf("The admin is not existed!");
+        printf("管理员不存在!");
         return NULL; // 如果找不到管理员，则直接返回
     }
 
@@ -87,7 +87,7 @@ Admin* admin_modify(Admin* admin, int modify_mode, char* arg) {
             admin->admin_email = strdup(arg);
             break;
         default:
-            printf("Invalid modification mode\n");
+            printf("无效修改模式\n");
             break;
     }
     return admin;

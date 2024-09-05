@@ -10,7 +10,7 @@ User* user_create(User_hash_table * hashTable,const char* userID, const char* na
                   const char* password, const char* email, double balance) {
     User* new_user = (User*)malloc(sizeof(User));
     if (new_user == NULL) {
-        printf("Memory allocation failed.\n");
+        printf("内存分配失败\n");
         return NULL;
     }
     new_user->userID = strdup(userID);
@@ -49,7 +49,7 @@ void user_direct_add_to_list(User_hash_table * hashTable,User** head, const char
                              const char* telephone, const char* password, const char* email, double balance) {
     User* new_user = user_create(hashTable,userID, name, gender, telephone, password, email, balance);
     if(new_user==NULL){
-        printf("user_direct_add_to_list failed!");
+        printf("添加用户到链表失败!");
         return;
     }
     user_add_to_list(head, new_user);
@@ -72,12 +72,12 @@ void user_show(const User* user) {
         printf("User not found.\n");
         return;
     }
-    printf("UserID: %s\n", user->userID);
-    printf("Name: %s\n", user->user_name);
-    printf("Gender: %s\n", user->gender);
-    printf("Telephone: %s\n", user->telephone);
-    printf("Email: %s\n", user->email);
-    printf("Balance: %.2f\n", user->user_balance);
+    printf("用户ID: %s\n", user->userID);
+    printf("姓名: %s\n", user->user_name);
+    printf("性别: %s\n", user->gender);
+    printf("电话号: %s\n", user->telephone);
+    printf("邮箱: %s\n", user->email);
+    printf("余额: %.2f\n", user->user_balance);
 }
 
 // 显示所有用户信息
@@ -154,7 +154,7 @@ void user_delete(User **head, const char *user_id) {
     }
 
     if (current == NULL) {
-        printf("User not found.\n");
+        printf("未发现用户\n");
         return;
     }
 
@@ -173,14 +173,14 @@ void user_delete(User **head, const char *user_id) {
     free(current->email);
     free(current);
 
-    printf("User deleted successfully.\n");
+    printf("用户删除成功.\n");
 }
 
 //修改用户信息
 User* user_modify(User* head, char* id, int mode, char* arg) {
     User* user = user_find_by_id(head, id);
     if (user == NULL) {
-        printf("The user is not existed!\n");
+        printf("用户不存在!\n");
         return NULL; // 如果找不到用户，则直接返回
     }
 
@@ -210,7 +210,7 @@ User* user_modify(User* head, char* id, int mode, char* arg) {
         user->email = strdup(arg);
         break;
     default:
-        printf("Invalid modification mode\n");
+        printf("错误修改模式\n");
         break;
     }
     return user;

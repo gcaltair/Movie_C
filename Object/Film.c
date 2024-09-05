@@ -59,7 +59,7 @@ Film* film_copy_list(Film* head)
         Film* new_film = (Film*)malloc(sizeof(Film));
         if (!new_film) {
             // 处理内存分配失败情况
-            perror("Failed to allocate memory for new film");
+            perror("为新电影分配内存失败");
             exit(EXIT_FAILURE);
         }
 
@@ -106,7 +106,7 @@ Film* film_sort(Film* head, int* compare(void*, void*)) {
     // 分配一个数组来存储所有电影的指针  
     films = (Film**)malloc(count * sizeof(Film*));
     if (!films) {
-        printf("Memory allocation failed!\n");
+        printf("内存分配失败!\n");
         return NULL;
     }
 
@@ -136,13 +136,13 @@ Film* film_sort(Film* head, int* compare(void*, void*)) {
 // 显示单个电影的信息
 void film_show(const Film* film) {
     if (film) {
-        printf("Film ID: %s\n", film->film_id);
-        printf("Name: %s\n", film->film_name);
-        printf("Type: %s\n", film->film_type);
-        printf("Language: %s\n", film->film_language);
+        printf("电影 ID: %s\n", film->film_id);
+        printf("名字: %s\n", film->film_name);
+        printf("类型: %s\n", film->film_type);
+        printf("语言: %s\n", film->film_language);
         printf("Summary: %s\n", film->film_summary);
-        printf("Time:%d\n", film->film_time);
-        printf("Rating: %d\n", film->film_rating);
+        printf("时间:%d\n", film->film_time);
+        printf("评分: %d\n", film->film_rating);
     }
 }
 

@@ -74,18 +74,6 @@ char* get_current_time();
 //生成orderID
 char* get_orderID();
 
-//判断当前时间是否和传入时间是同一天
-int is_current_date(char* time);
-
-//历史场次时间冲突判断
-//return 0 :查询失败
-//       1 :无冲突
-//       2 :已购买过该场次的票
-//       3 :当天已经购买五个场次的票
-//       4 :购买多个影片场次时间冲突
-//       5 :已购买过该场次的票且购买多个影片场次时间冲突
-int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
-
 //通过seats计算座位数
 //retunr 0 : 计算失败
 //       1 ：计算成功
@@ -98,29 +86,41 @@ char* seats_input_check();
 //座位数冲突判断
 //return 0 : 获取位置信息失败
 //       1 ; 订座成功 
-//       6 : 剩余座位数不足或超过最大购票限额
-//       7 ：输入两个相同的座位号。
-//       8 ：不在影院座次范围内
-//       9 ：座位已售出
-//       10 ：与已售出的座位相隔一个座位
+//       2 : 剩余座位数不足或超过最大购票限额
+//       3 ：输入两个相同的座位号。
+//       4 ：不在影院座次范围内
+//       5 ：座位已售出
+//       6 ：与已售出的座位相隔一个座位
 // 座位  0 ：不在影院座次范围内
 //       1 ：可购买
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
 int saets_check(char* seats, int(*seat_map)[26]);
 
+//判断当前时间是否和传入时间是同一天
+int is_current_date(char* time);
+
+//历史场次时间冲突判断
+//return 0 :查询失败
+//       1 :无冲突
+//       7 :已购买过该场次的票
+//       8 :当天已经购买五个场次的票
+//       9 :购买多个影片场次时间冲突
+//       10 :已购买过该场次的票且购买多个影片场次时间冲突
+int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
+
 //判断订单能否生成
 //return 0 :查询失败
-//       1 :生成订单成功
-//       2 :当天已经购买五个场次的票
-//       3 :已经购买过该影片的票
-//       4 :购买多个影片场次时间冲突
-//       5 :已购买过该场次的票且购买多个影片场次时间冲突
-//       6 :剩余座位数不足或超过最大购票限额
-//       7 :输入两个相同的座位号。
-//       8 :不在影院座次范围内
-//       9 :座位已售出
-//       10 :与已售出的座位相隔一个座位
+//       1 ; 订座成功 
+//       2 : 剩余座位数不足或超过最大购票限额
+//       3 ：输入两个相同的座位号。
+//       4 ：不在影院座次范围内
+//       5 ：座位已售出
+//       6 ：与已售出的座位相隔一个座位
+//       7 :已购买过该场次的票
+//       8 :当天已经购买五个场次的票
+//       9 :购买多个影片场次时间冲突
+//       10 :已购买过该场次的票且购买多个影片场次时间冲突
 int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //订单价格计算
@@ -130,9 +130,8 @@ int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], O
 double get_order_price(Order* order, Order_hash_table* hashTable);
 
 //判断余额是否充足
-//return 0 : 查询失败
+//return 0 : 余额不足
 //       1 ：余额充足
-//       2 ：余额不足
 int balance_check(Order* order, Order_hash_table* hashTable);
 
 //欠款计算
