@@ -342,7 +342,9 @@ int for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
     {
         new_head_for_option = new_head_for_option->next;
     }
-    return find_movie_in_hash_table(movie_hash_table, new_head_for_option->movie_id);
+    Movie* returned_movie= find_movie_in_hash_table(movie_hash_table, new_head_for_option->movie_id);
+    if (!returned_movie) return NULL;
+    return returned_movie;
     
 }
 void theater_print(const Theater* theater) {

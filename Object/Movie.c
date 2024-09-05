@@ -33,6 +33,7 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     newMovie->discount = discount;
     newMovie->next = NULL;
     newMovie->hash_next = NULL;
+    newMovie->seat_map = seat_map_generation();
     insert_movie_to_hash_table(movieHashTable,newMovie);//插入哈希表
 
     string_direct_add_to_list(&(theater->my_movie),newMovie->movie_id);//添加到影厅
@@ -149,6 +150,7 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->discount = movie->discount;
     new_movie->next = NULL;
     new_movie->hash_next=NULL;
+    new_movie->seat_map = movie->seat_map;
     return new_movie;
 }
 //1.上座率(降序），2.价格(升序)，3.场次收入(降序)，4.开始时间(升序)，5.剩余票数(升序)

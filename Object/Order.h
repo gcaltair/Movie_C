@@ -18,6 +18,7 @@ typedef struct Order {
 	int seat_number;
 	int status; //订单状态
 	char* time;
+	double price;
 	struct Order* next;
 	struct Order* hash_next;
 }Order;
@@ -73,11 +74,19 @@ char* get_current_time();
 //生成orderID
 char* get_orderID();
 
+
+//时间大小比较
+//return 0 ： a在b之前
+//       1 ： a与b同时
+//       2 ： a在b之后
+int time_compare(char* a, char* b);
+
 //历史场次时间冲突判断
 //return 0 :查询失败
 //       1 :无冲突
-//       2 ：以购买过该场次的票
+//       2 :已购买过该场次的票
 //       3 :当天已经购买五个场次的票
+//       4 :购买多个影片场次时间冲突
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable);
 
 //通过seats计算座位数
@@ -85,14 +94,22 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 //       1 ：计算成功
 int get_seat_number(char* seats);
 
+//检验座位输入
+//return NULL ：输入不合法
+char* seats_input_check();
+
 //座位数冲突判断
 //return 0 : 获取位置信息失败
 //       1 ; 订座成功 
-//       4 : 剩余座位数不足或超过最大购票限额
-//       5 ：输入两个相同的座位号。
-//       6：不在影院座次范围内
-//       7 ：座位已售出
-//       8 ：与已售出的座位相隔一个座位
+//       5 : 剩余座位数不足或超过最大购票限额
+//       6 ：输入两个相同的座位号。
+//       7 ：不在影院座次范围内
+//       8 ：座位已售出
+//       9 ：与已售出的座位相隔一个座位
+// 座位  0 ：不在影院座次范围内
+//       1 ：可购买
+//       2 ：已售出
+//       3 ：因与已售出的座位相隔一个座位导致无法售出
 int saets_check(char* seats, int(*seat_map)[26]);
 
 //判断订单能否生成
@@ -100,11 +117,12 @@ int saets_check(char* seats, int(*seat_map)[26]);
 //       1 :生成订单成功
 //       2 :当天已经购买五个场次的票
 //       3 :已经购买过该影片的票
-//       4 : 剩余座位数不足或超过最大购票限额
-//       5 ：输入两个相同的座位号。
-//       6：不在影院座次范围内
-//       7 ：座位已售出
-//       8 ：与已售出的座位相隔一个座位
+//       4 :购买多个影片场次时间冲突
+//       5 :剩余座位数不足或超过最大购票限额
+//       6 :输入两个相同的座位号。
+//       7 :不在影院座次范围内
+//       8 :座位已售出
+//       9 :与已售出的座位相隔一个座位
 int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //订单价格计算
@@ -117,7 +135,7 @@ double get_order_price(Order* order, Order_hash_table* hashTable);
 //return 0 : 查询失败
 //       1 ：余额充足
 //       2 ：余额不足
-int balanece_check(Order* order, Order_hash_table* hashTable);
+int balance_check(Order* order, Order_hash_table* hashTable);
 
 //欠款计算
 //return 0  ：不欠款
@@ -125,22 +143,27 @@ int balanece_check(Order* order, Order_hash_table* hashTable);
 double  get_debt(Order* order, Order_hash_table* hashTable);
 
 //充值
-void recharge(Order* order, double money);
+void recharge(User* usr, double money);
 
 //付款
 //return 0 ：查询错误
 //       1 : 付款成功
-//       2 ：订单状态不合法
+// 座位  0 ：不在影院座次范围内
+//       1 ：可购买
+//       2 ：已售出
+//       3 ：因与已售出的座位相隔一个座位导致无法售出
 int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //取消订单
-//return 0 ；取消失败
-//       1 ：取消成功
-int order_cancel(Order* order);
+void order_cancel(Order* order);
 
 //退票
 //return 0 ：退款失败
 //       1 : 退款成功
+// 座位  0 ：不在影院座次范围内
+//       1 ：可购买
+//       2 ：已售出
+//       3 ：因与已售出的座位相隔一个座位导致无法售出
 int ticket_refund(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
 
 //展示用户所有订单（不包括已经取消的订单）
@@ -152,3 +175,12 @@ double get_movie_income(User* usr, Movie* movie, Order_hash_table* hashTable);
 //智能推荐座位图
 //返回距离F13，F14最近的可购买的三个位置，返回格式"F11-F12-F15",进入函数前需判断余票数大于等于3
 char* get_great_seats(int(*seat_map)[26]);
+
+//释放order_list
+void order_list_free(Order* head);
+
+//
+Order* order_copy_info(Order* order);
+
+//
+Order* order_list_create_by_user(User* usr, Order_hash_table* order_hash_table);

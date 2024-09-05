@@ -76,8 +76,8 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
         return;
     }
     Movie* target_movie = for_user_movie_choose(movie_filtered_list,movieHashTable ); //得到target_movie
-    //选中了targetMovie后进行买单等操作
-    //随后买单返回值再给出提示
+    order_generate_main(user_now, target_movie, orderHashTable);
+   
     movie_list_free(movie_raw_list);
     movie_list_free(movie_filtered_list);
     return target_movie;
@@ -628,7 +628,275 @@ Movie* for_admin_movie_filter(Movie* new_movie_list)
         press_zero_to_continue();
     }
 }
+//Order main
+//
+//生成订单
+//return 0 : 生成失败
+//       1 : 生成成功
+int order_generate_main(User* usr, Movie* movie, Order_hash_table* hashTable) //判断当前时间是否早于电影开始时间
+{                           
+    printf("1212");
+    char* seats;
+    while (1) {
+        printf("请输入您想购买的座位号(形如A1-B1-C1).\n");
+        seats = seats_input_check();
+        if (seats == NULL) {
+            printf("输入无效，请重新输入.\n");
 
+            continue;
+        }
+        else {
+
+            break;
+        }
+    }
+    
+    int judge = strcmp(get_current_time(), movie->start_time);
+    if(judge<=0)  
+    {
+        int check = order_generation(usr, seats, movie, movie->seat_map, hashTable);
+        switch (check) {// 根据生成订单的结果进行不同处理  
+        case 0:
+            printf("查询失败.\n");
+            return 0;
+        case 1:
+            break;
+        case 2:
+            printf("当天已购买过五个场次的票,请明日再行购买.\n");
+            return 0;
+        case 3:
+            printf("您已经购买过该场次的票,请确认是否继续购买,继续购买请按1,放弃购买请按0\n");
+            int i;
+            while (1) {
+                if (scanf("%d", &i) != 1 || (i != 0 && i != 1)) {//输入容错机制
+                    printf("输入无效，请重新输入.\n");
+                    while (getchar() != '\n');
+                    continue;
+                }
+                break;
+            }
+            if (i) {
+                break;
+            }
+            else {
+                return 0;
+
+            }
+        case 4:
+            printf("该场次和您已经购买的场次时间冲突,请确认是否继续购买,继续购买请按1,放弃购买请按0\n");
+            int j;
+            while (1) {
+                if (scanf("%d", &j) != 1 || (j != 0 && j != 1)) {//输入容错机制
+                    printf("输入无效，请重新输入。\n");
+                    while (getchar() != '\n');
+                    continue;
+                }
+                break;
+            }
+            if (j) {
+                break;
+            }
+            else {
+                return 0;
+
+            }
+        case 5:
+            printf("您输入的座位数超过了最大购票限额.\n");
+            return 0;
+        case 6:
+            printf("您输入了两个相同的座位号.\n");
+            return 0;
+        case 7:
+            printf("您输入的座位号不在影院座次范围内.\n");
+            return 0;
+        case 8:
+            printf("座位已经售出.\n");
+            return 0;
+        case 9:
+            printf("座位与已售出的座位仅间隔一个座位.\n");
+            return 0;
+        }
+        // 订单生成并添加到列表中  
+        Order* new_order = order_create(hashTable, get_orderID(), usr, usr->userID, movie, movie->movie_id, movie->theater, movie->theater->cinema, seats, get_seat_number(seats), 2, get_current_time);
+        order_add_to_list(&order_list, new_order);
+        printf("订单生成成功，您的orderID是:%s\n", get_orderID());
+        return 1;
+    }
+    else
+    {
+        printf("您购买的影片已经开始.\n");
+        return 0;// 影片已开始，无法购买  
+    }
+}
+
+//付款
+//return 0 ： 输入无效订单或用户信息获取失败
+//       1 ： 付款成功
+//       2 ： 付款失败  
+int process_pay_main(Order_hash_table* hashTable) {
+    printf("请输入您要支付的orderID.\n");
+    char* orderID;
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    else {
+        Order* order = find_order_in_hash_table(hashTable, orderID);
+        if (order->status != 2) {// 检查订单状态并尝试付款
+            printf("订单状态不合法.\n");
+            return 2;
+        }
+        int judge = balance_check(order, hashTable); // 检查余额并付款  
+        switch (judge) {
+        case 0:
+            printf("余额查询失败.\n");
+            return 0;
+        case 1:
+            if (process_pay(order, order->movie->seat_map, hashTable) == 0) {
+                printf("订单查询失败.\n");
+                return 0;
+            }
+            else {
+                printf("付款成功.\n");
+                return 1;
+            }
+        default:// 余额不足，提示用户并询问是否充值  
+            while (balance_check(order, hashTable) == 2) {
+                printf("余额不足,您还需充值%f元`.继续充值请按1，放弃充值请按0\n", get_debt(order, hashTable));
+                int j;
+                while (1) {
+                    if (scanf("%d", &j) != 1 || (j != 0 && j != 1)) {
+                        printf("输入无效，请重新输入。\n");
+                        while (getchar() != '\n');
+                        continue;
+                    }
+                    break;
+                }
+                if (j) {
+                    if (balance_check(order, hashTable) != 1) {
+                        continue;
+                    }
+                    else {
+                        process_pay(order, order->movie->seat_map, hashTable);
+                        printf("付款成功.\n");
+                        return 1;
+                    }
+                }
+                else {
+                    return 2;
+                }
+            }
+        }
+    }
+}
+
+//充值
+void recharge_main(Order_hash_table* hashTable) {
+    printf("请输入您要支付的userID.\n");
+    char* userID;
+    while (1) {
+        if (scanf("%s", userID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (user_find_by_id(user_list, userID) == NULL) {
+        printf("您输入的userID无效.\n");
+    }
+    else {
+        User* usr = user_find_by_id(user_list, userID);
+        printf("请输入您的充值金额.\n");// 获取充值金额并调用充值函数  
+        double money;
+        while (1) {
+            if (scanf("%lf", money) != 1) {
+                printf("输入无效，请重新输入。\n");
+                while (getchar() != '\n');
+                continue;
+            }
+            break;
+        }
+        recharge(usr, money);
+    }
+
+}
+
+//取消订单
+//return 0 ： 输入无效订单或用户信息获取失败
+//       1 ： 取消成功
+//       2 ： 取消失败  
+int order_cancle_main(Order_hash_table* hashTable) {
+    printf("请输入您要取消的orderID.\n");
+    char* orderID;
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    else {
+        Order* order = find_order_in_hash_table(hashTable, orderID);
+        if (order->status != 2) {
+            printf("订单状态不合法,取消失败.\n");// 检查订单状态并尝试取消  
+            return 2;
+        }
+        else {
+            order_cancel(order);
+            printf("取消成功.\n");
+            return 1;
+        }
+    }
+}
+
+//退款
+//return 0 ： 输入无效订单或用户信息获取失败
+//       1 ： 退款成功
+//       2 ： 退款失败  
+int ticket_refund_main(Order_hash_table* hashTable) {
+    printf("请输入您退款的orderID.\n");
+    char* orderID;
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(hashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    else {
+        Order* order = find_order_in_hash_table(hashTable, orderID);
+        if (order->status != 1) {    // 检查订单状态并尝试退款
+            printf("订单状态不合法.\n");
+            return 2;
+        }
+        if (order->status != 1) {
+            printf("退款失败.\n");
+            return 2;
+        }
+        else {
+            return ticket_refund(order, order->movie->seat_map, hashTable);
+        }
+    }
+}
 static int login()
 {
     char password[20]; char id[20]; bool key = 0;

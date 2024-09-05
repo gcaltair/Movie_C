@@ -20,7 +20,7 @@ typedef struct Movie {
     int remaining_ticket;
     double price;
     double discount;
-
+    int(*seat_map)[26];
     struct Movie* next; // 指向下一个电影场次（链表）
     struct Movie *hash_next;
 } Movie;
