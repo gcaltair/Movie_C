@@ -76,7 +76,7 @@ char* get_orderID();
 
 //通过seats计算座位数
 //retunr 0 : 计算失败
-//       1 ：计算成功
+//       >=1 ：计算成功
 int get_seat_number(char* seats);
 
 //检验座位输入

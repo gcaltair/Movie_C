@@ -28,19 +28,28 @@ int main() {
     //}
     
 }
-static Film* hot_films()//有问题
+static Film* hot_films()
 {
+    // 首先，复制原始的电影列表，以避免直接修改原始数据  
     Film* copied_list = film_copy_list(film_list);
+
+    // 使用评分比较函数对复制的电影列表进行排序  
     Film* film_list_hot = film_sort(copied_list, compare_films_by_ratings);
+    // 静态变量t用于记录当前热门电影列表中的位置  
     static int t = 0;
+    // 使用静态变量t作为索引，跳过前t个电影，以便每次调用时返回下一个热门电影  
     for (int i = 0; i < t; ++i)
-        film_list_hot = film_list_hot->next;
+        if (film_list_hot != NULL) // 确保不会越界  
+            film_list_hot = film_list_hot->next;
+    // 更新索引，为下一次调用准备  
     ++t;
+    // 如果索引超过了热门电影列表的长度（假设不超过5），则重置索引  
     if (t >= 5) t %= 5;
+    // 释放复制的电影列表占用的内存  
     film_list_free(copied_list);
+    // 返回当前热门电影列表中的下一个电影（或者如果列表为空，则为NULL）  
     return film_list_hot;
-}
-static void user_operation()
+}static void user_operation()
 {
     while (1)
     {
@@ -83,8 +92,14 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
     Movie* target_movie = for_user_movie_choose(movie_filtered_list,movieHashTable ); //得到target_movie
     movie_show(target_movie);
     seat_map_show(target_movie->seat_map);
-    //printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
+    printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
     order_generate_main(user_now, target_movie);
+    seat_map_show(target_movie->seat_map);
+    printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
+    //recharge_main( );
+    //process_pay_main( );
+    //order_cancle_main( );
+    //ticket_refund_main();
     movie_list_free(movie_raw_list);
     movie_list_free(movie_filtered_list);
     return target_movie;
@@ -748,11 +763,11 @@ int process_pay_main_order(Order* order) {
         }
     }
     else {
-        while (balance_check(order, orderHashTable) == 2) {
+        while (balance_check(order, orderHashTable) == 0) {
             printf("余额不足,您还需充值%f元`.继续充值请按1，放弃充值请按0\n", get_debt(order, orderHashTable));
             int cer = get_user_input_int(1);
             if (cer) {
-                if (balance_check(order, orderHashTable) != 1) {
+                if (balance_check(order, orderHashTable) == 0) {
                     continue;
                 }
                 else {
@@ -767,12 +782,12 @@ int process_pay_main_order(Order* order) {
 }
 
 //充值
-void recharge_main( ) {
-    char* userID;
+void recharge_main(void) {
+    char userID[100]; // 假设用户ID不会超过99个字符  
     while (1) {
-        if (scanf("%s", userID) != 1) {
+        if (scanf("%99s", userID) != 1) { // 使用宽度限制来防止缓冲区溢出  
             printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n');
+            while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
             continue;
         }
         break;
@@ -782,10 +797,10 @@ void recharge_main( ) {
     }
     else {
         User* usr = user_find_by_id(user_list, userID);
-        printf("请输入您的充值金额.\n");// 获取充值金额并调用充值函数  
+        printf("请输入您的充值金额.\n");
         double money;
         while (1) {
-            if (scanf("%lf", money) != 1) {
+            if (scanf("%lf", &money) != 1) { // 注意 &money 而不是 money  
                 printf("输入无效，请重新输入。\n");
                 while (getchar() != '\n');
                 continue;
@@ -795,15 +810,14 @@ void recharge_main( ) {
         recharge(usr, money);
     }
 }
-
 //用户根据订单付款
-int process_pay_main( ) {
+int process_pay_main(void) {
+    char orderID[100]; // 假设订单ID不会超过99个字符  
     printf("请输入您要取消的orderID.\n");
-    char* orderID;
     while (1) {
-        if (scanf("%s", orderID) != 1) {
+        if (scanf("%99s", orderID) != 1) { // 使用宽度限制来防止缓冲区溢出  
             printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n');
+            while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
             continue;
         }
         break;
@@ -814,7 +828,7 @@ int process_pay_main( ) {
     }
     Order* order = find_order_in_hash_table(orderHashTable, orderID);
     return process_pay_main_order(order);
-}
+}  
 
 //取消订单
 //return 0 ： 输入无效订单或用户信息获取失败
@@ -912,19 +926,20 @@ static void hash_ini()
     movieHashTable = movie_hash_table_create();
     filmHashTable = film_hash_table_create();
 }
+
 static void load_file() {
     void* context1[] = { userHashTable,&user_list };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
     void* context2[] = { &film_list,filmHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
     void* context3[] = { &cinema_list };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\cinemas.csv", handle_cinema_data, context3);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\cinemas.csv", handle_cinema_data, context3);
     void* context4[] = { cinema_list,&admin_list };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\admins.csv", handle_admin_data, context4);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\admins.csv", handle_admin_data, context4);
     void* context5[] = { &theater_list,&cinema_list,theaterHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\theaters.csv", handle_theater_data, context5);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\theaters.csv", handle_theater_data, context5);
     void* context6[] = { &movie_list,movieHashTable,theaterHashTable,filmHashTable };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
 
     void* context7[] = {
             orderHashTable,   // 订单哈希表
@@ -932,7 +947,7 @@ static void load_file() {
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-    load_data_from_csv("C:\\Users\\Lenovo\\Source\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
+    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
 }
 
 

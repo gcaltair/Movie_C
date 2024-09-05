@@ -667,40 +667,41 @@ double get_movie_income(User* usr, Movie* movie, Order_hash_table* hashTable) {
 //智能推荐座位图
 //返回距离F13，F14最近的可购买的三个位置，返回格式"F11-F12-F15",进入函数前需判断余票数大于等于3
 char* get_great_seats(int(*seat_map)[26]) {
-	char* great_seats = malloc(13 * sizeof(char));
+	char* great_seats = malloc(13 * sizeof(char)); // 假设最多找到 3 个座位，每个座位表示需要 4 个字符（'A'-'Z' + '1'-'99' + '-'）  
+	if (great_seats == NULL) {
+		return NULL; // 内存分配失败  
+	}
 	memset(great_seats, 0, 13 * sizeof(char));
 	int count = 0;
-	int line_better[3];//用于存储作为信息
-	int row_better[3];//用于存储作为信息
-	for (double i = 0.5; i < 18; i++) {//座位图是9行26列，认为第六行中间为最佳位置，可认为第6行，第13.5列，故用double值，最大差值为17.5，故i < 18
-		if (count >= 3) {//找到三个后不再循环
-			break;
-		}
-		for (int line = 0; line < 9; line++) {//遍历座位图
-			if (count >= 3) {
-				break;
-			}
-			for (int row = 0; row < 26; row++) {
-				double difference = 1.0 * abs(line - 6) + fabs(1.0 * row - 13.5);//计算行数，列数到6-13.5距离
-				if (count >= 3) {
-					break;
-				}
-				if (seat_map[line][row] == 1 && fabs(difference - i) < 1e-6) {//得到的差值与differemce比较
+	int line_better[3];
+	int row_better[3];
+	for (double i = 0.5; i < 18.0 && count < 3; i += 1.0) { // 增量改为 1.0，避免浮点数精度问题  
+		for (int line = 0; line < 9 && count < 3; line++) {
+			for (int row = 0; row < 26 && count < 3; row++) {
+				double difference = fabs(line - 6) + fabs(row - 13.5);
+				if (seat_map[line][row] == 1 && fabs(difference - i) < 1e-6) {
 					line_better[count] = line;
 					row_better[count] = row;
 					count++;
+					if (count == 3) break; // 一旦找到 3 个座位就跳出内层循环  
 				}
 			}
+			if (count == 3) break; // 一旦找到 3 个座位就跳出中层循环  
 		}
+		if (count == 3) break; // 一旦找到 3 个座位就跳出外层循环  
 	}
 
-	for (int i = 0; i < count; i++) {//通过循环把得到的行列数增加到输出的字符串之后
-		char better[4];
-		sprintf(better, "%c%d-", line_better[i] + 'A', row_better[i] + 1);//需将返回的行数转化为字母的形式
-		strcat(great_seats, better);
+	char temp[6]; // 足够大以容纳 'Z99-'  
+	for (int i = 0; i < count; i++) {
+		sprintf(temp, "%c%d-", line_better[i] + 'A', row_better[i] + 1);
+		strcat(great_seats, temp);
 	}
-	size_t len = strlen(great_seats);//删去结尾的 -
+	size_t len = strlen(great_seats);
 	great_seats[len - 1] = '\0';
+	return great_seats;
+	// 不需要删除结尾的 '-'，因为 strcat 不会自动添加 '-'  
+	// 如果需要确保字符串不以 '-' 结尾（尽管在这个逻辑中不会），可以检查并删除  
+
 	return great_seats;
 }
 
