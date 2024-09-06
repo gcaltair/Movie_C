@@ -12,6 +12,7 @@
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
 #include"../Structure File/String_set.h"
+#include"../user_system.h"
 //订座位，seats为用户视角下，故行与列均-1
 // 座位  0 ：不在影院座次范围内
 //       1 ：可购买
@@ -317,7 +318,9 @@ int saets_check(char* seats, int(*seat_map)[26]) {
 		return 2;
 	}
 
-	char* token = strtok(seats, "-");//利用strtok函数对其进行分段
+	char seats_copy[30];
+	strcpy(seats_copy, seats);
+	char* token = strtok(seats_copy, "-");//利用strtok函数对其进行分段
 	char charline[3];//用于存储座位信息
 	int line[3];//用于存储座位信息
 	int row[3];//用于存储座位信息
@@ -505,7 +508,9 @@ void recharge(User* usr, double money) {
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
 int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable) {
-	char* token = strtok(order->seats, "-");//利用strtok函数对其进行分段
+	char seats_copy[30];
+	strcpy(seats_copy, order->seats);
+	char* token = strtok(seats_copy, "-");//利用strtok函数对其进行分段
 	char charline[3];//用于存储座位信息
 	int line[3];//用于存储座位信息
 	int row[3];//用于存储座位信息
@@ -560,7 +565,9 @@ void order_cancel(Order* order) {
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
 int ticket_refund(Order* order, int(*seat_map)[26], Order_hash_table* hashTable) {
-	char* token = strtok(order->seats, "-");//利用strtok函数对其进行分段
+	char seats_copy[30];
+	strcpy(seats_copy, order->seats);
+	char* token = strtok(seats_copy, "-");//利用strtok函数对其进行分段
 	char charline[4];//用于存储座位信息
 	int line[3];//用于存储座位信息
 	int row[3];//用于存储座位信息
@@ -770,4 +777,14 @@ Order* order_list_create_by_user(User* usr, Order_hash_table* order_hash_table) 
 		head_order = head_order->next;
 	}
 	return new_head;
+}
+void order_list_show_by_user(User* usr, Order_hash_table* hashTable) {
+	if (usr == NULL) {
+		printf("找不到用户.\n");
+	}
+	Linked_string_list* order = usr->my_order;
+	while (order != NULL) {
+		order_print_for_user(find_order_in_hash_table(hashTable, order->id));
+		order = order->next;
+	}
 }

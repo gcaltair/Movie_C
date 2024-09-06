@@ -292,7 +292,8 @@ void order_print_for_user(const Order* order)
     printf("Status: %d\n", order->status);//展示order内容
     printf("Time: %s\n", order->time);//展示order内容
     printf("Price:%f\n", order->price);//展示order内容
-    movie_show(order->movie);//展示order内容
+   
+    movie_print(order->movie);//展示order内容
     // 可以根据需要显示更多的订单信息
 }
 void movie_list_print(const Movie* movie_list)
@@ -527,6 +528,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         for (int i = 0; i < duration_day; ++i)
         {
             // 确保Theater和Film存在
+
             if (theater == NULL || film == NULL) {
                 printf("Theater或Film对象为空，无法添加电影。\n");
                 return 2;
@@ -542,8 +544,9 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
             strcat(date_time_start, start_time);
             strcat(date_time_end, end_time);
             start_day++;
-
             
+            strcat(date_time_start, ":00"); strcat(date_time_end, ":00");
+
             Movie* new_movie = movie_create(movie_hash_table, movie_id, film->film_id, film, theater->theater_id, theater, date_time_start, date_time_end, remaining_ticket, price, discount);
             if (new_movie == NULL) {
                 return 2;
@@ -613,6 +616,8 @@ int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, cha
             strcat(date_time_start, start_time);
             strcat(date_time_end, end_time);
             start_day++;
+
+            strcat(date_time_start, ":00"); strcat(date_time_end, ":00");
 
 
             Movie* new_movie = movie_create(movie_hash_table, movie_id, film->film_id, film, theater->theater_id, theater, date_time_start, date_time_end, remaining_ticket, price, discount);
@@ -907,7 +912,7 @@ void display_user_greet()
     printf("* 1. 电影购票                                   *\n");
     printf("* 2. 正在热映                                   *\n");
     printf("* 3. 我的订单                                   *\n");
-    printf("* 4. 个人中心                                   *\n");
+    printf("* 4. 充值                                       *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");

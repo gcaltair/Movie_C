@@ -5,14 +5,18 @@ int main() {
     printf("test\n");
     hash_ini();
     load_file();
-    admin_now = admin_find_by_id(admin_list, "A001"); 
-    user_now = find_user_in_hash_table(userHashTable, "U001");
-    
-    /*Film* target_film = find_film_in_hash_table_by_name(filmHashTable, "Inception");
-    Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);*/
-    //user_operation();
-    
-    admin_operation();
+
+     
+    while (1)
+    {
+        system("cls");
+        do
+        {
+            mode = login();
+        }while(!mode);
+        if (mode == admin_mode) admin_operation();
+        else if (mode == user_mode) user_operation();
+    }
     //while (1) {
     //    system("cls");
     //    do {
@@ -20,13 +24,12 @@ int main() {
     //    } while (!mode);
     //    if (mode == admin_mode)
     //    {
-    //        admin_opreation();
+    //        admin_operation();
     //    }
-    //    else if (mode == user_mode)
+    //    else
     //    {
-    //        printf("\nWelcome user");
+    //        user_operation();
     //    }
-    //}
     write_file();
     
 }
@@ -51,11 +54,12 @@ static Film* hot_films()
     film_list_free(copied_list);
     // 返回当前热门电影列表中的下一个电影（或者如果列表为空，则为NULL）  
     return film_list_hot;
-}static void user_operation()
+}
+static void user_operation()
 {
     while (1)
     {
-        //system("cls");
+        system("cls");
         display_user_greet();
         int option = get_user_input_int(4);
         switch (option)
@@ -73,8 +77,54 @@ static Film* hot_films()
             if (!choosed_movie) break;
             //然后购票
             break;
+        case 3:
+            printf("请选择您的功能:\n1.查看订单.\n2.付款\n3.取消订单\n4.退款\n\n0.退出\n");
+            int cer = get_user_input_int(4);
+            switch (cer) {
+            case 1:
+                printf("请输入您的userID:\n");
+                char userID[100];
+                while (1) {
+                    if (scanf("%99s", userID) != 1) { // 使用宽度限制来防止缓冲区溢出  
+                        printf("输入无效，请重新输入。\n");
+                        while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
+                        continue;
+                    }
+                    break;
+                }
+                User* usr = user_find_by_id(user_list, userID);
+                if (usr == NULL) {
+                    printf("您输入的userID无效.\n");
+                    break;
+                }
+                else {
+                    order_list_show_by_user(usr, orderHashTable);
+                    press_zero_to_continue();
+                    break;
+                }
+            case 2:
+                process_pay_main();
+                press_zero_to_continue();
+                break;
+            case 3:
+                order_cancle_main();
+                press_zero_to_continue();
+                break;
+            case 4:
+                ticket_refund_main();
+                press_zero_to_continue();
+                break;
+            case 0:
+                 break;
+            }
+            break;
+        case 4:
+            recharge_main();
+            press_zero_to_continue();
+            break;
         default:
             return;
+            break;
         }
     }
 }
@@ -96,12 +146,12 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
     seat_map_show(target_movie->seat_map);
     printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
     order_generate_main(user_now, target_movie);
-    seat_map_show(target_movie->seat_map);
-    printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
-    //recharge_main( );
-    //process_pay_main( );
-    //order_cancle_main( );
-    //ticket_refund_main();
+    
+
+    /*recharge_main( );
+    process_pay_main( );
+    order_cancle_main( );
+    ticket_refund_main();*/
     movie_list_free(movie_raw_list);
     movie_list_free(movie_filtered_list);
     return target_movie;
@@ -120,7 +170,7 @@ static void sub_purchase_by_name()
         if (target_film !=NULL) break;
     }
     Movie* target_movie = search_target_film_and_choose_movie(target_film); //得到target movie然后购买
-    order_generate_main(user_now, target_movie);
+
 }
 static void sub_purchase_by_name_and_cinema()
 {
@@ -167,7 +217,7 @@ static void user_purchase_ticket()
 {
     while (1)
     {
-        //system("cls");
+        system("cls");
         display_purchase_ticket();
         int option = get_user_input_int(4);
         switch (option)
@@ -196,7 +246,7 @@ static void user_purchase_ticket()
 static void admin_operation()
 {
     while (1) {
-        //system("cls");
+        system("cls");
         admin_greet();
         int option = get_user_input_int(5);
         switch (option)
@@ -273,7 +323,7 @@ static void admin_movie_manage()//排片管理
 {
     while (1)
     {
-        //system("cls");
+        system("cls");
         display_admin_movie_manage_greet();
         int option = get_user_input_int(3);
         switch (option)
@@ -329,7 +379,7 @@ static void admin_theater_manage()//theater的删除没做
 {
     while (1)
     {
-        //system("cls");
+        system("cls");
         admin_theater_manage_greet();
         int option = get_user_input_int(3);
         switch (option)
@@ -366,7 +416,7 @@ static void admin_order_manage()
 {
     while (1)
     {
-        //system("cls");
+        system("cls");
         admin_order_manage_greet(); char text[20];
         int option = get_user_input_int(2);
         switch (option)
@@ -398,6 +448,7 @@ static void admin_order_manage()
 static void user_view_and_count_movie()
 {
     Movie* new_movie_list = movie_filter_by_not_played(movie_list);
+    movie_list_print(new_movie_list);
     if (!new_movie_list)
     {
         printf("当前无可用场\n");
@@ -405,22 +456,29 @@ static void user_view_and_count_movie()
     }
     while (1)
     {
-        //system("cls");
+        system("cls");
+        
         display_user_movie_operate_main_menu();
+        
         int option = get_user_input_int(3);
         switch (option)
         {
         case 1://选择了排序
             new_movie_list = for_user_movie_sort(new_movie_list);//进入排序界面
+
             break;
         case 2://选择了筛选
             new_movie_list = for_user_movie_filter(new_movie_list);
             break;
         case 3:
+            
             Movie * movie_choice = movie_choose(new_movie_list, movieHashTable);
             if (movie_choice == NULL) break;
             movie_print(movie_choice);
-            //然后进入购票，会有返回值
+            order_generate_main(user_now, movie_choice);
+            seat_map_show(movie_choice->seat_map);
+            printf("该场次的推荐%s.\n", get_great_seats(movie_choice->seat_map));
+            order_generate_main(user_now, movie_choice);
             break;
         default:
             movie_list_free(new_movie_list);
@@ -435,13 +493,14 @@ static void admin_view_and_count_order(){
     
     while (1)
     {
-        //system("cls");
+        system("cls");
         display_movie_operate_main_menu();
         int option = get_user_input_int(4);
         switch (option)
         {
         case 1://选择了排序
             new_movie_list = for_admin_movie_sort(new_movie_list);//进入排序界面
+            
             break;
         case 2://选择了筛选
             new_movie_list= for_admin_movie_filter(new_movie_list);
@@ -467,7 +526,7 @@ Movie* for_user_movie_sort(Movie* new_movie_list)
 {
     while (1)
     {
-        //Movie* temp = new_movie_list;
+        
         system("cls");
         display_user_sort_menu();
         int option = get_user_input_int(3);
@@ -476,6 +535,7 @@ Movie* for_user_movie_sort(Movie* new_movie_list)
         {
         case 1:
             new_movie_list = movie_operation_sort(new_movie_list, 2);
+            //movie_print(new_movie_list);
             printf("按价格排序完成");
             break;
         case 2:
@@ -486,7 +546,8 @@ Movie* for_user_movie_sort(Movie* new_movie_list)
             new_movie_list = movie_operation_sort(new_movie_list, 5);
             printf("按剩余票数排序完成");
             break;
-        default:
+        case 0:
+
             return new_movie_list;
         }
         press_zero_to_continue();
@@ -785,32 +846,14 @@ int process_pay_main_order(Order* order) {
 
 //充值
 void recharge_main(void) {
-    char userID[100]; // 假设用户ID不会超过99个字符  
-    while (1) {
-        if (scanf("%99s", userID) != 1) { // 使用宽度限制来防止缓冲区溢出  
-            printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
-            continue;
-        }
-        break;
-    }
-    if (user_find_by_id(user_list, userID) == NULL) {
-        printf("您输入的userID无效.\n");
-    }
-    else {
-        User* usr = user_find_by_id(user_list, userID);
-        printf("请输入您的充值金额.\n");
-        double money;
-        while (1) {
-            if (scanf("%lf", &money) != 1) { // 注意 &money 而不是 money  
-                printf("输入无效，请重新输入。\n");
-                while (getchar() != '\n');
-                continue;
-            }
-            break;
-        }
-        recharge(usr, money);
-    }
+    
+
+    printf("输入金额");
+    double money = get_user_input_double(50, 5000);
+    scanf("%lf", &money);
+        
+    recharge(user_now, money);
+    
 }
 //用户根据订单付款
 int process_pay_main(void) {
