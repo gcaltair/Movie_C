@@ -66,4 +66,6 @@ int process_pay_main( );
 int order_cancle_main( );
 void recharge_main( );
 int ticket_refund_main( );
+
+static void write_file();
 #endif //MOVIE_C_TEST_H

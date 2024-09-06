@@ -676,8 +676,9 @@ int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_tabl
     }
 
     printf("系统为您选择的时段是：\n");
+    end_min = start_min + time;
     theater_print(re__iterate_head);
-    print_start_and_end_time(start_min, end_min);
+    print_start_and_end_time(start_min, start_min+time);
     if (pre_flow_theater)
     {
         printf("存在%d个人流冲突场次", pre_flow_theater);

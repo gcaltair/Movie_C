@@ -10,8 +10,9 @@ int main() {
     
     /*Film* target_film = find_film_in_hash_table_by_name(filmHashTable, "Inception");
     Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);*/
-    user_operation();
-    //admin_operation();
+    //user_operation();
+    
+    admin_operation();
     //while (1) {
     //    system("cls");
     //    do {
@@ -26,6 +27,7 @@ int main() {
     //        printf("\nWelcome user");
     //    }
     //}
+    write_file();
     
 }
 static Film* hot_films()
@@ -929,17 +931,17 @@ static void hash_ini()
 
 static void load_file() {
     void* context1[] = { userHashTable,&user_list };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\users.csv", handle_user_data, context1);
+    load_data_from_csv("users.csv", handle_user_data, context1);
     void* context2[] = { &film_list,filmHashTable };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\films.csv", handle_film_data, context2);
+    load_data_from_csv("films.csv", handle_film_data, context2);
     void* context3[] = { &cinema_list };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\cinemas.csv", handle_cinema_data, context3);
+    load_data_from_csv("cinemas.csv", handle_cinema_data, context3);
     void* context4[] = { cinema_list,&admin_list };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\admins.csv", handle_admin_data, context4);
+    load_data_from_csv("admins.csv", handle_admin_data, context4);
     void* context5[] = { &theater_list,&cinema_list,theaterHashTable };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\theaters.csv", handle_theater_data, context5);
+    load_data_from_csv("theaters.csv", handle_theater_data, context5);
     void* context6[] = { &movie_list,movieHashTable,theaterHashTable,filmHashTable };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\movies.csv", handle_movie_data, context6);
+    load_data_from_csv("movies.csv", handle_movie_data, context6);
 
     void* context7[] = {
             orderHashTable,   // 订单哈希表
@@ -947,7 +949,18 @@ static void load_file() {
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-    load_data_from_csv("D:\\Repos\\Movie_C\\Data\\order.csv", handle_order_data, context7);
+    load_data_from_csv("order.csv", handle_order_data, context7);
 }
+static void write_file()
+{
+    write_users_to_csv("users.csv", user_list);
+    write_cinemas_to_csv("cinemas.csv", cinema_list);
+    write_films_to_csv("films.csv", film_list);
+    write_movies_to_csv("movies.csv", movie_list);
+    write_orders_to_csv("Order.csv", order_list);
+    write_theaters_to_csv("theater.csv", theater_list);
+    write_admins_to_csv("admins.csv", admin_list);
+    
 
+}
 

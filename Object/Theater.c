@@ -99,7 +99,6 @@ Theater* theater_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theat
         else
         {
             Theater* new_theater = theater_copy_info(theater_find);  
-            string_node_show_all(new_theater->my_movie);
             theater_add_to_list(&new_head, new_theater);  
         }
         head_theater = head_theater->next;  
