@@ -142,7 +142,7 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
         return;
     }
     Movie* target_movie = for_user_movie_choose(movie_filtered_list,movieHashTable ); //得到target_movie
-    movie_show(target_movie);
+    movie_print(target_movie);
     seat_map_show(target_movie->seat_map);
     printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
     order_generate_main(user_now, target_movie);
@@ -152,8 +152,8 @@ Movie* search_target_film_and_choose_movie(Film* target_film)
     process_pay_main( );
     order_cancle_main( );
     ticket_refund_main();*/
-    movie_list_free(movie_raw_list);
-    movie_list_free(movie_filtered_list);
+    /*movie_list_free(movie_raw_list);
+    movie_list_free(movie_filtered_list);*/
     return target_movie;
 }
 static void sub_purchase_by_name()
@@ -448,7 +448,6 @@ static void admin_order_manage()
 static void user_view_and_count_movie()
 {
     Movie* new_movie_list = movie_filter_by_not_played(movie_list);
-    movie_list_print(new_movie_list);
     if (!new_movie_list)
     {
         printf("当前无可用场\n");
@@ -473,6 +472,7 @@ static void user_view_and_count_movie()
         case 3:
             
             Movie * movie_choice = movie_choose(new_movie_list, movieHashTable);
+            
             if (movie_choice == NULL) break;
             movie_print(movie_choice);
             order_generate_main(user_now, movie_choice);
@@ -485,6 +485,18 @@ static void user_view_and_count_movie()
             new_movie_list = NULL;
             return;
         }
+    }
+}
+static void from_user_print_order(Movie* movie)
+{
+    Order* new_head=order_list;
+    while (new_head)
+    {
+        if (!strcmp(movie->movie_id, new_head->movie_id))
+        {
+            order_print_for_user(new_head);
+        }
+        new_head = new_head->next;
     }
 }
 static void admin_view_and_count_order(){
@@ -508,7 +520,9 @@ static void admin_view_and_count_order(){
         case 3:
             Movie * movie_choice = movie_choose(new_movie_list,movieHashTable);
             if (movie_choice == NULL) break;
-            movie_print(movie_choice);
+            printf("该场次的订单是:\n\n");
+            from_user_print_order(movie_choice);
+            press_zero_to_continue();
             //order_show_all //然后输出所有当前场次的订单
             break;
         case 4:
@@ -881,7 +895,7 @@ int process_pay_main(void) {
 //       2 ： 取消失败  
 int order_cancle_main( ) {
     printf("请输入您要取消的orderID.\n");
-    char* orderID;
+    char orderID[20];
     while (1) {
         if (scanf("%s", orderID) != 1) {
             printf("输入无效，请重新输入。\n");
@@ -992,7 +1006,7 @@ static void load_file() {
             movieHashTable,   // 电影哈希表
             &order_list,      // 订单链表
     };
-    load_data_from_csv("order.csv", handle_order_data, context7);
+    load_data_from_csv("orders.csv", handle_order_data, context7);
 }
 static void write_file()
 {
@@ -1000,8 +1014,8 @@ static void write_file()
     write_cinemas_to_csv("cinemas.csv", cinema_list);
     write_films_to_csv("films.csv", film_list);
     write_movies_to_csv("movies.csv", movie_list);
-    write_orders_to_csv("Order.csv", order_list);
-    write_theaters_to_csv("theater.csv", theater_list);
+    write_orders_to_csv("orders.csv", order_list);
+    write_theaters_to_csv("theaters.csv", theater_list);
     write_admins_to_csv("admins.csv", admin_list);
     
 

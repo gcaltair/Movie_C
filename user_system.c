@@ -210,13 +210,19 @@ int get_user_input_int(int max) {
     }
 }
 // 检查日期格式是否为 YYYY-MM-DD
+// 判断闰年
+bool is_leap_year(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+// 验证日期是否为有效的格式和有效日期
 bool is_valid_date_format(const char* date) {
     // 长度必须为 10
     if (strlen(date) != 10) {
         return false;
     }
 
-    // 检查每一部分是否符合要求
+    // 检查格式是否为 YYYY-MM-DD
     for (int i = 0; i < 10; i++) {
         if (i == 4 || i == 7) {
             if (date[i] != '-') {
@@ -230,8 +236,32 @@ bool is_valid_date_format(const char* date) {
         }
     }
 
+    // 提取年份、月份、天数
+    int year = atoi(date);
+    int month = atoi(date + 5);
+    int day = atoi(date + 8);
+
+    // 检查月份是否有效
+    if (month < 1 || month > 12) {
+        return false;
+    }
+
+    // 检查天数是否有效
+    int max_days_in_month[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    // 如果是闰年，2 月有 29 天
+    if (is_leap_year(year)) {
+        max_days_in_month[1] = 29;
+    }
+
+    // 检查天数是否有效
+    if (day < 1 || day > max_days_in_month[month - 1]) {
+        return false;
+    }
+
     return true;
 }
+
 
 // 获取用户输入并确保格式正确
 int get_valid_date_input(char* date) {
@@ -276,7 +306,7 @@ void movie_print_for_user(const Movie* movie)
     printf("余票数: %d\n", movie->remaining_ticket);
     printf("价格: %.2f\n", movie->price);
     printf("折扣: %.2f\n", movie->discount);
-    printf("------------\n");
+    printf("------------\n\n");
 }
 void order_print_for_user(const Order* order)
 {
@@ -284,16 +314,16 @@ void order_print_for_user(const Order* order)
         printf("Order not found.\n");
         return;
     }
-    printf("OrderID: %s\n", order->orderID);//展示order内容
-    printf("UserID: %s\n", order->user_id);//展示order内容
-    printf("Movie ID: %s\n", order->movie_id);//展示order内容
-    printf("Seats: %s\n", order->seats);//展示order内容
-    printf("Seat number: %d\n", order->seat_number);//展示order内容
-    printf("Status: %d\n", order->status);//展示order内容
-    printf("Time: %s\n", order->time);//展示order内容
-    printf("Price:%f\n", order->price);//展示order内容
-   
-    movie_print(order->movie);//展示order内容
+    printf("订单ID: %s\n", order->orderID);//展示order内容
+    printf("用户ID: %s\n", order->user_id);//展示order内容
+    printf("场次 ID: %s\n", order->movie_id);//展示order内容
+    printf("座位 %s\n", order->seats);//展示order内容
+    printf("座位个数: %d\n", order->seat_number);//展示order内容
+    printf("订单状态: %d\n", order->status);//展示order内容
+    printf("订单时间: %s\n", order->time);//展示order内容
+    printf("订单价格: %f\n", order->price);//展示order内容
+    printf("-----------------");
+    //movie_print(order->movie);//展示order内容
     // 可以根据需要显示更多的订单信息
 }
 void movie_list_print(const Movie* movie_list)
