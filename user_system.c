@@ -21,8 +21,66 @@
 #include"Object/Order.h"
 #include"Structure File/interval_tree.h"
 #include"Structure File/linked_list.h"
+#include"Structure File/io_system.h"
 
+void sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, User* user_now)
+{
+    char cinema_name[20]; char film_name[20]; Cinema* target_cinema; Film* target_film;
+    while (1)
+    {
+        printf("请输入电影院名称：\n");
+        get_user_input_string(cinema_name, 15);
+        target_cinema = cinema_find_by_name(cinema_list, cinema_name);
+        if (!target_cinema)
+        {
+            printf("未找到电影院，是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;
+        }
+        if (target_cinema) break;
+    }
+    while (1)
+    {
+        printf("请输入电影名称：\n");
+        get_user_input_string(film_name, 15);
+        target_film = find_film_in_hash_table_by_name(filmHashTable, film_name);
+        if (!target_film)
+        {
+            printf("未找到电影，是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;
+        }
+        if (target_film) break;
+    }
 
+    Movie* raw_movie_list = movie_list_create_by_film(target_film, movieHashTable);
+    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(film_name, raw_movie_list);
+    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list, movieHashTable);
+    if (!choosed_movie) return;
+    //然后进入付款
+    movie_list_free(raw_movie_list);
+    movie_list_free(cinema_film_movie_list);
+    if (choosed_movie) {
+
+        order_generate_main(user_now, choosed_movie);
+
+    }
+}
+
+void sub_purchase_by_name(Film_hash_table* filmHashTable, Movie* movieHashTable, User* user_now)
+{
+    Film* target_film;
+    while (1) {
+        printf("请输入电影名称：");
+        char scanf_movie_name[30]; get_user_input_string(scanf_movie_name, 20);
+        target_film = find_film_in_hash_table_by_name(filmHashTable, scanf_movie_name);
+        if (target_film == NULL) {
+            printf("无法找到当前影片,是否重新输入?(1/0)");
+            if (!get_user_input_int(1)) return;  //如果输入0退出循环
+        }
+        if (target_film != NULL) break;
+    }
+    Movie* target_movie = search_target_film_and_choose_movie(target_film, movieHashTable, user_now); //得到target movie然后购买
+
+}
 
 bool user_password_check(User *usr,User_hash_table*userHashTable)
 {
@@ -40,7 +98,7 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
             return 0;
         }
         printf("请输入密码:");
-        if (!getPassword(password, 20)) return 0;
+        if (!get_password(password, 20)) return 0;
         
         key=!strcmp(usr->password,password);
         if(!key) {
@@ -53,58 +111,11 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
     } while (!key);
     return 1;
 }
-bool admin_password_check(Admin* admin,Admin* admin_list){
-    if(!admin) return 0;
-    int count=0;char password[20];bool key=0;
-    do {
-        if(count>=5)
-        {
-            for (int i = 0; i < 60; ++i) {
-                system("cls");
-                printf("请稍后重试 您已等待 %d/60",i);
-                _sleep(1000);
-            }
-            count-=3;
-            return 0;
-        }
-        printf("请输入密码:");
-        if(!getPassword(password, 20)) return 0;
-        key=!strcmp(admin->admin_password,password);
-        if(!key) {
-            printf("\n密码错误!\n");
-            count++;
-            _sleep(500);
-            system("cls");
-            printf("请输入您的ID:%s\n",admin->admin_id);
-        }
-    } while (!key);
-    return 1;
-}
 
 
 
-static bool getPassword(char *password, int maxLen) {
-    int i = 0;
-    char ch;
-    while (i < maxLen - 1) {
-        ch =_getch(); // 读取一个字符但不显示
-        if(ch==26||ch==3) return 0;
-        if (ch == '\r') { // 检测到回车符（Enter键）
-            break;
-        } else if (ch == '\b') { // 处理退格键
-            if (i > 0) {
-                i--;
-                printf("\b \b"); // 删除一个字符
-            }
-        } else {
-            password[i++] = ch;
 
-            printf("*"); // 显示星号
-        }
-    }
-    password[i] = '\0'; // 字符串末尾添加终止符
-    return 1;
-}
+
 bool change_password(const char* current_password,char* new_password) {
     char input_password[20]; // 用于存储用户输入的当前密码
     char new_password1[20];  // 用于存储用户第一次输入的新密码
@@ -112,7 +123,7 @@ bool change_password(const char* current_password,char* new_password) {
 
     // 输入当前密码
     printf("请输入当前密码: ");
-    if (!getPassword(input_password, sizeof(input_password))) {
+    if (!get_password(input_password, sizeof(input_password))) {
         printf("\n密码输入失败。\n");
         return false;
     }
@@ -126,7 +137,7 @@ bool change_password(const char* current_password,char* new_password) {
 
     // 输入新密码（第一次）
     printf("请输入新密码: ");
-    if (!getPassword(new_password1, sizeof(new_password1))) {
+    if (!get_password(new_password1, sizeof(new_password1))) {
         printf("\n密码输入失败。\n");
         return false;
     }
@@ -134,7 +145,7 @@ bool change_password(const char* current_password,char* new_password) {
 
     // 输入新密码（第二次）
     printf("请再次输入新密码: ");
-    if (!getPassword(new_password2, sizeof(new_password2))) {
+    if (!get_password(new_password2, sizeof(new_password2))) {
         printf("\n密码输入失败。\n");
         return false;
     }

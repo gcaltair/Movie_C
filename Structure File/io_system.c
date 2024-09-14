@@ -71,6 +71,31 @@ int get_user_input_int(int max) {
         }
     }
 }
+
+bool get_password(char* password, int maxLen) {
+    int i = 0;
+    char ch;
+    while (i < maxLen - 1) {
+        ch = _getch(); // 读取一个字符但不显示
+        if (ch == 26 || ch == 3) return 0;
+        if (ch == '\r') { // 检测到回车符（Enter键）
+            break;
+        }
+        else if (ch == '\b') { // 处理退格键
+            if (i > 0) {
+                i--;
+                printf("\b \b"); // 删除一个字符
+            }
+        }
+        else {
+            password[i++] = ch;
+
+            printf("*"); // 显示星号
+        }
+    }
+    password[i] = '\0'; // 字符串末尾添加终止符
+    return 1;
+}
 // 检查日期格式是否为 YYYY-MM-DD
 // 判断闰年
 bool is_leap_year(int year) {
@@ -243,6 +268,19 @@ char* get_valid_phone_number() {
         else {
             printf("输入不合法，请重新输入。\n");
         }
+    }
+}
+
+void from_user_print_order(Movie* movie,Order* order_list)
+{
+    Order* new_head = order_list;
+    while (new_head)
+    {
+        if (!strcmp(movie->movie_id, new_head->movie_id))
+        {
+            order_print_for_user(new_head);
+        }
+        new_head = new_head->next;
     }
 }
 void movie_list_print(const Movie* movie_list)

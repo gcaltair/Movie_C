@@ -9,10 +9,12 @@ typedef struct User_hash_table User_hash_table;
 typedef struct Admin Admin;
 typedef struct Film Film;
 typedef struct Order Order;
-bool admin_password_check(Admin* admin,Admin* admin_list);
-bool user_password_check(User *usr,User_hash_table*userHashTable);
-static bool getPassword(char* password, int maxLen);
 
+void sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, User* user_now);
+
+void sub_purchase_by_name(Film_hash_table* filmHashTable, Movie* movieHashTable, User* user_now);
+
+bool user_password_check(User *usr,User_hash_table*userHashTable);
 
 int date_to_days(const char* date);
 void days_to_date(int days, char* date);
@@ -24,6 +26,8 @@ int hhmm_to_minutes(const char* hhmm);
 void print_start_and_end_time(int start_min, int end_min);
 
 void press_zero_to_continue();
+
+int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table);
 
 
 

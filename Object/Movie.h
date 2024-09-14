@@ -6,6 +6,7 @@
 typedef struct Movie_hash_table Movie_hash_table;
 typedef struct Film Film;
 typedef struct Film_hash_table Film_hash_table;
+typedef struct User User;
 typedef struct Movie {
     char* movie_id;
     char* film_id;
@@ -34,7 +35,7 @@ void movie_add_to_list(Movie** head, Movie* newMovie);
 // 显示单个 Movie 的信息  
 void movie_show(const Movie* movie);
 
-
+Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* movieHashTable, User* user_now);
 
 // 显示链表中所有 Movie 的信息  
 void movie_show_all(Movie* head);

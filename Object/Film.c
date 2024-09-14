@@ -49,6 +49,19 @@ Film* film_find_by_name(Film* head, const char* name) {
     }
     return NULL;
 }
+Film* hot_films(Film* film_list)
+{
+    Film* copied_list = film_copy_list(film_list);
+    Film* film_list_hot = film_sort(copied_list, compare_films_by_ratings);
+    static int t = 0;
+    for (int i = 0; i < t; ++i)
+        if (film_list_hot != NULL)
+            film_list_hot = film_list_hot->next;
+    ++t;
+    if (t >= 5) t %= 5;
+    film_list_free(copied_list);
+    return film_list_hot;
+}
 Film* film_copy_list(Film* head)
 {
     if (!head) return NULL;

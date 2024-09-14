@@ -169,7 +169,7 @@ double get_theater_income(Theater* theater, Movie_hash_table* hash_table)
     return res;
 }
 //这个函数有问题！！！！
-int compare_theaters_by_income(const void* a, const void* b, void* context) {
+int compare_theaters_by_income(const void* a, const void* b,const void* context) {
     Theater* theater1 = *(Theater* const*)a;
     Theater* theater2 = *(Theater* const*)b;
     Movie_hash_table* movieHashTable = (Movie_hash_table*)context;

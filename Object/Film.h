@@ -30,6 +30,8 @@ void film_add_to_list(Film** head, Film* new_film);
 // 按名字查找电影
 Film* film_find_by_name(Film* head, const char* name);
 
+Film* hot_films(Film* film_list);
+
 Film* film_copy_list(Film* head);
 
 Film* film_sort(Film* head, int* compare(void*, void*));

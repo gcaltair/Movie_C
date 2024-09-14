@@ -50,18 +50,16 @@ static void hash_ini();
 static void load_file();
 static int login();
 static void admin_operation();
-static void admin_theater_manage();
-static void admin_view_and_count_order();
-static void admin_movie_manage();
-static void admin_modify_self_info();
+
+
+
 static void user_operation();
 static void user_purchase_ticket();
 static void user_view_and_count_movie();
-Movie* search_target_film_and_choose_movie(Film* target_film);
+
 Movie* for_user_movie_filter(Movie* new_movie_list);
 Movie* for_user_movie_sort(Movie* new_movie_list);
-Movie* for_admin_movie_sort(Movie* new_movie_list);
-Movie* for_admin_movie_filter(Movie* new_movie_list);
+
 
 int order_generate_main(User* usr, Movie* movie);
 int process_pay_main_order(Order* order);
