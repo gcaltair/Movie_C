@@ -20,6 +20,9 @@
 #include "Structure File/linked_list.h"
 #include "Structure File/interval_tree.h"
 #include "user_system.h"
+#include "Structure File/io_system.h"
+#include"admin_system.h"
+
 User *user_now;
 Admin *admin_now;
 

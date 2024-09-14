@@ -16,6 +16,7 @@ int main() {
         }while(!mode);
         if (mode == admin_mode) admin_operation();
         else if (mode == user_mode) user_operation();
+        if(user_now||admin_now) write_file();
     }
     //while (1) {
     //    system("cls");
@@ -30,7 +31,7 @@ int main() {
     //    {
     //        user_operation();
     //    }
-    write_file();
+    
     
 }
 static Film* hot_films()
@@ -75,7 +76,7 @@ static void user_operation()
             if (!get_user_input_int(1)) break;
             Movie* choosed_movie = search_target_film_and_choose_movie(hot_film);
             if (!choosed_movie) break;
-            //然后购票
+            press_zero_to_continue();
             break;
         case 3:
             printf("请选择您的功能:\n1.查看订单.\n2.付款\n3.取消订单\n4.退款\n\n0.退出\n");
