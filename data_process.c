@@ -23,13 +23,13 @@ void load_data_from_csv(const char* filename, DataHandler handler, void* context
     }
 
     char line[MAX_LINE_LENGTH];
-    fgets(line, sizeof(line), file);  // Ìø¹ı±êÌâĞĞ
+    fgets(line, sizeof(line), file);  // è·³è¿‡æ ‡é¢˜è¡Œ
 
     while (fgets(line, sizeof(line), file)) {
-        // È¥³ı»»ĞĞ·û
+        // å»é™¤æ¢è¡Œç¬¦
         line[strcspn(line, "\n")] = '\0';
 
-        // Ê¹ÓÃÒ»¸öÊı×é±£´æ½âÎöºóµÄ×Ö¶Î
+        // ä½¿ç”¨ä¸€ä¸ªæ•°ç»„ä¿å­˜è§£æåçš„å­—æ®µ
         char* fields[MAX_LINE_LENGTH];
         int field_count = 0;
 
@@ -39,7 +39,7 @@ void load_data_from_csv(const char* filename, DataHandler handler, void* context
             token = strtok(NULL, ",");
         }
 
-        // µ÷ÓÃ»Øµ÷º¯Êı´¦ÀíÊı¾İ
+        // è°ƒç”¨å›è°ƒå‡½æ•°å¤„ç†æ•°æ®
         handler(fields, context);
     }
 
@@ -55,7 +55,7 @@ void handle_user_data(char** fields,void* context) {
         const char* email = fields[5];
         double balance = atof(fields[6]);
         User_hash_table *hashtable = ((User_hash_table **)context)[0];
-        User** user_list = ((User ***) context)[1]; //²»¼ÓÇ°ÃæµÄ(User**)±àÒëÆ÷»á¾¯¸æ£¬µ«ÊÇÄÜÕı³£ÔËĞĞ
+        User** user_list = ((User ***) context)[1]; //ä¸åŠ å‰é¢çš„(User**)ç¼–è¯‘å™¨ä¼šè­¦å‘Šï¼Œä½†æ˜¯èƒ½æ­£å¸¸è¿è¡Œ
         User* new_user = user_create((User_hash_table*)hashtable, userID, name, gender, telephone, password, email, balance);
         user_add_to_list(user_list, new_user);
     }
@@ -68,15 +68,15 @@ void handle_admin_data(char** fields, void* context) {
         const char* admin_password = fields[3];
         const char* admin_email = fields[4];
         const char* cinema_id=fields[5];
-        // ½« context ×ª»»Îª Admin** Ö¸Õë
+        // å°† context è½¬æ¢ä¸º Admin** æŒ‡é’ˆ
         Cinema* head = ((Cinema**)context)[0];
         Admin** admin_list = ((Admin***)context)[1];
 
-        // ´´½¨ĞÂµÄ Admin ÊµÀı
+        // åˆ›å»ºæ–°çš„ Admin å®ä¾‹
         Admin* new_admin = Admin_create(admin_id, admin_name, admin_telephone, admin_password, admin_email,
                                         cinema_find_by_id(head,cinema_id) ,cinema_id);
 
-        // ½«ĞÂµÄ Admin ÊµÀıÌí¼Óµ½Á´±íÖĞ
+        // å°†æ–°çš„ Admin å®ä¾‹æ·»åŠ åˆ°é“¾è¡¨ä¸­
         admin_add_to_list(admin_list, new_admin);
     }
 }
@@ -87,14 +87,14 @@ void handle_cinema_data(char** fields, void* context) {
         const char* location = fields[2];
         const char* cinema_id = fields[3];
 
-        // ½« context ×ª»»Îª Cinema** ºÍ Theater_hash_table* Ö¸Õë
+        // å°† context è½¬æ¢ä¸º Cinema** å’Œ Theater_hash_table* æŒ‡é’ˆ
         Cinema** cinema_list = ((Cinema ***)context)[0];
 
-        // ´´½¨ĞÂµÄ Cinema ÊµÀı
+        // åˆ›å»ºæ–°çš„ Cinema å®ä¾‹
         Cinema* new_cinema = cinema_create(cinema_name,cinema_alphabet, location, cinema_id);
 
 
-        // ½«ĞÂ´´½¨µÄ Cinema Ìí¼Óµ½Á´±íÖĞ
+        // å°†æ–°åˆ›å»ºçš„ Cinema æ·»åŠ åˆ°é“¾è¡¨ä¸­
         cinema_add_to_list(cinema_list, new_cinema);
     }
     else printf("cinema data error!");
@@ -103,7 +103,7 @@ void handle_movie_data(char** fields, void* context) {
     if (fields[0] && fields[1] && fields[2] && fields[3] && fields[4] && fields[5] && fields[6] && fields[7] && fields[8]) {
         const char* movie_id = fields[0];
         const char* film_id = fields[1];
-        const char* theater_id = fields[2]; // Ó°ÌüID
+        const char* theater_id = fields[2]; // å½±å…ID
         const char* start_time = fields[3];
         const char* end_time = fields[4];
         int remaining_ticket = atoi(fields[5]);
@@ -116,14 +116,14 @@ void handle_movie_data(char** fields, void* context) {
         Theater_hash_table* theater_table = ((Theater_hash_table**)context)[2];
         Film_hash_table * film_table = ((Film_hash_table**)context)[3];
 
-        // ²éÕÒ¶ÔÓ¦µÄ Theater
+        // æŸ¥æ‰¾å¯¹åº”çš„ Theater
         Theater* play_theater = find_theater_in_hash_table(theater_table, theater_id);
         Film* released_film = find_film_in_hash_table_by_id(film_table, film_id);
         
-        // ´´½¨ĞÂµÄ Movie ÊµÀı
+        // åˆ›å»ºæ–°çš„ Movie å®ä¾‹
         Movie* new_movie = movie_create(movie_hash_table, movie_id, film_id,released_film, theater_id, play_theater, start_time, end_time, remaining_ticket, price, discount);
 
-        // ½«ĞÂ´´½¨µÄ Movie Ìí¼Óµ½Á´±íÖĞ
+        // å°†æ–°åˆ›å»ºçš„ Movie æ·»åŠ åˆ°é“¾è¡¨ä¸­
         movie_add_to_list(movie_list, new_movie);
     }
 }
@@ -139,14 +139,14 @@ void handle_theater_data(char** fields, void* context) {
         Cinema** cinema_list = ((Cinema ***) context)[1];
         Theater_hash_table* hashtable = ((Theater_hash_table**)context)[2];
 
-        // ²éÕÒ Cinema ÊÇ·ñ´æÔÚ
+        // æŸ¥æ‰¾ Cinema æ˜¯å¦å­˜åœ¨
         Cinema* cinema = cinema_find_by_id(*cinema_list, cinema_id);
         if (cinema == NULL) {
             printf("Cinema with ID %s not found for Theater %s.\n", cinema_id, theater_id);
             return;
         }
 
-        // ´´½¨ Theater ²¢²åÈëÁ´±íºÍ¹şÏ£±í
+        // åˆ›å»º Theater å¹¶æ’å…¥é“¾è¡¨å’Œå“ˆå¸Œè¡¨
         Theater* new_theater = theater_create(hashtable, theater_id, name, capacity, cinema, cinema_id, type);
         theater_add_to_list(theater_list, new_theater);
     }
@@ -161,12 +161,12 @@ void handle_order_data(char** fields, void* context) {
         int status = atoi(fields[5]);
         const char* time = fields[6];
 
-        // ´ÓÉÏÏÂÎÄÖĞÌáÈ¡¹şÏ£±íºÍÁ´±í
+        // ä»ä¸Šä¸‹æ–‡ä¸­æå–å“ˆå¸Œè¡¨å’Œé“¾è¡¨
         Order_hash_table* order_hash_table = ((Order_hash_table**)context)[0];
         User_hash_table* user_hash_table = ((User_hash_table**)context)[1];
         Movie_hash_table* movie_hash_table = ((Movie_hash_table**)context)[2];
-        Order** order_list = ((Order***)context)[3]; // ¼ÙÉèÉÏÏÂÎÄÖĞ°üº¬¶©µ¥Á´±í
-        // ²éÕÒÏà¹ØµÄ User¡¢Movie¡¢Theater ºÍ Cinema
+        Order** order_list = ((Order***)context)[3]; // å‡è®¾ä¸Šä¸‹æ–‡ä¸­åŒ…å«è®¢å•é“¾è¡¨
+        // æŸ¥æ‰¾ç›¸å…³çš„ Userã€Movieã€Theater å’Œ Cinema
         User* user = find_user_in_hash_table(user_hash_table, user_id);
         Movie* movie = find_movie_in_hash_table(movie_hash_table, movie_id);
         Theater* theater = movie->theater;
@@ -182,11 +182,11 @@ void handle_order_data(char** fields, void* context) {
         }
 }
 void handle_film_data(char** fields, void* context) {
-    // ´Ó context ÖĞ»ñÈ¡ËùĞèµÄ Film ÁĞ±íºÍ¹şÏ£±í
+    // ä» context ä¸­è·å–æ‰€éœ€çš„ Film åˆ—è¡¨å’Œå“ˆå¸Œè¡¨
     Film** film_list = ((Film***)context)[0];
     Film_hash_table* hash_table = ((Film_hash_table**)context)[1];
 
-    // ´Ó fields ÖĞÌáÈ¡Êı¾İ
+    // ä» fields ä¸­æå–æ•°æ®
     const char* film_id = fields[0];
     const char* film_name = fields[1];
     const char* film_type = fields[2];
@@ -195,14 +195,14 @@ void handle_film_data(char** fields, void* context) {
     int film_time = atoi(fields[5]);
     int film_rating = atoi(fields[6]);
     
-    // ´´½¨ĞÂµÄ Film ÊµÀı
+    // åˆ›å»ºæ–°çš„ Film å®ä¾‹
     Film* new_film = film_create(hash_table, film_id, film_name, film_type, film_language, film_summary, film_time,film_rating);
     if (!new_film) {
         printf("Failed to create film: %s\n", film_name);
         return;
     }
 
-    // ½« Film Ìí¼Óµ½Á´±íÖĞ
+    // å°† Film æ·»åŠ åˆ°é“¾è¡¨ä¸­
     film_add_to_list(film_list, new_film);
 }
 void write_users_to_csv(const char* filename, User** user_list) {
@@ -212,10 +212,10 @@ void write_users_to_csv(const char* filename, User** user_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "userID,user_name,gender,telephone,password,email,user_balance\n");
 
-    // ±éÀúÓÃ»§ÁĞ±í£¬½«Ã¿¸öÓÃ»§µÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†ç”¨æˆ·åˆ—è¡¨ï¼Œå°†æ¯ä¸ªç”¨æˆ·çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     User* current_user = user_list;
     while (current_user != NULL) {
         fprintf(file, "%s,%s,%s,%s,%s,%s,%.2f\n",
@@ -239,10 +239,10 @@ void write_admins_to_csv(const char* filename, Admin* admin_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "admin_id,admin_name,admin_telephone,admin_password,admin_email,cinema_id\n");
 
-    // ±éÀú¹ÜÀíÔ±ÁĞ±í£¬½«Ã¿¸ö¹ÜÀíÔ±µÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†ç®¡ç†å‘˜åˆ—è¡¨ï¼Œå°†æ¯ä¸ªç®¡ç†å‘˜çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Admin* current_admin = admin_list;
     while (current_admin != NULL) {
         fprintf(file, "%s,%s,%s,%s,%s,%s\n",
@@ -265,10 +265,10 @@ void write_cinemas_to_csv(const char* filename, Cinema* cinema_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "cinema_name,cinema_alphabet,location,cinema_id\n");
 
-    // ±éÀúµçÓ°ÔºÁĞ±í£¬½«Ã¿¸öµçÓ°ÔºµÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†ç”µå½±é™¢åˆ—è¡¨ï¼Œå°†æ¯ä¸ªç”µå½±é™¢çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Cinema* current_cinema = cinema_list;
     while (current_cinema != NULL) {
         fprintf(file, "%s,%s,%s,%s\n",
@@ -289,10 +289,10 @@ void write_orders_to_csv(const char* filename, Order* order_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "orderID,user_id,movie_id,seats,seat_number,status,time\n");
 
-    // ±éÀú¶©µ¥ÁĞ±í£¬½«Ã¿¸ö¶©µ¥µÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†è®¢å•åˆ—è¡¨ï¼Œå°†æ¯ä¸ªè®¢å•çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Order* current_order = order_list;
     while (current_order != NULL) {
         fprintf(file, "%s,%s,%s,%s,%d,%d,%s\n",
@@ -316,10 +316,10 @@ void write_theaters_to_csv(const char* filename, Theater* theater_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "theater_id,theater_name,capacity,cinema_id,theater_type\n");
 
-    // ±éÀúÓ°ÌüÁĞ±í£¬½«Ã¿¸öÓ°ÌüµÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†å½±å…åˆ—è¡¨ï¼Œå°†æ¯ä¸ªå½±å…çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Theater* current_theater = theater_list;
     while (current_theater != NULL) {
         fprintf(file, "%s,%s,%d,%s,%s\n",
@@ -341,10 +341,10 @@ void write_films_to_csv(const char* filename, Film* film_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "film_id,film_name,film_type,film_language,film_summary,film_time,film_rating\n");
 
-    // ±éÀúµçÓ°ÁĞ±í£¬½«Ã¿¸öµçÓ°µÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†ç”µå½±åˆ—è¡¨ï¼Œå°†æ¯ä¸ªç”µå½±çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Film* current_film = film_list;
     while (current_film != NULL) {
         fprintf(file, "%s,%s,%s,%s,%s,%d,%d\n",
@@ -368,10 +368,10 @@ void write_movies_to_csv(const char* filename, Movie* movie_list) {
         return;
     }
 
-    // Ğ´Èë±êÌâĞĞ
+    // å†™å…¥æ ‡é¢˜è¡Œ
     fprintf(file, "movie_id,film_id,theater_id,start_time,end_time,remaining_ticket,price,discount\n");
 
-    // ±éÀúµçÓ°³¡´ÎÁĞ±í£¬½«Ã¿¸öµçÓ°³¡´ÎµÄĞÅÏ¢Ğ´ÈëÎÄ¼ş
+    // éå†ç”µå½±åœºæ¬¡åˆ—è¡¨ï¼Œå°†æ¯ä¸ªç”µå½±åœºæ¬¡çš„ä¿¡æ¯å†™å…¥æ–‡ä»¶
     Movie* current_movie = movie_list;
     while (current_movie != NULL) {
         fprintf(file, "%s,%s,%s,%s,%s,%d,%.2f,%.2f\n",
