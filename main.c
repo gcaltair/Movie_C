@@ -960,13 +960,13 @@ int ticket_refund_main(  ) {
 static int login(){
     char password[20]; char id[20]; bool key = 0;
     do {
-        printf("Enter your ID:");
+        printf("请输入您的ID:");
         scanf("%s", id);
-        if (id=='\n') { printf("ID don't found\n"); _sleep(500); system("cls"); continue; }
+        if (id=='\n') { printf("您输入的ID不存在\n"); _sleep(500); system("cls"); continue; }//对于回车特判
         user_now = find_user_in_hash_table(userHashTable, id);
         admin_now = admin_find_by_id(admin_list, id);//注意考虑重名问题
         if ((!user_now) && (!admin_now)) {
-            printf("无法找到ID\n");
+            printf("您输入的ID不存在\n");
             _sleep(500);
             system("cls");
         }
@@ -978,6 +978,7 @@ static int login(){
     system("cls");
     return 0;
 }
+//哈希表初始化
 static void hash_ini()
 {
     userHashTable = user_hash_table_create();
@@ -1018,7 +1019,6 @@ static void write_file()
     write_orders_to_csv("orders.csv", order_list);
     write_theaters_to_csv("theaters.csv", theater_list);
     write_admins_to_csv("admins.csv", admin_list);
-    
-
+ 
 }
 

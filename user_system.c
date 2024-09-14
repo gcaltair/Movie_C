@@ -33,22 +33,22 @@ bool user_password_check(User *usr,User_hash_table*userHashTable)
         {
             for (int i = 0; i < 60; ++i) {
                 system("cls");
-                printf("Your need to wait %d seconds(total 60)",i);
+                printf("ÇëÉÔºóÖØÊÔ ÄúÒÑµÈ´ı %d/60",i);
                 _sleep(1000);
             }
             count-=3;
             return 0;
         }
-        printf("Enter your password:");
+        printf("ÇëÊäÈëÃÜÂë:");
         if (!getPassword(password, 20)) return 0;
         
         key=!strcmp(usr->password,password);
         if(!key) {
-            printf("\nPassword wrong!\n");
+            printf("\nÃÜÂë´íÎó!\n");
             count++;
             _sleep(500);
             system("cls");
-            printf("Enter your ID:%s\n",usr->userID);
+            printf("ÇëÊäÈëÄúµÄID:%s\n",usr->userID);
         }
     } while (!key);
     return 1;
@@ -61,21 +61,21 @@ bool admin_password_check(Admin* admin,Admin* admin_list){
         {
             for (int i = 0; i < 60; ++i) {
                 system("cls");
-                printf("Your need to wait %d seconds(total 60)",i);
+                printf("ÇëÉÔºóÖØÊÔ ÄúÒÑµÈ´ı %d/60",i);
                 _sleep(1000);
             }
             count-=3;
             return 0;
         }
-        printf("Enter your password:");
+        printf("ÇëÊäÈëÃÜÂë:");
         if(!getPassword(password, 20)) return 0;
         key=!strcmp(admin->admin_password,password);
         if(!key) {
-            printf("\nPassword wrong!\n");
+            printf("\nÃÜÂë´íÎó!\n");
             count++;
             _sleep(500);
             system("cls");
-            printf("Enter your ID:%s\n",admin->admin_id);
+            printf("ÇëÊäÈëÄúµÄID:%s\n",admin->admin_id);
         }
     } while (!key);
     return 1;
