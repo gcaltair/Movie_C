@@ -18,7 +18,7 @@ void int_direct_add_to_list(Linked_int_list** head, const int value)
     Linked_int_list* new_node = create_int_node(value);
     int_add_to_list(head, new_node);
 }
-// åˆ›å»ºæ–°çš„èŠ‚ç‚¹
+// ´´½¨ĞÂµÄ½Úµã
 Linked_string_list* create_node(const char* id)
 {
     Linked_string_list* new_node = (Linked_string_list*)malloc(sizeof(Linked_string_list));
@@ -27,11 +27,11 @@ Linked_string_list* create_node(const char* id)
         printf("Memory allocation failed\n");
         return NULL;
     }
-    new_node->id = strdup(id); // å¤åˆ¶å­—ç¬¦ä¸²
+    new_node->id = strdup(id); // ¸´ÖÆ×Ö·û´®
     new_node->next = NULL;
     return new_node;
 }
-// å‘é“¾è¡¨ä¸­æ·»åŠ èŠ‚ç‚¹
+// ÏòÁ´±íÖĞÌí¼Ó½Úµã
 void string_add_to_list(Linked_string_list** head, Linked_string_list* node)
 {
     if(node==NULL)
@@ -49,7 +49,7 @@ void string_add_to_list(Linked_string_list** head, Linked_string_list* node)
     *head = node;
 }
 
-// æ ¹æ®IDæŸ¥æ‰¾èŠ‚ç‚¹
+// ¸ù¾İID²éÕÒ½Úµã
 Linked_string_list* find_node_by_id(Linked_string_list* head, const char* id)
 {
     while (head != NULL)
@@ -63,7 +63,7 @@ Linked_string_list* find_node_by_id(Linked_string_list* head, const char* id)
     return NULL;
 }
 
-// æ˜¾ç¤ºå•ä¸ªèŠ‚ç‚¹çš„å†…å®¹
+// ÏÔÊ¾µ¥¸ö½ÚµãµÄÄÚÈİ
 void string_node_show(Linked_string_list* node)
 {
     if (node != NULL)
@@ -84,7 +84,7 @@ void string_node_show_all(Linked_string_list* head){
 
 }
 
-// é‡Šæ”¾é“¾è¡¨èŠ‚ç‚¹çš„å†…å­˜
+// ÊÍ·ÅÁ´±í½ÚµãµÄÄÚ´æ
 void free_string_list(Linked_string_list* head)
 {
     Linked_string_list* temp;
@@ -92,11 +92,11 @@ void free_string_list(Linked_string_list* head)
     {
         temp = head;
         head = head->next;
-        free(temp->id); // é‡Šæ”¾å­—ç¬¦ä¸²
-        free(temp);     // é‡Šæ”¾èŠ‚ç‚¹
+        free(temp->id); // ÊÍ·Å×Ö·û´®
+        free(temp);     // ÊÍ·Å½Úµã
     }
 }
-// åˆ›å»ºæ–°çš„èŠ‚ç‚¹
+// ´´½¨ĞÂµÄ½Úµã
 Linked_int_list* create_int_node(int value) {
     Linked_int_list* new_node = (Linked_int_list*)malloc(sizeof(Linked_int_list));
     if (new_node == NULL) {
@@ -108,7 +108,7 @@ Linked_int_list* create_int_node(int value) {
     return new_node;
 }
 
-// å‘é“¾è¡¨ä¸­æ·»åŠ èŠ‚ç‚¹
+// ÏòÁ´±íÖĞÌí¼Ó½Úµã
 void int_add_to_list(Linked_int_list** head, Linked_int_list* node) {
     if (node == NULL) {
         perror("int node is NULL, add failed");
@@ -123,7 +123,7 @@ void int_add_to_list(Linked_int_list** head, Linked_int_list* node) {
     *head = node;
 }
 
-// æ ¹æ®å€¼æŸ¥æ‰¾èŠ‚ç‚¹
+// ¸ù¾İÖµ²éÕÒ½Úµã
 Linked_int_list* find_int_node_by_value(Linked_int_list* head, int value) {
     while (head != NULL) {
         if (head->value == value) {
@@ -134,7 +134,7 @@ Linked_int_list* find_int_node_by_value(Linked_int_list* head, int value) {
     return NULL;
 }
 
-// æ˜¾ç¤ºå•ä¸ªèŠ‚ç‚¹çš„å†…å®¹
+// ÏÔÊ¾µ¥¸ö½ÚµãµÄÄÚÈİ
 void int_node_show(Linked_int_list* node) {
     if (node != NULL) {
         printf("Node Value: %d\n", node->value);
@@ -144,7 +144,7 @@ void int_node_show(Linked_int_list* node) {
     }
 }
 
-// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰èŠ‚ç‚¹çš„å†…å®¹
+// ÏÔÊ¾Á´±íÖĞËùÓĞ½ÚµãµÄÄÚÈİ
 void int_node_show_all(Linked_int_list* head) {
     while (head != NULL) {
         int_node_show(head);
@@ -152,7 +152,7 @@ void int_node_show_all(Linked_int_list* head) {
     }
 }
 
-// é‡Šæ”¾é“¾è¡¨èŠ‚ç‚¹çš„å†…å­˜
+// ÊÍ·ÅÁ´±í½ÚµãµÄÄÚ´æ
 void free_int_list(Linked_int_list* head) {
     Linked_int_list* temp;
     while (head != NULL) {

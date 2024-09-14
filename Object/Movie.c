@@ -9,18 +9,18 @@
 #include "../Structure File/linked_list.h"
 #include"../Structure File/interval_tree.h"
 #include"Film.h"
-// åˆ›å»ºæ–°çš„ Movie èŠ‚ç‚¹  
+// ´´½¨ĞÂµÄ Movie ½Úµã  
 Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const char* film_id,Film* film,const char* theater_id,Theater* theater, const char* start_time, const char* end_time,
     int remaining_ticket, double price, double discount) {
     Movie* newMovie = (Movie*)malloc(sizeof(Movie));
     if (!newMovie) {
-        printf("å†…å­˜åˆ†é…å¤±è´¥!\n");
+        printf("ÄÚ´æ·ÖÅäÊ§°Ü!\n");
         return NULL;
     }
     if (!theater) { printf("Movie %s's Theater is null\n",movie_id); newMovie->theater = NULL;}
     else newMovie->theater = theater;
     newMovie->film = film;
-    newMovie->movie_id= strdup(movie_id); // ä½¿ç”¨ strdup ç®€åŒ–å†…å­˜åˆ†é…å’Œå¤åˆ¶
+    newMovie->movie_id= strdup(movie_id); // Ê¹ÓÃ strdup ¼ò»¯ÄÚ´æ·ÖÅäºÍ¸´ÖÆ
     newMovie->film_id = strdup(film_id);
     newMovie->theater_id = strdup(theater_id);
     newMovie->theater = theater;
@@ -34,21 +34,21 @@ Movie* movie_create(Movie_hash_table *movieHashTable,const char* movie_id,const 
     newMovie->next = NULL;
     newMovie->hash_next = NULL;
     newMovie->seat_map = seat_map_generation();
-    insert_movie_to_hash_table(movieHashTable,newMovie);//æ’å…¥å“ˆå¸Œè¡¨
+    insert_movie_to_hash_table(movieHashTable,newMovie);//²åÈë¹şÏ£±í
 
-    string_direct_add_to_list(&(newMovie->theater->my_movie),newMovie->movie_id);//æ·»åŠ åˆ°å½±å…
+    string_direct_add_to_list(&(newMovie->theater->my_movie),newMovie->movie_id);//Ìí¼Óµ½Ó°Ìü
     //printf("theater id:%s movie_id:%s\n", theater->theater_id, movie_id);
-    int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->start_min);//æ·»åŠ èµ·æ­¢æ—¶é—´åˆ°peaktime
+    int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->start_min);//Ìí¼ÓÆğÖ¹Ê±¼äµ½peaktime
     int_direct_add_to_list(&(theater->cinema->peak_time), newMovie->end_min);
 
-    theater->time_line = insert_interval(theater->time_line, newMovie->start_min, newMovie->end_min);//æ’å…¥timeLineæ—¶é—´çº¿
+    theater->time_line = insert_interval(theater->time_line, newMovie->start_min, newMovie->end_min);//²åÈëtimeLineÊ±¼äÏß
 
     string_direct_add_to_list(&(film->playing_movie), newMovie->movie_id);
 
     return newMovie;
 }
 
-// æ·»åŠ  Movie åˆ°é“¾è¡¨  
+// Ìí¼Ó Movie µ½Á´±í  
 void movie_add_to_list(Movie** head, Movie* newMovie) {
     if (*head == NULL) {
         *head = newMovie;
@@ -62,21 +62,21 @@ void movie_add_to_list(Movie** head, Movie* newMovie) {
     }
 }
 
-// æ˜¾ç¤ºå•ä¸ª Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾µ¥¸ö Movie µÄĞÅÏ¢  
 void movie_show(const Movie* movie) {
     if (movie == NULL) return;
-    printf("åœºæ¬¡ ID: %s\n",movie->movie_id);
-    printf("ç”µå½± ID: %s\n", movie->film_id);
-    printf("ç”µå½±é™¢ ID: %s\n", movie->theater_id);
-    printf("å¼€å§‹æ—¶é—´: %s\n", movie->start_time);
-    printf("ç»“æŸæ—¶é—´: %s\n", movie->end_time);
-    printf("ä½™ç¥¨æ•°: %d\n", movie->remaining_ticket);
-    printf("ä»·æ ¼: %.2f\n", movie->price);
-    printf("æŠ˜æ‰£: %.2f\n", movie->discount);
+    printf("³¡´Î ID: %s\n",movie->movie_id);
+    printf("µçÓ° ID: %s\n", movie->film_id);
+    printf("µçÓ°Ôº ID: %s\n", movie->theater_id);
+    printf("¿ªÊ¼Ê±¼ä: %s\n", movie->start_time);
+    printf("½áÊøÊ±¼ä: %s\n", movie->end_time);
+    printf("ÓàÆ±Êı: %d\n", movie->remaining_ticket);
+    printf("¼Û¸ñ: %.2f\n", movie->price);
+    printf("ÕÛ¿Û: %.2f\n", movie->discount);
     printf("----------\n");
 }
 
-// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰ Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾Á´±íÖĞËùÓĞ Movie µÄĞÅÏ¢  
 void movie_show_all(Movie* head) {
     Movie* movie = head;
     while (movie != NULL) {
@@ -88,7 +88,7 @@ void movie_show_all(Movie* head) {
 
 
 
-// åˆ›å»ºå“ˆå¸Œè¡¨
+// ´´½¨¹şÏ£±í
 Movie_hash_table* movie_hash_table_create() {
     Movie_hash_table* ht = (Movie_hash_table*)malloc(sizeof(Movie_hash_table));
     if (!ht) {
@@ -99,7 +99,7 @@ Movie_hash_table* movie_hash_table_create() {
     return ht;
 }
 
-// åˆå§‹åŒ–å“ˆå¸Œè¡¨
+// ³õÊ¼»¯¹şÏ£±í
 void movie_hash_table_init(Movie_hash_table* ht) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         ht->table[i] = NULL;
@@ -107,25 +107,25 @@ void movie_hash_table_init(Movie_hash_table* ht) {
     ht->count = 0;
 }
 
-// æ’å…¥ Movie åˆ°å“ˆå¸Œè¡¨
+// ²åÈë Movie µ½¹şÏ£±í
 void insert_movie_to_hash_table(Movie_hash_table* ht, Movie* movie) {
-    unsigned int index = hash(movie->movie_id, strlen(movie->movie_id), 0x9747b28c); // ä½¿ç”¨MurmurHash2ç”Ÿæˆç´¢å¼•
-    movie->hash_next = ht->table[index];  // å°†å½“å‰çš„å“ˆå¸Œè¡¨ç´¢å¼•å¤„çš„å…ƒç´ æ”¾åœ¨æ–°ç”µå½±çš„åé¢
-    ht->table[index] = movie;// å°†æ–°ç”µå½±æ”¾åœ¨é“¾è¡¨çš„å¤´éƒ¨
+    unsigned int index = hash(movie->movie_id, strlen(movie->movie_id), 0x9747b28c); // Ê¹ÓÃMurmurHash2Éú³ÉË÷Òı
+    movie->hash_next = ht->table[index];  // ½«µ±Ç°µÄ¹şÏ£±íË÷Òı´¦µÄÔªËØ·ÅÔÚĞÂµçÓ°µÄºóÃæ
+    ht->table[index] = movie;// ½«ĞÂµçÓ°·ÅÔÚÁ´±íµÄÍ·²¿
     ht->count++;
 }
 
-// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾ Movieï¼Œé€šè¿‡ movie_id æŸ¥æ‰¾
+// ÔÚ¹şÏ£±íÖĞ²éÕÒ Movie£¬Í¨¹ı movie_id ²éÕÒ
 Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id) {
     unsigned int index = hash(movie_id, strlen(movie_id), 0x9747b28c);
     Movie* movie = ht->table[index];
     while (movie) {
         if (strcmp(movie->movie_id, movie_id) == 0) {
-            return movie;  // æ‰¾åˆ°ç”µå½±ï¼Œè¿”å›æŒ‡é’ˆ
+            return movie;  // ÕÒµ½µçÓ°£¬·µ»ØÖ¸Õë
         }
-        movie = movie->hash_next;  // ç»§ç»­æŸ¥æ‰¾é“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªç”µå½±
+        movie = movie->hash_next;  // ¼ÌĞø²éÕÒÁ´±íÖĞµÄÏÂÒ»¸öµçÓ°
     }
-    return NULL;  // å¦‚æœæœªæ‰¾åˆ°ï¼Œè¿”å›NULL
+    return NULL;  // Èç¹ûÎ´ÕÒµ½£¬·µ»ØNULL
 }
 Movie *movie_copy_info(Movie* movie)
 {
@@ -137,7 +137,7 @@ Movie *movie_copy_info(Movie* movie)
         printf("Memory allocation failed!\n");
         return NULL;
     }
-    // å¤åˆ¶å½“å‰ç”µå½±çš„ä¿¡æ¯åˆ°æ–°èŠ‚ç‚¹
+    // ¸´ÖÆµ±Ç°µçÓ°µÄĞÅÏ¢µ½ĞÂ½Úµã
     new_movie->movie_id = strdup(movie->movie_id);
     new_movie->film_id = strdup(movie->film_id);
     new_movie->film = movie->film;
@@ -153,7 +153,7 @@ Movie *movie_copy_info(Movie* movie)
     new_movie->seat_map = movie->seat_map;
     return new_movie;
 }
-//1.ä¸Šåº§ç‡(é™åºï¼‰ï¼Œ2.ä»·æ ¼(å‡åº)ï¼Œ3.åœºæ¬¡æ”¶å…¥(é™åº)ï¼Œ4.å¼€å§‹æ—¶é—´(å‡åº)ï¼Œ5.å‰©ä½™ç¥¨æ•°(å‡åº)
+//1.ÉÏ×ùÂÊ(½µĞò£©£¬2.¼Û¸ñ(ÉıĞò)£¬3.³¡´ÎÊÕÈë(½µĞò)£¬4.¿ªÊ¼Ê±¼ä(ÉıĞò)£¬5.Ê£ÓàÆ±Êı(ÉıĞò)
 Movie* movie_operation_sort(Movie* head, int mode)
 {
     Movie* new_head = NULL;
@@ -179,33 +179,33 @@ Movie* movie_operation_sort(Movie* head, int mode)
     }
     return new_head;
 }
-//1.æ—¶é—´æ®µï¼Œ2.å·²æ”¾æ˜ ï¼Œ3.æœªæ”¾æ˜ ï¼Œ4.å½“æ—¥æ—¥æœŸï¼Œ5.å½±ç‰‡ç±»å‹ï¼Œ6.ç”µå½±é™¢id
+//1.Ê±¼ä¶Î£¬2.ÒÑ·ÅÓ³£¬3.Î´·ÅÓ³£¬4.µ±ÈÕÈÕÆÚ£¬5.Ó°Æ¬ÀàĞÍ£¬6.µçÓ°Ôºid
 Movie* movie_operation_filter(Movie* head, int mode, void* filter_param) {
     Movie* new_head = NULL;
 
     switch (mode) {
-    case 1:  // è¿‡æ»¤æ—¶é—´æ®µ
+    case 1:  // ¹ıÂËÊ±¼ä¶Î
     
         char** time_period = (char**)filter_param;  // filter_param should be a char* array with two elements: [start_time, end_time]
         new_head = movie_filter_by_time_period(head, time_period[0], time_period[1]);
         break;
-    case 2:  // è¿‡æ»¤å·²æ”¾æ˜ 
+    case 2:  // ¹ıÂËÒÑ·ÅÓ³
         new_head = movie_filter_by_played(head);
         break;
-    case 3:  // è¿‡æ»¤æœªæ”¾æ˜ 
+    case 3:  // ¹ıÂËÎ´·ÅÓ³
         new_head = movie_filter_by_not_played(head);
         break;
-    case 4:  // è¿‡æ»¤å½“æ—¥æ—¥æœŸ
+    case 4:  // ¹ıÂËµ±ÈÕÈÕÆÚ
         new_head = movie_filter_by_current_date(head);  // filter_param should be a const char* representing the date
         break;
-    case 5:  // è¿‡æ»¤å½±ç‰‡ç±»å‹
+    case 5:  // ¹ıÂËÓ°Æ¬ÀàĞÍ
         new_head = movie_filter_by_film_type(head, (const char*)filter_param);  // filter_param should be a const char* representing the film type
         break;
-    case 6:  // è¿‡æ»¤ç”µå½±é™¢ID
+    case 6:  // ¹ıÂËµçÓ°ÔºID
         new_head = movie_filter_by_cinema_id((char*)filter_param, head);  
         break;
     default:
-        return head;  // å¦‚æœ mode ä¸åœ¨ 1-6 ä¹‹é—´ï¼Œç›´æ¥è¿”å›åŸé“¾è¡¨
+        return head;  // Èç¹û mode ²»ÔÚ 1-6 Ö®¼ä£¬Ö±½Ó·µ»ØÔ­Á´±í
     }
 
     return new_head;
@@ -214,47 +214,47 @@ Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* 
 {
     Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);
     Movie* movie_filtered_list_temp = movie_filter_by_current_date(movie_raw_list);
-    Movie* movie_filtered_list = movie_filter_by_not_played(movie_filtered_list_temp);//å¾—åˆ°å½“å¤©æœªæ”¾æ˜ åœºæ¬¡
+    Movie* movie_filtered_list = movie_filter_by_not_played(movie_filtered_list_temp);//µÃµ½µ±ÌìÎ´·ÅÓ³³¡´Î
     if (movie_filtered_list == NULL)
     {
-        printf("æš‚æ— å½“æ—¥åœºæ¬¡\n");
+        printf("ÔİÎŞµ±ÈÕ³¡´Î\n");
         press_zero_to_continue();
         movie_list_free(movie_raw_list);
         movie_list_free(movie_filtered_list_temp);
         return;
     }
-    Movie* target_movie = for_user_movie_choose(movie_filtered_list, movieHashTable); //å¾—åˆ°target_movie
+    Movie* target_movie = for_user_movie_choose(movie_filtered_list, movieHashTable); //µÃµ½target_movie
     movie_print(target_movie);
     seat_map_show(target_movie->seat_map);
-    printf("è¯¥åœºæ¬¡çš„æ¨è%s.\n", get_great_seats(target_movie->seat_map));
+    printf("¸Ã³¡´ÎµÄÍÆ¼ö%s.\n", get_great_seats(target_movie->seat_map));
     order_generate_main(user_now, target_movie);
 
     return target_movie;
 }
-// æ ¹æ®æ”¾æ˜ åœºæ¬¡ç±»å‹è¿‡æ»¤
+// ¸ù¾İ·ÅÓ³³¡´ÎÀàĞÍ¹ıÂË
 Movie* movie_filter_by_film_type(Movie* head, const char* film_type) {
-    Movie* result_head = NULL;  // ç»“æœé“¾è¡¨çš„å¤´èŠ‚ç‚¹
+    Movie* result_head = NULL;  // ½á¹ûÁ´±íµÄÍ·½Úµã
     Movie* movie = head;
 
-    // éå†åŸé“¾è¡¨
+    // ±éÀúÔ­Á´±í
     while (movie != NULL) {
-        // å¦‚æœç”µå½±çš„ movie_type ç¬¦åˆæ¡ä»¶
+        // Èç¹ûµçÓ°µÄ movie_type ·ûºÏÌõ¼ş
         if (strcmp(movie->film->film_type, film_type) == 0) {
-            // åˆ›å»ºä¸€ä¸ªæ–°èŠ‚ç‚¹ï¼Œå°†å…¶æ·»åŠ åˆ°ç»“æœé“¾è¡¨
+            // ´´½¨Ò»¸öĞÂ½Úµã£¬½«ÆäÌí¼Óµ½½á¹ûÁ´±í
             Movie* new_movie = movie_copy_info(movie);
 
-            // å°†æ–°èŠ‚ç‚¹æ·»åŠ åˆ°ç»“æœé“¾è¡¨
+            // ½«ĞÂ½ÚµãÌí¼Óµ½½á¹ûÁ´±í
             movie_add_to_list(&result_head,new_movie);
         }
-        movie = movie->next;  // ç»§ç»­éå†åŸé“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªç”µå½±
+        movie = movie->next;  // ¼ÌĞø±éÀúÔ­Á´±íÖĞµÄÏÂÒ»¸öµçÓ°
     }
-    return result_head;  // è¿”å›ç»“æœé“¾è¡¨çš„å¤´èŠ‚ç‚¹
+    return result_head;  // ·µ»Ø½á¹ûÁ´±íµÄÍ·½Úµã
 }
 
 Movie* movie_list_create_by_film(Film* film,Movie_hash_table* movie_hash_table)
 {
     Movie* new_head = NULL;
-    Linked_string_list* string_head = film->playing_movie; //string_headæœ‰è¯¯
+    Linked_string_list* string_head = film->playing_movie; //string_headÓĞÎó
 
     while (string_head)
     {
@@ -405,7 +405,7 @@ int compare_movies_by_income(const void* a, const void* b)
 
 
 
-//ä¸Šåº§ç‡å‡åº
+//ÉÏ×ùÂÊÉıĞò
 int compare_movies_by_occupancy_rate(const void* a, const void* b)
 {
     Movie* movie1 = *(Movie* const*)a;
@@ -415,7 +415,7 @@ int compare_movies_by_occupancy_rate(const void* a, const void* b)
     if (rate1 < rate2) return 1;
     return -1;
 }
-//å‡åº
+//ÉıĞò
 int compare_movies_by_price(const void* a, const void* b)
 {
     Movie* movie1 = *(Movie* const*)a;
@@ -424,7 +424,7 @@ int compare_movies_by_price(const void* a, const void* b)
     return 1;
 }
 
-//å‡åº
+//ÉıĞò
 int compare_movies_by_remaining_ticket(const void* a, const void* b)
 {
     Movie* movie1 = *(Movie* const*)a;
@@ -432,7 +432,7 @@ int compare_movies_by_remaining_ticket(const void* a, const void* b)
     if (movie1->remaining_ticket < movie2->remaining_ticket) return -1;
     return 1;
 }
-//å‡åº     
+//ÉıĞò     
 int compare_movies_by_start_time(const void* a, const void* b) {
     Movie* movie1 = *(Movie* const*)a;
     Movie* movie2 = *(Movie* const*)b;
@@ -443,21 +443,21 @@ Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
     Movie** movies = NULL;
     int count = 0;
 
-    // é¦–å…ˆï¼Œè®¡ç®—é“¾è¡¨ä¸­çš„ç”µå½±æ•°é‡  
+    // Ê×ÏÈ£¬¼ÆËãÁ´±íÖĞµÄµçÓ°ÊıÁ¿  
     Movie* current = head;
     while (current != NULL) {
         count++;
         current = current->next;
     }
 
-    // åˆ†é…ä¸€ä¸ªæ•°ç»„æ¥å­˜å‚¨æ‰€æœ‰ç”µå½±çš„æŒ‡é’ˆ  
+    // ·ÖÅäÒ»¸öÊı×éÀ´´æ´¢ËùÓĞµçÓ°µÄÖ¸Õë  
     movies = (Movie**)malloc(count * sizeof(Movie*));
     if (!movies) {
-        printf("å†…å­˜åˆ†é…å¤±è´¥!\n");
+        printf("ÄÚ´æ·ÖÅäÊ§°Ü!\n");
         return NULL;
     }
 
-    // å°†æ‰€æœ‰ç”µå½±çš„æŒ‡é’ˆå­˜å‚¨åˆ°æ•°ç»„ä¸­  
+    // ½«ËùÓĞµçÓ°µÄÖ¸Õë´æ´¢µ½Êı×éÖĞ  
     int i = 0;
     current = head;
     while (current != NULL) {
@@ -465,17 +465,17 @@ Movie* movie_sort(Movie* head,int* compare(void*,void*)) {
         current = current->next;
     }
 
-    // ä½¿ç”¨qsortå¯¹æ•°ç»„è¿›è¡Œæ’åº  
+    // Ê¹ÓÃqsort¶ÔÊı×é½øĞĞÅÅĞò  
     qsort(movies, count, sizeof(Movie*), compare);
 
-    // é‡æ–°æ„å»ºé“¾è¡¨  
+    // ÖØĞÂ¹¹½¨Á´±í  
     Movie* new_head = movies[0];
     for (i = 1; i < count; i++) {
         movies[i - 1]->next = movies[i];
     }
     movies[count - 1]->next = NULL;
 
-    // é‡Šæ”¾æ•°ç»„å†…å­˜  
+    // ÊÍ·ÅÊı×éÄÚ´æ  
     free(movies);
 
     return new_head;
@@ -524,7 +524,7 @@ double caculate_movie_income(Movie* head)
 {
     if (!head)
     {
-        printf("æ•°æ®ä¸å­˜åœ¨!");
+        printf("Êı¾İ²»´æÔÚ!");
         return 0;
     }
     double res = 0;
@@ -542,7 +542,7 @@ int datetime_to_minutes(const char* datetime)
         return hour * 60 + minute;
     }
     else {
-        // å¦‚æœè§£æå¤±è´¥ï¼Œè¿”å›ä¸€ä¸ªé”™è¯¯æ ‡å¿—
+        // Èç¹û½âÎöÊ§°Ü£¬·µ»ØÒ»¸ö´íÎó±êÖ¾
         return -1;
     }
 }
@@ -553,14 +553,14 @@ void movie_list_free(Movie* head) {
         temp = head;
         head = head->next;
 
-        // é‡Šæ”¾ movie_id, film_id, theater_id, start_time, end_time
+        // ÊÍ·Å movie_id, film_id, theater_id, start_time, end_time
         if (temp->movie_id) free(temp->movie_id);
         if (temp->film_id) free(temp->film_id);
         if (temp->theater_id) free(temp->theater_id);
         if (temp->start_time) free(temp->start_time);
         if (temp->end_time) free(temp->end_time);
 
-        // é‡Šæ”¾ Movie ç»“æ„ä½“æœ¬èº«
+        // ÊÍ·Å Movie ½á¹¹Ìå±¾Éí
         free(temp);
         temp = NULL;
     }
