@@ -41,6 +41,8 @@ bool change_password(const char* current_password, char* new_password);
 
 Movie* movie_choose(Movie* new_movie_list, Movie_hash_table* hash_table);
 
+Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* movieHashTable, User* user_now);
+
 Film* film_choose(Film* new_film_list,Film_hash_table* hash_table);
 
 Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table);

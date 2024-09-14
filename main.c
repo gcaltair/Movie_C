@@ -5,7 +5,10 @@ int main() {
     printf("test\n");
     hash_ini();
     load_file();
-
+    cinema_show_all(cinema_list);
+    film_show_all(film_list);
+    press_zero_to_continue();
+    
     user_now = find_user_in_hash_table(userHashTable, "U001");
     user_operation();
     //while (1)

@@ -186,6 +186,28 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
     }
     return find_movie_in_hash_table(hash_table,new_head_for_option->movie_id);
 }
+Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* movieHashTable, User* user_now)
+{
+    Movie* movie_raw_list = movie_list_create_by_film(target_film, movieHashTable);
+    Movie* movie_filtered_list_temp = movie_filter_by_current_date(movie_raw_list);
+    Movie* movie_filtered_list = movie_filter_by_not_played(movie_filtered_list_temp);//得到当天未放映场次
+    if (movie_filtered_list == NULL)
+    {
+        printf("暂无当日场次\n");
+        press_zero_to_continue();
+        movie_list_free(movie_raw_list);
+        movie_list_free(movie_filtered_list_temp);
+        return;
+    }
+    Movie* target_movie = for_user_movie_choose(movie_filtered_list, movieHashTable); //得到target_movie
+    movie_print(target_movie);
+    seat_map_show(target_movie->seat_map);
+    printf("该场次的推荐%s.\n", get_great_seats(target_movie->seat_map));
+    //order_generate_main(user_now, target_movie);
+
+    return target_movie;
+}
+
 Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
 {
     int count = 0;
@@ -214,9 +236,6 @@ Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
     return returned_movie;
     
 }
-
-
-
 
 int my_min(int a,int b)
 {
