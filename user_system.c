@@ -70,7 +70,8 @@ void sub_purchase_by_name(Film_hash_table* filmHashTable, Movie* movieHashTable,
     Film* target_film;
     while (1) {
         printf("请输入电影名称：");
-        char scanf_movie_name[30]; get_user_input_string(scanf_movie_name, 20);
+        char scanf_movie_name[30]; 
+        get_user_input_string(scanf_movie_name, 20);
         target_film = find_film_in_hash_table_by_name(filmHashTable, scanf_movie_name);
         if (target_film == NULL) {
             printf("无法找到当前影片,是否重新输入?(1/0)");
