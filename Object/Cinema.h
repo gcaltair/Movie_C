@@ -16,8 +16,8 @@ typedef struct Cinema{
     Linked_int_list* peak_time;
 }Cinema;
 Cinema* cinema_create(const char* name,const char* cinema_alphabet,const char* location, char* id);
-Cinema* cinema_create_list(Cinema* new_cinema); //åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
-void cinema_add_to_list(Cinema** head, Cinema* new_cinema);//æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+Cinema* cinema_create_list(Cinema* new_cinema); //´´½¨Á´±íÍ·½Úµã
+void cinema_add_to_list(Cinema** head, Cinema* new_cinema);//Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
 Cinema* cinema_find_by_id(Cinema* head, const char* id);
 
 Cinema* cinema_find_by_name(Cinema* head, const char* name);

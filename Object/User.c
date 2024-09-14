@@ -5,12 +5,12 @@
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
 
-// åˆ›å»ºç”¨æˆ·
+// ´´½¨ÓÃ»§
 User* user_create(User_hash_table * hashTable,const char* userID, const char* name, const char* gender, const char* telephone,
                   const char* password, const char* email, double balance) {
     User* new_user = (User*)malloc(sizeof(User));
     if (new_user == NULL) {
-        printf("å†…å­˜åˆ†é…å¤±è´¥\n");
+        printf("ÄÚ´æ·ÖÅäÊ§°Ü\n");
         return NULL;
     }
     new_user->userID = strdup(userID);
@@ -22,18 +22,18 @@ User* user_create(User_hash_table * hashTable,const char* userID, const char* na
     new_user->user_balance = balance;
     new_user->next = NULL;
     new_user->hash_next=NULL;
-//idç¡®å®šåæ’å…¥
+//idÈ·¶¨ºó²åÈë
     insert_user_to_hash_table(hashTable,new_user);
     new_user->my_order=NULL;
     return new_user;
 }
-// åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
+// ´´½¨Á´±íÍ·½Úµã
 User* user_create_list(User* new_user) {
     new_user->next = NULL;
     return new_user;
 }
 
-// æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+// Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
 void user_add_to_list(User** head, User* new_user) {
     if (*head == NULL) {
         (*head) = new_user;
@@ -44,18 +44,18 @@ void user_add_to_list(User** head, User* new_user) {
     (*head)=new_user;
 }
 
-// ç›´æ¥æ·»åŠ ä¸€ä¸ªç”¨æˆ·åˆ°é“¾è¡¨
+// Ö±½ÓÌí¼ÓÒ»¸öÓÃ»§µ½Á´±í
 void user_direct_add_to_list(User_hash_table * hashTable,User** head, const char* userID, const char* name, const char* gender,
                              const char* telephone, const char* password, const char* email, double balance) {
     User* new_user = user_create(hashTable,userID, name, gender, telephone, password, email, balance);
     if(new_user==NULL){
-        printf("æ·»åŠ ç”¨æˆ·åˆ°é“¾è¡¨å¤±è´¥!");
+        printf("Ìí¼ÓÓÃ»§µ½Á´±íÊ§°Ü!");
         return;
     }
     user_add_to_list(head, new_user);
 }
 
-// é€šè¿‡ç”¨æˆ·IDæŸ¥æ‰¾ç”¨æˆ·
+// Í¨¹ıÓÃ»§ID²éÕÒÓÃ»§
 User* user_find_by_id(User* head, const char* userID) {
     while (head != NULL) {
         if (strcmp(head->userID, userID) == 0) {
@@ -66,21 +66,21 @@ User* user_find_by_id(User* head, const char* userID) {
     return NULL;
 }
 
-// æ˜¾ç¤ºå•ä¸ªç”¨æˆ·ä¿¡æ¯
+// ÏÔÊ¾µ¥¸öÓÃ»§ĞÅÏ¢
 void user_show(const User* user) {
     if (user == NULL) {
         printf("User not found.\n");
         return;
     }
-    printf("ç”¨æˆ·ID: %s\n", user->userID);
-    printf("å§“å: %s\n", user->user_name);
-    printf("æ€§åˆ«: %s\n", user->gender);
-    printf("ç”µè¯å·: %s\n", user->telephone);
-    printf("é‚®ç®±: %s\n", user->email);
-    printf("ä½™é¢: %.2f\n", user->user_balance);
+    printf("ÓÃ»§ID: %s\n", user->userID);
+    printf("ĞÕÃû: %s\n", user->user_name);
+    printf("ĞÔ±ğ: %s\n", user->gender);
+    printf("µç»°ºÅ: %s\n", user->telephone);
+    printf("ÓÊÏä: %s\n", user->email);
+    printf("Óà¶î: %.2f\n", user->user_balance);
 }
 
-// æ˜¾ç¤ºæ‰€æœ‰ç”¨æˆ·ä¿¡æ¯
+// ÏÔÊ¾ËùÓĞÓÃ»§ĞÅÏ¢
 void user_show_all(User* head) {
     while (head != NULL) {
         user_show(head);
@@ -89,7 +89,7 @@ void user_show_all(User* head) {
     }
 }
 
-// é‡Šæ”¾ç”¨æˆ·é“¾è¡¨å ç”¨çš„å†…å­˜
+// ÊÍ·ÅÓÃ»§Á´±íÕ¼ÓÃµÄÄÚ´æ
 void user_free_list(User* head) {
     while (head != NULL) {
         User* temp = head;
@@ -105,16 +105,16 @@ void user_free_list(User* head) {
     }
 }
 
-// åˆå§‹åŒ–å“ˆå¸Œè¡¨ï¼Œå°†æ‰€æœ‰çš„æŒ‡é’ˆè®¾ç½®ä¸ºNULL
-// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ªUser_hash_table
+// ³õÊ¼»¯¹şÏ£±í£¬½«ËùÓĞµÄÖ¸ÕëÉèÖÃÎªNULL
+// ´´½¨²¢³õÊ¼»¯Ò»¸öUser_hash_table
 User_hash_table* user_hash_table_create() {
-    // åŠ¨æ€åˆ†é…å†…å­˜ç»™User_hash_tableç»“æ„
+    // ¶¯Ì¬·ÖÅäÄÚ´æ¸øUser_hash_table½á¹¹
     User_hash_table* ht = (User_hash_table*)malloc(sizeof(User_hash_table));
     if (!ht) {
-        // å¦‚æœå†…å­˜åˆ†é…å¤±è´¥ï¼Œè¿”å›NULL
+        // Èç¹ûÄÚ´æ·ÖÅäÊ§°Ü£¬·µ»ØNULL
         return NULL;
     }
-    // åˆå§‹åŒ–å“ˆå¸Œè¡¨ï¼Œå°†æ‰€æœ‰çš„æŒ‡é’ˆè®¾ç½®ä¸ºNULL
+    // ³õÊ¼»¯¹şÏ£±í£¬½«ËùÓĞµÄÖ¸ÕëÉèÖÃÎªNULL
     user_hash_table_init(ht);
     return ht;
 }
@@ -124,25 +124,25 @@ void user_hash_table_init(User_hash_table* ht) {
     }
 }
 
-// å°†ç”¨æˆ·æ’å…¥å“ˆå¸Œè¡¨ï¼Œä½¿ç”¨é“¾åœ°å€æ³•å¤„ç†å“ˆå¸Œå†²çª
+// ½«ÓÃ»§²åÈë¹şÏ£±í£¬Ê¹ÓÃÁ´µØÖ··¨´¦Àí¹şÏ£³åÍ»
 void insert_user_to_hash_table(User_hash_table* ht, User* user) {
-    unsigned int index = hash(user->userID, strlen(user->userID), 0x9747b28c); // ä½¿ç”¨MurmurHash2ç”Ÿæˆç´¢å¼•
+    unsigned int index = hash(user->userID, strlen(user->userID), 0x9747b28c); // Ê¹ÓÃMurmurHash2Éú³ÉË÷Òı
     //printf("Inserting user %s at index %u\n", user->userID, index);
-    user->hash_next = ht->table[index];  // å°†å½“å‰çš„å“ˆå¸Œè¡¨ç´¢å¼•å¤„çš„å…ƒç´ æ”¾åœ¨æ–°ç”¨æˆ·çš„åé¢
-    ht->table[index] = user;        // å°†æ–°ç”¨æˆ·æ”¾åœ¨é“¾è¡¨çš„å¤´éƒ¨
+    user->hash_next = ht->table[index];  // ½«µ±Ç°µÄ¹şÏ£±íË÷Òı´¦µÄÔªËØ·ÅÔÚĞÂÓÃ»§µÄºóÃæ
+    ht->table[index] = user;        // ½«ĞÂÓÃ»§·ÅÔÚÁ´±íµÄÍ·²¿
 }
 
-// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾ç”¨æˆ·ï¼Œé€šè¿‡userIDæŸ¥æ‰¾
+// ÔÚ¹şÏ£±íÖĞ²éÕÒÓÃ»§£¬Í¨¹ıuserID²éÕÒ
 User* find_user_in_hash_table(User_hash_table* ht, const char* userID) {
     unsigned int index = hash(userID, strlen(userID), 0x9747b28c);
     User* user = ht->table[index];
     while (user) {
         if (strcmp(user->userID, userID) == 0) {
-            return user;  // æ‰¾åˆ°ç”¨æˆ·ï¼Œè¿”å›æŒ‡é’ˆ
+            return user;  // ÕÒµ½ÓÃ»§£¬·µ»ØÖ¸Õë
         }
-        user = user->hash_next;  // ç»§ç»­æŸ¥æ‰¾é“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªç”¨æˆ·
+        user = user->hash_next;  // ¼ÌĞø²éÕÒÁ´±íÖĞµÄÏÂÒ»¸öÓÃ»§
     }
-    return NULL;  // å¦‚æœæœªæ‰¾åˆ°ï¼Œè¿”å›NULL
+    return NULL;  // Èç¹ûÎ´ÕÒµ½£¬·µ»ØNULL
 }
 void user_delete(User **head, const char *user_id) {
     User* current = *head;
@@ -154,7 +154,7 @@ void user_delete(User **head, const char *user_id) {
     }
 
     if (current == NULL) {
-        printf("æœªå‘ç°ç”¨æˆ·\n");
+        printf("Î´·¢ÏÖÓÃ»§\n");
         return;
     }
 
@@ -173,44 +173,44 @@ void user_delete(User **head, const char *user_id) {
     free(current->email);
     free(current);
 
-    printf("ç”¨æˆ·åˆ é™¤æˆåŠŸ.\n");
+    printf("ÓÃ»§É¾³ı³É¹¦.\n");
 }
 
-//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
+//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
 User* user_modify(User* head, char* id, int mode, char* arg) {
     User* user = user_find_by_id(head, id);
     if (user == NULL) {
-        printf("ç”¨æˆ·ä¸å­˜åœ¨!\n");
-        return NULL; // å¦‚æœæ‰¾ä¸åˆ°ç”¨æˆ·ï¼Œåˆ™ç›´æ¥è¿”å›
+        printf("ÓÃ»§²»´æÔÚ!\n");
+        return NULL; // Èç¹ûÕÒ²»µ½ÓÃ»§£¬ÔòÖ±½Ó·µ»Ø
     }
 
     switch (mode) {
-    case 1: // ä¿®æ”¹ç”¨æˆ·ID
-        free(user->userID); // é‡Šæ”¾æ—§IDçš„å†…å­˜
-        user->userID = strdup(arg); // åˆ†é…æ–°IDçš„å†…å­˜å¹¶å¤åˆ¶
+    case 1: // ĞŞ¸ÄÓÃ»§ID
+        free(user->userID); // ÊÍ·Å¾ÉIDµÄÄÚ´æ
+        user->userID = strdup(arg); // ·ÖÅäĞÂIDµÄÄÚ´æ²¢¸´ÖÆ
         break;
-    case 2: // ä¿®æ”¹ç”¨æˆ·å
+    case 2: // ĞŞ¸ÄÓÃ»§Ãû
         free(user->user_name);
         user->user_name = strdup(arg);
         break;
-    case 6: // ä¿®æ”¹æ€§åˆ«
+    case 6: // ĞŞ¸ÄĞÔ±ğ
         free(user->gender);
         user->gender = strdup(arg);
         break;
-    case 4: // ä¿®æ”¹ç”µè¯
+    case 4: // ĞŞ¸Äµç»°
         free(user->telephone);
         user->telephone = strdup(arg);
         break;
-    case 5: // ä¿®æ”¹å¯†ç 
+    case 5: // ĞŞ¸ÄÃÜÂë
         free(user->password);
         user->password = strdup(arg);
         break;
-    case 3: // ä¿®æ”¹é‚®ç®±
+    case 3: // ĞŞ¸ÄÓÊÏä
         free(user->email);
         user->email = strdup(arg);
         break;
     default:
-        printf("é”™è¯¯ä¿®æ”¹æ¨¡å¼\n");
+        printf("´íÎóĞŞ¸ÄÄ£Ê½\n");
         break;
     }
     return user;

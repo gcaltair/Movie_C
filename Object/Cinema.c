@@ -8,14 +8,14 @@
 #include "Theater.h"
 
 Cinema *cinema_create(const char *name, const char* cinema_alphabet,const char *location, char* id) {
-    // åŠ¨æ€åˆ†é…å†…å­˜ç»™Cinemaç»“æ„ä½“
+    // ¶¯Ì¬·ÖÅäÄÚ´æ¸øCinema½á¹¹Ìå
     Cinema* cinema = (Cinema*)malloc(sizeof(Cinema));
     if (cinema == NULL) {
-        printf("å†…å­˜åˆ†é…å¤±è´¥.\n");
+        printf("ÄÚ´æ·ÖÅäÊ§°Ü.\n");
         return NULL;
     }
 
-    // åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶å‚æ•°å†…å®¹åˆ°ç»“æ„ä½“å­—æ®µ
+    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊıÄÚÈİµ½½á¹¹Ìå×Ö¶Î
     cinema->cinema_name = strdup(name);
     cinema->cinema_alphabet = strdup(cinema_alphabet);
     cinema->location = strdup(location);
@@ -27,14 +27,14 @@ Cinema *cinema_create(const char *name, const char* cinema_alphabet,const char *
 }
 void cinema_show(const Cinema* cinema) {
     if (cinema == NULL) {
-        printf("ç”µå½±é™¢æ•°æ®ä¸å­˜åœ¨.\n");
+        printf("µçÓ°ÔºÊı¾İ²»´æÔÚ.\n");
         return;
     }
 
-    printf("ç”µå½±é™¢åå­—: %s\n", cinema->cinema_name);
+    printf("µçÓ°ÔºÃû×Ö: %s\n", cinema->cinema_name);
     printf("Cinema Alphabet: %s\n", cinema->cinema_alphabet);
-    printf("åœ°ç‚¹: %s\n", cinema->location);
-    printf("ç”µå½±é™¢ID: %s\n", cinema->cinema_id);
+    printf("µØµã: %s\n", cinema->location);
+    printf("µçÓ°ÔºID: %s\n", cinema->cinema_id);
 }
 void cinema_show_detail(const Cinema* cinema){
     cinema_show(cinema);
@@ -63,7 +63,7 @@ Cinema* cinema_find_by_id(Cinema* head, const char* id) {
         }
         temp = temp->next;
     }
-    return NULL; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°åŒ¹é…çš„IDï¼Œè¿”å›NULL
+    return NULL; // Èç¹ûÃ»ÓĞÕÒµ½Æ¥ÅäµÄID£¬·µ»ØNULL
 }
 Cinema* cinema_find_by_name(Cinema* head, const char* name) {
     Cinema* temp = head;
@@ -74,7 +74,7 @@ Cinema* cinema_find_by_name(Cinema* head, const char* name) {
         }
         temp = temp->next;
     }
-    return NULL; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°åŒ¹é…çš„IDï¼Œè¿”å›NULL
+    return NULL; // Èç¹ûÃ»ÓĞÕÒµ½Æ¥ÅäµÄID£¬·µ»ØNULL
 }
 void cinema_show_all(Cinema* head) {
     Cinema* temp = head;

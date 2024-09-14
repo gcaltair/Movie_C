@@ -8,14 +8,14 @@
 #include "stdio.h"
 Admin* Admin_create(const char* id, const char* name, const char* telephone,
                     const char* password, const char* email, Cinema *cinema_,const char* cinema_id) {
-    // åŠ¨æ€åˆ†é…å†…å­˜ç»™Adminç»“æ„ä½“
+    // ¶¯Ì¬·ÖÅäÄÚ´æ¸øAdmin½á¹¹Ìå
     Admin* admin = (Admin*)malloc(sizeof(Admin));
     if (admin == NULL) {
-        printf("å†…å­˜åˆ†é…å¤±è´¥.\n");
+        printf("ÄÚ´æ·ÖÅäÊ§°Ü.\n");
         return NULL;
     }
 
-    // åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶å‚æ•°å†…å®¹åˆ°ç»“æ„ä½“å­—æ®µ
+    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊıÄÚÈİµ½½á¹¹Ìå×Ö¶Î
     admin->admin_id = strdup(id);
     admin->admin_name = strdup(name);
     admin->admin_telephone = strdup(telephone);
@@ -48,27 +48,27 @@ void admin_show(const Admin *admin) {
         return;
     }
 
-    printf("ç®¡ç†å‘˜ ID: %s\n", admin->admin_id);
-    printf("å§“å: %s\n", admin->admin_name);
-    printf("ç”µè¯: %s\n", admin->admin_telephone);
-    printf("Password: %s\n", admin->admin_password);  // æ³¨æ„ï¼šå®é™…ç³»ç»Ÿä¸­é€šå¸¸ä¸ä¼šæ‰“å°å¯†ç 
-    printf("é‚®ç®±: %s\n", admin->admin_email);
+    printf("¹ÜÀíÔ± ID: %s\n", admin->admin_id);
+    printf("ĞÕÃû: %s\n", admin->admin_name);
+    printf("µç»°: %s\n", admin->admin_telephone);
+    printf("Password: %s\n", admin->admin_password);  // ×¢Òâ£ºÊµ¼ÊÏµÍ³ÖĞÍ¨³£²»»á´òÓ¡ÃÜÂë
+    printf("ÓÊÏä: %s\n", admin->admin_email);
     cinema_show(admin->cinema);
     printf("\n");
 
 }
-//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
+//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
 Admin* admin_modify(Admin* admin, int modify_mode, char* arg) {
     if (admin == NULL) {
-        printf("ç®¡ç†å‘˜ä¸å­˜åœ¨!");
-        return NULL; // å¦‚æœæ‰¾ä¸åˆ°ç®¡ç†å‘˜ï¼Œåˆ™ç›´æ¥è¿”å›
+        printf("¹ÜÀíÔ±²»´æÔÚ!");
+        return NULL; // Èç¹ûÕÒ²»µ½¹ÜÀíÔ±£¬ÔòÖ±½Ó·µ»Ø
     }
 
     switch (modify_mode) {
         case 1:
-            // é€šå¸¸ä¸æ¨èä¿®æ”¹IDï¼Œä½†ä¸ºäº†å®Œæ•´æ€§åŒ…å«æ­¤åŠŸèƒ½
-            free(admin->admin_id); // é‡Šæ”¾æ—§IDçš„å†…å­˜
-            admin->admin_id = strdup(arg); // åˆ†é…æ–°IDçš„å†…å­˜å¹¶å¤åˆ¶
+            // Í¨³£²»ÍÆ¼öĞŞ¸ÄID£¬µ«ÎªÁËÍêÕûĞÔ°üº¬´Ë¹¦ÄÜ
+            free(admin->admin_id); // ÊÍ·Å¾ÉIDµÄÄÚ´æ
+            admin->admin_id = strdup(arg); // ·ÖÅäĞÂIDµÄÄÚ´æ²¢¸´ÖÆ
             break;
         case 2:
             free(admin->admin_name);
@@ -87,12 +87,12 @@ Admin* admin_modify(Admin* admin, int modify_mode, char* arg) {
             admin->admin_email = strdup(arg);
             break;
         default:
-            printf("æ— æ•ˆä¿®æ”¹æ¨¡å¼\n");
+            printf("ÎŞĞ§ĞŞ¸ÄÄ£Ê½\n");
             break;
     }
     return admin;
 }
-//æŸ¥è¯¢ç®¡ç†å‘˜ä¿¡æ¯
+//²éÑ¯¹ÜÀíÔ±ĞÅÏ¢
 Admin* admin_find_by_id(Admin* head, char* id) {
     Admin* temp = head;
     while (temp != NULL) {
@@ -102,32 +102,32 @@ Admin* admin_find_by_id(Admin* head, char* id) {
         temp = temp->next;
     }
     //printf("Not found Admin ID %s\n", id);
-    return NULL; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°åŒ¹é…çš„IDï¼Œè¿”å›NULL
+    return NULL; // Èç¹ûÃ»ÓĞÕÒµ½Æ¥ÅäµÄID£¬·µ»ØNULL
 }
 
 char* admin_delete(Admin** head, char* id){
-    Admin* target = admin_find_by_id(*head, id); // è°ƒç”¨ admin_find_by_id æ¥æŸ¥æ‰¾èŠ‚ç‚¹
+    Admin* target = admin_find_by_id(*head, id); // µ÷ÓÃ admin_find_by_id À´²éÕÒ½Úµã
     if (target != NULL) {
         char* temp=target->admin_id;
         Admin* prev = NULL;
         Admin* current = *head;
-        // æŸ¥æ‰¾è¦åˆ é™¤çš„èŠ‚ç‚¹çš„å‰ä¸€ä¸ªèŠ‚ç‚¹
+        // ²éÕÒÒªÉ¾³ıµÄ½ÚµãµÄÇ°Ò»¸ö½Úµã
         while (current != target) {
             prev = current;
             current = current->next;
         }
 
-        // å¤„ç†åˆ é™¤é€»è¾‘
+        // ´¦ÀíÉ¾³ıÂß¼­
         if (prev == NULL) {
-            // å¦‚æœè¦åˆ é™¤çš„èŠ‚ç‚¹æ˜¯å¤´èŠ‚ç‚¹
-            *head = current->next; // æ›´æ–°å¤´èŠ‚ç‚¹
+            // Èç¹ûÒªÉ¾³ıµÄ½ÚµãÊÇÍ·½Úµã
+            *head = current->next; // ¸üĞÂÍ·½Úµã
         }
         else {
-            // å¦‚æœè¦åˆ é™¤çš„èŠ‚ç‚¹ä¸æ˜¯å¤´èŠ‚ç‚¹
-            prev->next = current->next; // æ–­å¼€è¿æ¥
+            // Èç¹ûÒªÉ¾³ıµÄ½Úµã²»ÊÇÍ·½Úµã
+            prev->next = current->next; // ¶Ï¿ªÁ¬½Ó
         }
 
-        // é‡Šæ”¾è¦åˆ é™¤çš„èŠ‚ç‚¹çš„å†…å­˜
+        // ÊÍ·ÅÒªÉ¾³ıµÄ½ÚµãµÄÄÚ´æ
         free(current);
         return temp;
     }
@@ -137,15 +137,15 @@ void admin_free_list(Admin** head) {
     Admin* next;
 
     while (current != NULL) {
-        next = current->next; // ä¿å­˜ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆ
+        next = current->next; // ±£´æÏÂÒ»¸ö½ÚµãµÄÖ¸Õë
 
-        // é‡Šæ”¾Cinemaç»“æ„ä½“
+        // ÊÍ·ÅCinema½á¹¹Ìå
         //if (current->cinema != NULL) {
         //    cinema_free(current->cinema);
-        //    current->cinema = NULL; //æœ‰åŠ©äºé¿å…é‡æŒ‡é’ˆ
+        //    current->cinema = NULL; //ÓĞÖúÓÚ±ÜÃâÒ°Ö¸Õë
         //}
 
-        // é‡Šæ”¾Adminç»“æ„ä½“
+        // ÊÍ·ÅAdmin½á¹¹Ìå
         free(current->admin_id);
         free(current->admin_name);
         free(current->admin_telephone);
@@ -154,8 +154,8 @@ void admin_free_list(Admin** head) {
         free(current->cinema_id);
         free(current);
 
-        current = next; // ç§»åŠ¨åˆ°ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
+        current = next; // ÒÆ¶¯µ½ÏÂÒ»¸ö½Úµã
     }
 
-    *head = NULL; // å°†å¤´æŒ‡é’ˆè®¾ç½®ä¸ºNULLï¼Œè¡¨ç¤ºé“¾è¡¨ä¸ºç©º
+    *head = NULL; // ½«Í·Ö¸ÕëÉèÖÃÎªNULL£¬±íÊ¾Á´±íÎª¿Õ
 }

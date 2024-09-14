@@ -15,6 +15,7 @@
 #include"Object/Order.h"
 #include"Structure File/interval_tree.h"
 #include"Structure File/linked_list.h"
+#include "Structure File/io_system.h"
 
 Theater* theater_choose_for_admin(Theater* new_theater_list, Theater_hash_table* hash_table)
 {

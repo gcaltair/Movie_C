@@ -11,7 +11,7 @@ typedef struct Movie {
     char* film_id;
     Film* film;
     char* theater_id;
-    Theater* theater; // æŒ‡å‘åœ¨å“ªä¸ªå½±å…æ’­æ”¾  
+    Theater* theater; // Ö¸ÏòÔÚÄÄ¸öÓ°Ìü²¥·Å  
     
     char* start_time;
     int start_min;
@@ -21,37 +21,37 @@ typedef struct Movie {
     double price;
     double discount;
     int(*seat_map)[26];
-    struct Movie* next; // æŒ‡å‘ä¸‹ä¸€ä¸ªç”µå½±åœºæ¬¡ï¼ˆé“¾è¡¨ï¼‰
+    struct Movie* next; // Ö¸ÏòÏÂÒ»¸öµçÓ°³¡´Î£¨Á´±í£©
     struct Movie *hash_next;
 } Movie;
 
-// åˆ›å»ºæ–°çš„ Movie èŠ‚ç‚¹  
+// ´´½¨ĞÂµÄ Movie ½Úµã  
 Movie* movie_create(Movie_hash_table* movieHashTable, const char* movie_id, const char* film_id, Film* film, const char* theater_id, Theater* theater, const char* start_time, const char* end_time, int remaining_ticket, double price, double discount);
 
-// æ·»åŠ  Movie åˆ°é“¾è¡¨
+// Ìí¼Ó Movie µ½Á´±í
 void movie_add_to_list(Movie** head, Movie* newMovie);
 
-// æ˜¾ç¤ºå•ä¸ª Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾µ¥¸ö Movie µÄĞÅÏ¢  
 void movie_show(const Movie* movie);
 
 
 
-// æ˜¾ç¤ºé“¾è¡¨ä¸­æ‰€æœ‰ Movie çš„ä¿¡æ¯  
+// ÏÔÊ¾Á´±íÖĞËùÓĞ Movie µÄĞÅÏ¢  
 void movie_show_all(Movie* head);
 
-//æ ¹æ®å‰©ä½™ç¥¨æ•°æŸ¥æ‰¾çš„æ¯”è¾ƒå‡½æ•°(é™åº)
+//¸ù¾İÊ£ÓàÆ±Êı²éÕÒµÄ±È½Ïº¯Êı(½µĞò)
 int compare_movies_by_remaining_ticket(const void* a, const void* b);
 
-// æ ¹æ®å¼€å§‹æ—¶é—´æŸ¥æ‰¾çš„æ¯”è¾ƒå‡½æ•°  
+// ¸ù¾İ¿ªÊ¼Ê±¼ä²éÕÒµÄ±È½Ïº¯Êı  
 int compare_movies_by_start_time(const void* a, const void* b);
-// movieæ’åºå‡½æ•°
+// movieÅÅĞòº¯Êı
 Movie* movie_sort(Movie* head, int* compare(void*, void*));
 
 
-//æŒ‰åœºæ¬¡æ”¶å…¥æ’åº(é™åº)
+//°´³¡´ÎÊÕÈëÅÅĞò(½µĞò)
 int compare_movies_by_income(const void* a, const void* b);
 
-//åˆ›å»ºä¸€ä¸ªæ ¹æ®ç”µå½±åæ‰€æŸ¥åˆ°çš„åœºæ¬¡é“¾è¡¨
+//´´½¨Ò»¸ö¸ù¾İµçÓ°ÃûËù²éµ½µÄ³¡´ÎÁ´±í
 Movie* movie_list_create_by_film(Film* film, Movie_hash_table* movie_hash_table);
 
 Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_hash_table, Movie_hash_table* movie_hash_table);
@@ -59,9 +59,9 @@ Movie* movie_list_create_by_cinema(Cinema* cinema, Theater_hash_table* theater_h
 Movie* movie_filter_by_theater_type(char* type, Movie* head);
 
 Movie* movie_filter_by_time_period(Movie* head, char* start_time, char* end_time);
-//ç­›é€‰å·²ç»æ’­æ”¾çš„åœºæ¬¡
+//É¸Ñ¡ÒÑ¾­²¥·ÅµÄ³¡´Î
 Movie* movie_filter_by_played(Movie* head);
-//ç­›é€‰æœªæ’­æ”¾çš„åœºæ¬¡
+//É¸Ñ¡Î´²¥·ÅµÄ³¡´Î
 Movie* movie_filter_by_not_played(Movie* head);
 
 Movie* movie_filter_by_current_date(Movie* head);
@@ -72,7 +72,7 @@ Movie* movie_filter_by_cinema_id(char* id, Movie* head);
 
 Movie* movie_filter_by_cinema_name(char* name, Movie* head);
 
-//æ ¹æ®ç”µå½±åç­›é€‰åœºæ¬¡
+//¸ù¾İµçÓ°ÃûÉ¸Ñ¡³¡´Î
 Movie* movie_filter_by_film_name(char* name, Movie* head);
 typedef struct Movie_hash_table{
     Movie *table[HASH_TABLE_SIZE];
@@ -80,16 +80,16 @@ typedef struct Movie_hash_table{
 }Movie_hash_table;
 
 Movie_hash_table* movie_hash_table_create();
-// åˆå§‹åŒ–å“ˆå¸Œè¡¨
+// ³õÊ¼»¯¹şÏ£±í
 void movie_hash_table_init(Movie_hash_table* ht);
 
-// æ’å…¥ Movie åˆ°å“ˆå¸Œè¡¨
+// ²åÈë Movie µ½¹şÏ£±í
 void insert_movie_to_hash_table(Movie_hash_table* ht, Movie* movie);
 
-// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾ Movie
+// ÔÚ¹şÏ£±íÖĞ²éÕÒ Movie
 Movie* find_movie_in_hash_table(Movie_hash_table* ht, const char* movie_id);
 
-//å¤åˆ¶movieé™¤å“ˆå¸Œè¡¨ä¸æ€»é“¾è¡¨çš„ä¿¡æ¯
+//¸´ÖÆmovie³ı¹şÏ£±íÓë×ÜÁ´±íµÄĞÅÏ¢
 Movie* movie_copy_info(Movie* movie);
 
 Movie* movie_operation_sort(Movie* head, int mode);
@@ -97,7 +97,7 @@ Movie* movie_operation_sort(Movie* head, int mode);
 Movie* movie_operation_filter(Movie* head, int mode, void* filter_param);
 
 
-//æ ¹æ®ä¸Šåº§ç‡æ’åº(é™åº)
+//¸ù¾İÉÏ×ùÂÊÅÅĞò(½µĞò)
 int compare_movies_by_occupancy_rate(const void* a, const void* b);
 
 int compare_movies_by_price(const void* a, const void* b);

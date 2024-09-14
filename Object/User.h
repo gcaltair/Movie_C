@@ -22,7 +22,7 @@ typedef struct User {
     Linked_string_list* my_order;
 } User;
 
-//å¯¹äºä¿®æ”¹ç”¨æˆ·çš„åŠŸèƒ½çš„å‡ ä¸ªmodeè¿›è¡Œæšä¸¾
+//¶ÔÓÚĞŞ¸ÄÓÃ»§µÄ¹¦ÄÜµÄ¼¸¸ömode½øĞĞÃ¶¾Ù
 enum user_modify_mode {
     modify_id = 1,
     modify_name = 2,
@@ -34,21 +34,21 @@ enum user_modify_mode {
 };
 
 User* user_create(User_hash_table* hashTable, const char* userID, const char* name, const char* gender, const char* telephone,
-                  const char* password, const char* email, double balance); // åˆ›å»ºç”¨æˆ·
+                  const char* password, const char* email, double balance); // ´´½¨ÓÃ»§
 
-User* user_create_list(User* new_user); // åˆ›å»ºé“¾è¡¨å¤´èŠ‚ç‚¹
-void user_add_to_list(User** head, User* new_user); // æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°é“¾è¡¨ï¼Œå¤´æ’æ³•
+User* user_create_list(User* new_user); // ´´½¨Á´±íÍ·½Úµã
+void user_add_to_list(User** head, User* new_user); // Ìí¼ÓÒ»¸öÔªËØµ½Á´±í£¬Í·²å·¨
 void user_direct_add_to_list(User_hash_table *hashTable,User** head, const char* userID, const char* name, const char* gender,
                              const char* telephone, const char* password, const char* email, double balance);
-User* user_find_by_id(User* head, const char* userID); // é€šè¿‡ç”¨æˆ·IDæŸ¥æ‰¾ç”¨æˆ·
+User* user_find_by_id(User* head, const char* userID); // Í¨¹ıÓÃ»§ID²éÕÒÓÃ»§
 
-void user_show(const User* user); // æ˜¾ç¤ºå•ä¸ªç”¨æˆ·ä¿¡æ¯
-void user_show_all(User* head); // æ˜¾ç¤ºæ‰€æœ‰ç”¨æˆ·ä¿¡æ¯
-//ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
+void user_show(const User* user); // ÏÔÊ¾µ¥¸öÓÃ»§ĞÅÏ¢
+void user_show_all(User* head); // ÏÔÊ¾ËùÓĞÓÃ»§ĞÅÏ¢
+//ĞŞ¸ÄÓÃ»§ĞÅÏ¢
 User* user_modify(User* head, char* id, int mode, char* arg);
 
 
-//å“ˆå¸Œè¡¨ç›¸å…³
+//¹şÏ£±íÏà¹Ø
 typedef struct User_hash_table{
     User* table[HASH_TABLE_SIZE];
 }User_hash_table;

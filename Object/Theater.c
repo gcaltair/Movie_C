@@ -10,16 +10,16 @@
 #include "../hash.txt"
 #include "../Structure File/linked_list.h"
 #include"../Structure File/interval_tree.h"
-// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ªæ–°çš„ Theater ç»“æ„ä½“
+// ´´½¨²¢³õÊ¼»¯Ò»¸öĞÂµÄ Theater ½á¹¹Ìå
 Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type){
-    // åŠ¨æ€åˆ†é…å†…å­˜ç»™ Theater ç»“æ„ä½“
+    // ¶¯Ì¬·ÖÅäÄÚ´æ¸ø Theater ½á¹¹Ìå
     Theater* theater = (Theater*)malloc(sizeof(Theater));
     if (theater == NULL) {
         printf("Memory allocation failed.\n");
         return NULL;
     }
 
-    // åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶å‚æ•°å†…å®¹åˆ°ç»“æ„ä½“å­—æ®µ
+    // ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆ²ÎÊıÄÚÈİµ½½á¹¹Ìå×Ö¶Î
     theater->theater_id= strdup(theater_id_);
     theater->theater_name = strdup(name);
     theater->theater_capacity = capacity;
@@ -37,22 +37,22 @@ Theater* theater_create(Theater_hash_table *hashTable,const char* theater_id_, c
     return theater;
 }
 
-// æ˜¾ç¤ºå•ä¸ªå‰§é™¢ä¿¡æ¯
+// ÏÔÊ¾µ¥¸ö¾çÔºĞÅÏ¢
 void theater_show(const Theater* theater) {
     if (theater == NULL) {
         printf("Theater Data is NULL.\n");
         return;
     }
 
-    printf("ç”µå½±å… ID: %s\n",theater->theater_id);
-    printf("ç”µå½±å…åå­—: %s\n", theater->theater_name);
-    printf("ç”µå½±å…å®¹é‡: %d\n", theater->theater_capacity);
-    printf("ç”µå½±é™¢ ID: %s\n",theater->cinema_id);
-    printf("ç”µå½±å…ç±»å‹: %s\n", theater->theater_type);
+    printf("µçÓ°Ìü ID: %s\n",theater->theater_id);
+    printf("µçÓ°ÌüÃû×Ö: %s\n", theater->theater_name);
+    printf("µçÓ°ÌüÈİÁ¿: %d\n", theater->theater_capacity);
+    printf("µçÓ°Ôº ID: %s\n",theater->cinema_id);
+    printf("µçÓ°ÌüÀàĞÍ: %s\n", theater->theater_type);
     printf("\n");
 }
 
-// æ·»åŠ ä¸€ä¸ªå…ƒç´ åˆ°å‰§é™¢é“¾è¡¨ï¼ˆå¤´æ’æ³•ï¼‰
+// Ìí¼ÓÒ»¸öÔªËØµ½¾çÔºÁ´±í£¨Í·²å·¨£©
 void theater_add_to_list(Theater** head, Theater* new_theater) {
     if (*head == NULL) {
         *head = new_theater;
@@ -63,7 +63,7 @@ void theater_add_to_list(Theater** head, Theater* new_theater) {
     *head = new_theater;
 }
 
-// æ ¹æ®å‰§é™¢åæŸ¥æ‰¾å‰§é™¢
+// ¸ù¾İ¾çÔºÃû²éÕÒ¾çÔº
 Theater* theater_find_by_name(Theater* head, const char* name) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -72,10 +72,10 @@ Theater* theater_find_by_name(Theater* head, const char* name) {
         }
         temp = temp->next;
     }
-    return NULL; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°åŒ¹é…çš„åå­—ï¼Œè¿”å›NULL
+    return NULL; // Èç¹ûÃ»ÓĞÕÒµ½Æ¥ÅäµÄÃû×Ö£¬·µ»ØNULL
 }
 
-// æ˜¾ç¤ºæ‰€æœ‰å‰§é™¢ä¿¡æ¯
+// ÏÔÊ¾ËùÓĞ¾çÔºĞÅÏ¢
 void theater_show_all(Theater* head) {
     Theater* temp = head;
     while (temp != NULL) {
@@ -118,7 +118,7 @@ Theater* theater_copy_info(Theater* theater)
         return NULL;
     }
 
-    // å¤åˆ¶å½“å‰ Theater çš„ä¿¡æ¯åˆ°æ–°èŠ‚ç‚¹
+    // ¸´ÖÆµ±Ç° Theater µÄĞÅÏ¢µ½ĞÂ½Úµã
     new_theater->theater_id = strdup(theater->theater_id);
     new_theater->theater_name = strdup(theater->theater_name);
     new_theater->theater_capacity = theater->theater_capacity;
@@ -142,13 +142,13 @@ void theater_free_copied_list(Theater* theater_list)
 
     while (current_theater != NULL)
     {
-        // é‡Šæ”¾ä¸å½“å‰ Theater ç›¸å…³çš„å†…å­˜
+        // ÊÍ·ÅÓëµ±Ç° Theater Ïà¹ØµÄÄÚ´æ
         free(current_theater->theater_id);
         free(current_theater->theater_name);
         free(current_theater->cinema_id);
         free(current_theater->theater_type);
 
-        // ç§»åŠ¨åˆ°ä¸‹ä¸€ä¸ª Theater
+        // ÒÆ¶¯µ½ÏÂÒ»¸ö Theater
         next_theater = current_theater->next;
         free(current_theater);
         current_theater = next_theater;
@@ -168,7 +168,7 @@ double get_theater_income(Theater* theater, Movie_hash_table* hash_table)
     }
     return res;
 }
-//è¿™ä¸ªå‡½æ•°æœ‰é—®é¢˜ï¼ï¼ï¼ï¼
+//Õâ¸öº¯ÊıÓĞÎÊÌâ£¡£¡£¡£¡
 int compare_theaters_by_income(const void* a, const void* b, void* context) {
     Theater* theater1 = *(Theater* const*)a;
     Theater* theater2 = *(Theater* const*)b;
@@ -181,20 +181,20 @@ int compare_theaters_by_income(const void* a, const void* b, void* context) {
 //    Theater** theaters = NULL;
 //    int count = 0;
 //
-//    // é¦–å…ˆï¼Œè®¡ç®—é“¾è¡¨ä¸­çš„å½±å…æ•°é‡  
+//    // Ê×ÏÈ£¬¼ÆËãÁ´±íÖĞµÄÓ°ÌüÊıÁ¿  
 //    Theater* current = head;
 //    while (current != NULL) {
 //        count++;
 //        current = current->next;
 //    }
-//    // åˆ†é…ä¸€ä¸ªæ•°ç»„æ¥å­˜å‚¨æ‰€æœ‰å½±å…çš„æŒ‡é’ˆ  
+//    // ·ÖÅäÒ»¸öÊı×éÀ´´æ´¢ËùÓĞÓ°ÌüµÄÖ¸Õë  
 //    theaters = (Theater**)malloc(count * sizeof(Theater*));
 //    if (!theaters) {
 //        printf("Memory allocation failed!\n");
 //        return NULL;
 //    }
 //
-//    // å°†æ‰€æœ‰å½±å…çš„æŒ‡é’ˆå­˜å‚¨åˆ°æ•°ç»„ä¸­  
+//    // ½«ËùÓĞÓ°ÌüµÄÖ¸Õë´æ´¢µ½Êı×éÖĞ  
 //    int i = 0;
 //    current = head;
 //    while (current != NULL) {
@@ -202,23 +202,23 @@ int compare_theaters_by_income(const void* a, const void* b, void* context) {
 //        current = current->next;
 //    }
 //
-//    // ä½¿ç”¨qsortå¯¹æ•°ç»„è¿›è¡Œæ’åº  
+//    // Ê¹ÓÃqsort¶ÔÊı×é½øĞĞÅÅĞò  
 //    qsort_s(theaters, count, sizeof(Theater*), compare,(void*)movie_hash_table);
 //
-//    // é‡æ–°æ„å»ºé“¾è¡¨  
+//    // ÖØĞÂ¹¹½¨Á´±í  
 //    Theater* new_head = theaters[0];
 //    for (i = 1; i < count; i++) {
 //        theaters[i - 1]->next = theaters[i];
 //    }
 //    theaters[count - 1]->next = NULL;
 //
-//    // é‡Šæ”¾æ•°ç»„å†…å­˜  
+//    // ÊÍ·ÅÊı×éÄÚ´æ  
 //    free(theaters);
 //
 //    return new_head;
 //}
 
-// åˆå§‹åŒ–å“ˆå¸Œè¡¨ï¼Œå°†æ‰€æœ‰çš„æŒ‡é’ˆè®¾ç½®ä¸º NULL
+// ³õÊ¼»¯¹şÏ£±í£¬½«ËùÓĞµÄÖ¸ÕëÉèÖÃÎª NULL
 void init_theater_hash_table(Theater_hash_table* ht) {
     for (int i = 0; i < HASH_TABLE_SIZE; i++) {
         ht->table[i] = NULL;
@@ -226,7 +226,7 @@ void init_theater_hash_table(Theater_hash_table* ht) {
     ht->count = 0;
 }
 
-// åˆ›å»ºå¹¶åˆå§‹åŒ–ä¸€ä¸ª Theater_hash_table
+// ´´½¨²¢³õÊ¼»¯Ò»¸ö Theater_hash_table
 Theater_hash_table* theater_hash_table_create() {
     Theater_hash_table* ht = (Theater_hash_table*)malloc(sizeof(Theater_hash_table));
     if (!ht) {
@@ -236,26 +236,26 @@ Theater_hash_table* theater_hash_table_create() {
     return ht;
 }
 
-// ä½¿ç”¨å“ˆå¸Œè¡¨å°†å‰§é™¢æ’å…¥è¡¨ä¸­
+// Ê¹ÓÃ¹şÏ£±í½«¾çÔº²åÈë±íÖĞ
 void insert_theater_to_hash_table(Theater_hash_table* ht, Theater* theater) {
     uint32_t index = hash(theater->theater_id, strlen(theater->theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
-    theater->hash_next = ht->table[index];  // å¤„ç†å“ˆå¸Œå†²çªï¼Œå°†æ–°å‰§é™¢æ’å…¥å“ˆå¸Œé“¾è¡¨å¤´éƒ¨
+    theater->hash_next = ht->table[index];  // ´¦Àí¹şÏ£³åÍ»£¬½«ĞÂ¾çÔº²åÈë¹şÏ£Á´±íÍ·²¿
     ht->table[index] = theater;
     ht->count++;
 }
 
-// åœ¨å“ˆå¸Œè¡¨ä¸­æŸ¥æ‰¾å‰§é™¢ï¼Œé€šè¿‡ theater_id æŸ¥æ‰¾
+// ÔÚ¹şÏ£±íÖĞ²éÕÒ¾çÔº£¬Í¨¹ı theater_id ²éÕÒ
 Theater* find_theater_in_hash_table(Theater_hash_table* ht, const char* theater_id) {
     if (!ht) { printf("theater hash table is null"); return NULL; }
     uint32_t index = hash(theater_id, strlen(theater_id), 0x9747b28c) % HASH_TABLE_SIZE;
     Theater* theater = ht->table[index];
     while (theater) {
         if (strcmp(theater->theater_id, theater_id) == 0) {
-            return theater;  // æ‰¾åˆ°åŒ¹é…çš„å‰§é™¢ï¼Œè¿”å›æŒ‡é’ˆ
+            return theater;  // ÕÒµ½Æ¥ÅäµÄ¾çÔº£¬·µ»ØÖ¸Õë
         }
-        theater = theater->hash_next;  // ä½¿ç”¨hash_nextæŒ‡é’ˆç»§ç»­æŸ¥æ‰¾å“ˆå¸Œé“¾è¡¨ä¸­çš„ä¸‹ä¸€ä¸ªå‰§é™¢
+        theater = theater->hash_next;  // Ê¹ÓÃhash_nextÖ¸Õë¼ÌĞø²éÕÒ¹şÏ£Á´±íÖĞµÄÏÂÒ»¸ö¾çÔº
     }
     printf("%s haven't find\n", theater_id);
-    return NULL;  // å¦‚æœæœªæ‰¾åˆ°ï¼Œè¿”å›NULL
+    return NULL;  // Èç¹ûÎ´ÕÒµ½£¬·µ»ØNULL
 }
 

@@ -16,7 +16,7 @@ typedef struct Theater {
     int theater_capacity;
     struct Cinema* cinema;
     char* cinema_id;
-    // ç¼ºå°‘åº§ä½å›¾å’Œåº§ä½å·çš„å®šä¹‰
+    // È±ÉÙ×ùÎ»Í¼ºÍ×ùÎ»ºÅµÄ¶¨Òå
     char* theater_type;
 
     struct Theater* next;
@@ -27,7 +27,7 @@ typedef struct Theater {
     
 }Theater;
 
-// æ·»åŠ æ–°å½±å…
+// Ìí¼ÓĞÂÓ°Ìü
 Theater* theater_create(Theater_hash_table *hashTable, const char* id,
                         const char* name, int capacity, Cinema* cinema_,const char *cinema_id_, const char* type);
 
@@ -36,7 +36,7 @@ Theater* theater_find_by_name(Theater* head, const char* name);
 void theater_show(const Theater* theater);
 void theater_show_all(Theater* head);
 
-//è¿™ä¸ªå‡½æ•°æœ‰é—®é¢˜ï¼
+//Õâ¸öº¯ÊıÓĞÎÊÌâ£¡
 int compare_theaters_by_income(const void* a, const void* b, const void* context); 
 
 double get_theater_income(Theater* theater, Movie_hash_table* hash_table);
