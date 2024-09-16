@@ -96,7 +96,7 @@ char* seats_input_check();
 //       1 ：可购买
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
-int saets_check(char* seats, int(*seat_map)[26]);
+int seats_check(char* seats, int(*seat_map)[26]);
 
 //判断当前时间是否和传入时间是同一天
 int is_current_date(char* time);
@@ -133,7 +133,7 @@ double get_order_price(Order* order, Order_hash_table* hashTable);
 //判断余额是否充足
 //return 0 : 余额不足
 //       1 ：余额充足
-int balance_check(Order* order, Order_hash_table* hashTable);
+int balance_check(Order* order);
 
 //欠款计算
 //return 0  ：不欠款
@@ -141,7 +141,9 @@ int balance_check(Order* order, Order_hash_table* hashTable);
 double  get_debt(Order* order, Order_hash_table* hashTable);
 
 //充值
-void recharge(User* usr, double money);
+//return 0 ：充值失败
+//return 1 : 充值成功
+int recharge(User* usr, double money);
 
 //付款
 //return 0 ：查询错误
@@ -150,7 +152,7 @@ void recharge(User* usr, double money);
 //       1 ：可购买
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
-int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable);
+int process_pay(Order* order, int(*seat_map)[26]);
 
 //取消订单
 void order_cancel(Order* order);

@@ -128,58 +128,6 @@ static void admin_operation()
 
 
 
-
-
-
-
-//付款
-//return 1 ： 付款成功
-//       2 ： 付款失败
-int process_pay_main_order(Order* order) {
-    if (order->status != 2) {// 检查订单状态并尝试付款
-        printf("订单状态不合法.\n");
-        return 2;
-    }
-    if (balance_check(order, orderHashTable) == 1) { // 检查余额并付款  
-        if (process_pay(order, order->movie->seat_map, orderHashTable) == 0) {
-            printf("订单查询失败.\n");
-            return 0;
-        }
-        else {
-            printf("付款成功.\n");
-            return 1;
-        }
-    }
-    else {
-        while (balance_check(order, orderHashTable) == 0) {
-            printf("余额不足,您还需充值%f元`.继续充值请按1，放弃充值请按0\n", get_debt(order, orderHashTable));
-            int cer = get_user_input_int(1);
-            if (cer) {
-                if (balance_check(order, orderHashTable) == 0) {
-                    continue;
-                }
-                else {
-                    process_pay(order, order->movie->seat_map, orderHashTable);
-                    printf("付款成功.\n");
-                    return 1;
-                }
-            }
-            return 2;
-        }
-    }
-}
-
-//充值
-void recharge_main(void) {
-    
-
-    printf("输入金额");
-    double money = get_user_input_double(50, 5000);
-    scanf("%lf", &money);
-        
-    recharge(user_now, money);
-    
-}
 //用户根据订单付款
 int process_pay_main(void) {
     char orderID[100]; // 假设订单ID不会超过99个字符  

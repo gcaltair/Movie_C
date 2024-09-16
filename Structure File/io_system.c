@@ -313,19 +313,26 @@ void movie_print(const Movie* movie) {
     printf("折扣: %.2f\n", movie->discount);
     printf("------------\n");
 }
-void movie_print_for_user(const Movie* movie)
-{
-    if (movie == NULL) { printf("当前信息为空"); return; }
-    printf("影院名称：%s\n", movie->theater->cinema->cinema_name);
-    printf("影厅名称：%s\n", movie->theater->theater_name);
-    printf("影厅类型：%s\n", movie->theater->theater_type);
-    printf("场次类型：%s\n", movie->film->film_language);
-    printf("开始时间: %s\n", movie->start_time);
-    printf("结束时间: %s\n", movie->end_time);
-    printf("余票数: %d\n", movie->remaining_ticket);
-    printf("价格: %.2f\n", movie->price);
-    printf("折扣: %.2f\n", movie->discount);
-    printf("------------\n\n");
+void movie_print_for_user_ticket(const Movie* movie, char* seat) {
+    if (movie == NULL) {
+        printf("当前信息为空\n");
+        return;
+    }
+
+    printf("==========================================\n");
+    printf("|              电影票信息                |\n");
+    printf("==========================================\n");
+    printf("| %-10s: %-26s |\n", "电影名称", movie->film->film_name);
+    printf("| %-10s: %-26s |\n", "影院名称", movie->theater->cinema->cinema_name);
+    printf("| %-10s: %-26s |\n", "影厅名称", movie->theater->theater_name);
+    printf("| %-10s: %-26s |\n", "座位号", seat);
+    printf("| %-10s: %-26s |\n", "影厅类型", movie->theater->theater_type);
+    printf("| %-10s: %-26s |\n", "语言", movie->film->film_language);
+    printf("| %-10s: %-26s |\n", "开始时间", movie->start_time);
+    printf("| %-10s: %-26s |\n", "结束时间", movie->end_time);
+    printf("| %-10s: %-26.2f |\n", "价格", movie->price);
+    printf("| %-10s: %-26.2f |\n", "折扣", movie->discount);
+    printf("==========================================\n\n");
 }
 void order_print_for_user(const Order* order)
 {

@@ -11,6 +11,10 @@ typedef struct Film Film;
 typedef struct Order Order;
 typedef struct Order_hash_table Order_hash_table;
 
+int process_pay_main_order(Order* order, Order_hash_table* orderHashTable);
+
+void recharge_main(User* user_now);
+
 void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Order_hash_table* orderHashTable, User* user_now, Cinema* cinema_list, Movie* movie_list, Order** order_list);
 
 Movie* user_view_and_count_movie(Movie* movie_list, Movie_hash_table* movieHashTable, User* user_now);

@@ -23,7 +23,76 @@
 #include"Structure File/linked_list.h"
 #include"Structure File/io_system.h"
 #include"data_process.h"
+//付款
+//return 1 ： 付款成功
+//       2 ： 付款失败
+int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
+    if (order->status != 2) {// 检查订单状态并尝试付款
+        printf("订单状态不合法.\n");
+        return 2;
+    }
+    if (balance_check(order) == 1) { // 检查余额并付款  
+        if (process_pay(order, order->movie->seat_map) == 0) {
+            printf("订单查询失败.\n");
+            return 0;
+        }
+        else {
+            printf("付款成功,您的票据信息是：\n");
+            char* token = strtok(order->seats, "-");
+            int token_count = 0;
+            while (token&&token_count++<=3)
+            {
+                movie_print_for_user_ticket(order->movie,token);
+                token = strtok(NULL, "-");
+            }
+            
+            return 1;
+        }
+    }
+    else 
+    {
+        while (balance_check(order) == 0) 
+        {
+            printf("余额不足,您还需充值%.2f元.继续充值请按1，放弃充值请按0\n", get_debt(order, orderHashTable));
+            int cer = get_user_input_int(1);
+            if (cer)
+            {
+                recharge_main(order->usr);
+                if (balance_check(order) == 0) {
+                    continue;
+                }
+                else {
+                    process_pay(order, order->movie->seat_map);
+                    printf("付款成功,您的票据信息是：\n");
+                    char* token = strtok(order->seats, "-");
+                    int token_count = 0;
+                    while (token && token_count++ <= 3)
+                    {
+                        movie_print_for_user_ticket(order->movie, token);
+                        token = strtok(NULL, "-");
+                    }
+                    
+                    return 1;
+                }
+            }
+            else
+            { 
+                printf("付款失败\n");
+                return 2; 
+            }
+        }
+    }
+}
+//充值
+void recharge_main(User* user_now) {
 
+
+    printf("请输入金额:");
+    double money = get_user_input_double(50, 5000);
+
+    if(recharge(user_now, money)) printf("充值成功！已充值%.2lf元\n",money);
+
+}
 void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable,Order_hash_table* orderHashTable, User* user_now, Cinema* cinema_list, Movie* movie_list,Order** order_list)
 {
     while (1)
@@ -54,10 +123,11 @@ void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movi
         Order* order_new=order_generate_main(user_now, target_movie, order_list, orderHashTable);
         
         if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
-        else printf("订单生成成功\n");
-       
-        //write_orders_to_csv("Data\\orders.csv", order_list);
+        else printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
+        if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
         press_zero_to_continue();
+        //write_orders_to_csv("Data\\orders.csv", order_list);
+        
     }
 }
 Movie* user_view_and_count_movie(Movie* movie_list, Movie_hash_table* movieHashTable, User* user_now)
@@ -371,7 +441,7 @@ Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
     {
         count++;
         printf("序号 %d:\n", count);
-        movie_print_for_user(new_movie_list);
+        movie_print(new_movie_list);
         new_movie_list = new_movie_list->next;
     }
     printf("请输入你的选择(输入0退出):");

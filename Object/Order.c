@@ -227,7 +227,7 @@ char* get_current_time() {
 
 //生成orderID
 char* get_orderID(int number) {
-	char* orderID=malloc(sizeof(char)*50);
+	char* orderID=(char*)malloc(sizeof(char)*50);
 	if (!orderID) exit(-1);
 	sprintf(orderID, "O%09d", number);//将随机数转化为字符串的格式
 
@@ -306,7 +306,7 @@ char* seats_input_check() {
 //       1 ：可购买
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
-int saets_check(char* seats, int(*seat_map)[26]) {
+int seats_check(char* seats, int(*seat_map)[26]) {
 	int seat_number;
 	if (get_seat_number(seats)) {//通过传入的seats计算座位数，减少参数传入量
 		seat_number = get_seat_number(seats);
@@ -433,8 +433,8 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 //       9 :座位已售出
 //       10 :与已售出的座位相隔一个座位
 int order_generation(User* usr, char* seats, Movie* movie, int(*seat_map)[26], Order_hash_table* hashTable) {
-	if (saets_check(seats, seat_map) != 1) {//分别调用历史场次冲突判断函数和座位冲突函数判断两个函数，并返回对应值
-		return saets_check(seats, seat_map);
+	if (seats_check(seats, seat_map) != 1) {//分别调用历史场次冲突判断函数和座位冲突函数判断两个函数，并返回对应值
+		return seats_check(seats, seat_map);
 	}
 	if (history_order_time_check(usr, movie, hashTable) != 1) {
 		return history_order_time_check(usr, movie, hashTable);
@@ -471,7 +471,7 @@ double get_order_price(Order* order, Order_hash_table* hashTable) {
 //判断余额是否充足
 //return 0 : 余额不足
 //       1 ：余额充足
-int balance_check(Order* order, Order_hash_table* hashTable) {
+int balance_check(Order* order) {
 	double order_price = order->price;
 
 	if (order->usr->user_balance >= order_price) {//比较订单价格与用户余额大小
@@ -496,8 +496,9 @@ double  get_debt(Order* order, Order_hash_table* hashTable) {
 }
 
 //充值
-void recharge(User* usr, double money) {
+int recharge(User* usr, double money) {
 	usr->user_balance += money;
+	return 1;
 }
 
 //付款
@@ -507,7 +508,7 @@ void recharge(User* usr, double money) {
 //       1 ：可购买
 //       2 ：已售出
 //       3 ：因与已售出的座位相隔一个座位导致无法售出
-int process_pay(Order* order, int(*seat_map)[26], Order_hash_table* hashTable) {
+int process_pay(Order* order, int(*seat_map)[26]) {
 	char seats_copy[30];
 	strcpy(seats_copy, order->seats);
 	char* token = strtok(seats_copy, "-");//利用strtok函数对其进行分段
