@@ -257,41 +257,44 @@ int get_seat_number(char* seats) {
 //检验座位输入
 //return NULL ：输入不合法
 char* seats_input_check() {
-	char* seats = (char*)malloc(100 * sizeof(char));  // 分配足够的内存
-	if (seats == NULL) {
-		return NULL;  // 确保内存分配成功
-	}
+	char seats[100]; // 分配足够的内存
 	while (1) {
 		if (scanf("%99s", seats) != 1) {  //读入为字符串检验
-			free(seats);  // 释放内存
+			while (getchar() != '\n');  // 清理输入缓冲区
 			return NULL;
 		}
 		char* seats_copy = (char*)malloc((strlen(seats) + 1) * sizeof(char));  // 分配存储复制字符串的内存
 		if (seats_copy == NULL) {
-			free(seats);
 			return NULL;
 		}
 		strcpy(seats_copy, seats);
-		char* token = strtok(seats_copy, "-");//以-分割输入的字符串
-			
+		char* token = strtok(seats_copy, "-"); // 以-分割输入的字符串
+
 		while (token != NULL) {
-			if (token == NULL || strlen(token) < 2) {//先判断长度，最短长度为2
+			if (strlen(token) < 2) { // 先判断长度，最短长度为2
+				free(seats_copy);  // 释放内存
 				return NULL;
 			}
-			if (isalpha(token[0]) == 0) {//确保第一个字符为字母
+			if (!isalpha(token[0])) { // 确保第一个字符为字母
+				free(seats_copy);  // 释放内存
 				return NULL;
 			}
 			for (int i = 1; i < strlen(token); i++) {
-				if (isdigit(token[i]) == 0) { // 确保后面的字符是数字
+				if (!isdigit(token[i])) { // 确保后面的字符是数字
+					free(seats_copy);  // 释放内存
 					return NULL;
 				}
 			}
 			token = strtok(NULL, "-");
 		}
 		free(seats_copy);  // 释放复制的内存
-		break;
+		char* result = (char*)malloc((strlen(seats) + 1) * sizeof(char));  // 分配内存存储最终结果
+		if (result == NULL) {
+			return NULL;
+		}
+		strcpy(result, seats);
+		return result;
 	}
-	return seats;
 }
 
 //座位数冲突判断

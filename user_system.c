@@ -854,18 +854,18 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
 //       2 : 生成成功，支付失败
 Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_hash_table* orderHashTable) //判断当前时间是否早于电影开始时间
 {
-    char seats[30];
+    char seats = NULL;
     while (1) {
         while (true)
         {
-            seat_map_show(movie->seat_map);
             printf("请输入您想购买的座位号(形如A1-B1-C1).\n");
-            strcpy(seats, seats_input_check());
+            seats = seats_input_check();
             if (seats == NULL) {
                 printf("输入无效，请重新输入.\n");
-                while (getchar() != '\n');
+                while (getchar() != '\n');  
                 continue;
             }
+            printf("输入有效: %s\n", seats);
             break;
         }
         int judge = strcmp(get_current_time(), movie->start_time);
@@ -935,6 +935,7 @@ Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_ha
             printf("您购买的影片已经开始.\n");
             return 0;// 影片已开始，无法购买  
         }
+        free(seats);
     }
 }
 
