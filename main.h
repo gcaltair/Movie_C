@@ -54,14 +54,13 @@ static void admin_operation();
 
 
 static void user_operation();
-static void user_purchase_ticket();
-static void user_view_and_count_movie();
-
-Movie* for_user_movie_filter(Movie* new_movie_list);
-Movie* for_user_movie_sort(Movie* new_movie_list);
 
 
-int order_generate_main(User* usr, Movie* movie);
+
+
+
+
+
 int process_pay_main_order(Order* order);
 int process_pay_main( );
 int order_cancle_main( );

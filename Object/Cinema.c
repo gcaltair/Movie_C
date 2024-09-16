@@ -31,10 +31,10 @@ void cinema_show(const Cinema* cinema) {
         return;
     }
 
-    printf("电影院名字: %s\n", cinema->cinema_name);
-    printf("Cinema Alphabet: %s\n", cinema->cinema_alphabet);
-    printf("地点: %s\n", cinema->location);
-    printf("电影院ID: %s\n", cinema->cinema_id);
+    printf("%-12s: %s\n", "影院名称", cinema->cinema_name);
+    printf("%-12s: %s\n", "拼音首字母", cinema->cinema_alphabet);
+    printf("%-12s: %s\n", "地点", cinema->location);
+    printf("%-12s: %s\n", "电影院ID", cinema->cinema_id);
 }
 void cinema_show_detail(const Cinema* cinema){
     cinema_show(cinema);

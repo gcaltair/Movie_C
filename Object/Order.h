@@ -36,6 +36,7 @@ void order_show_all(Order* head);
 
 typedef struct Order_hash_table {
 	Order* table[HASH_TABLE_SIZE];
+	int count;
 } Order_hash_table;
 
 //订座位，seats为用户视角下，故行与列均-1
@@ -72,7 +73,7 @@ char* get_current_day();
 char* get_current_time();
 
 //生成orderID
-char* get_orderID();
+char* get_orderID(int number);
 
 //通过seats计算座位数
 //retunr 0 : 计算失败

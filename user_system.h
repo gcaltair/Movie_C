@@ -9,10 +9,20 @@ typedef struct User_hash_table User_hash_table;
 typedef struct Admin Admin;
 typedef struct Film Film;
 typedef struct Order Order;
+typedef struct Order_hash_table Order_hash_table;
 
-void sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, User* user_now);
+void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Order_hash_table* orderHashTable, User* user_now, Cinema* cinema_list, Movie* movie_list, Order** order_list);
 
-void sub_purchase_by_name(Film_hash_table* filmHashTable, Movie* movieHashTable, User* user_now);
+Movie* user_view_and_count_movie(Movie* movie_list, Movie_hash_table* movieHashTable, User* user_now);
+
+
+
+
+
+Movie* for_user_movie_filter(Movie* new_movie_list);
+Movie* sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, User* user_now);
+Movie* sub_purchase_by_name(Film_hash_table* filmHashTable, Movie* movieHashTable, User* user_now);
+Movie* for_user_movie_sort(Movie* new_movie_list);
 
 bool user_password_check(User *usr,User_hash_table*userHashTable);
 
@@ -28,6 +38,8 @@ void print_start_and_end_time(int start_min, int end_min);
 void press_zero_to_continue();
 
 int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table);
+
+Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_hash_table* orderHashTable);
 
 
 

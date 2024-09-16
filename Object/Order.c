@@ -102,6 +102,7 @@ void init_order_hash_table(Order_hash_table* ht) {
 	for (int i = 0; i < HASH_TABLE_SIZE; i++) {
 		ht->table[i] = NULL;
 	}
+	ht->count = 0;
 }
 
 // 创建并初始化一个 Order_hash_table
@@ -120,6 +121,7 @@ void insert_order_to_hash_table(Order_hash_table* ht, Order* order) {
 	//printf("add key%s\n",order->orderID);
 	order->hash_next = ht->table[index];  // 处理哈希冲突，将新订单插入哈希链表头部
 	ht->table[index] = order;
+	(ht->count)++;
 }
 
 // 在哈希表中查找订单，通过 orderID 查找
@@ -224,12 +226,11 @@ char* get_current_time() {
 }
 
 //生成orderID
-char* get_orderID() {
-	srand(time(0));//考虑单纯的使用时间座位订单号可能出现重复的情况，故在其后补充一个随机数
-	int randomNumber = rand();
-	char rand[100];//初始化字符串大小
-	sprintf(rand, "-%d", randomNumber);//将随机数转化为字符串的格式
-	char* orderID = strcat(get_current_time(), rand);//连接字符串生成orderID
+char* get_orderID(int number) {
+	char* orderID=malloc(sizeof(char)*50);
+	if (!orderID) exit(-1);
+	sprintf(orderID, "O%09d", number);//将随机数转化为字符串的格式
+
 	return orderID;
 }
 
@@ -261,7 +262,6 @@ char* seats_input_check() {
 		return NULL;  // 确保内存分配成功
 	}
 	while (1) {
-		printf("请输入座位信息 (格式: A1-B1-C1): ");
 		if (scanf("%99s", seats) != 1) {  //读入为字符串检验
 			free(seats);  // 释放内存
 			return NULL;
@@ -385,7 +385,7 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 	int hint2 = 0;
 	if (usr == NULL) {
 		printf("用户不存在.\n");
-		return;
+		return 0;
 	}
 	Linked_string_list* order = usr->my_order;//复制头结点
 	while (order != NULL) {//遍历链表
@@ -417,7 +417,7 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 	if (hint1 == 1 && hint2 == 1) {
 		return 10;
 	}
-	return 0;
+	return 1;
 }
 
 //判断订单能否生成

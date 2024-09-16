@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 // 定义哈希表大小
-#define HASH_TABLE_SIZE 101
+#define HASH_TABLE_SIZE 100
 
 // Set中的节点结构
 typedef struct StringSetNode {
