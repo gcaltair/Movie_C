@@ -779,13 +779,3 @@ Order* order_list_create_by_user(User* usr, Order_hash_table* order_hash_table) 
 	}
 	return new_head;
 }
-void order_list_show_by_user(User* usr, Order_hash_table* hashTable) {
-	if (usr == NULL) {
-		printf("找不到用户.\n");
-	}
-	Linked_string_list* order = usr->my_order;
-	while (order != NULL) {
-		order_print_for_user(find_order_in_hash_table(hashTable, order->id));
-		order = order->next;
-	}
-}

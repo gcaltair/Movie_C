@@ -2,24 +2,24 @@
 
 int main() {
     int mode;
-    printf("test\n");
     hash_ini();
     load_file();
     
-    user_now = find_user_in_hash_table(userHashTable, "U001");
-    admin_now = admin_find_by_id(admin_list, "A00001");
-    user_operation();
-    //while (1)
-    //{
-    //    system("cls");
-    //    do
-    //    {
-    //        mode = login();
-    //    }while(!mode);
-    //    if (mode == admin_mode) admin_operation();
-    //    else if (mode == user_mode) user_operation();
-    //    if(user_now||admin_now) write_file();
-    //}
+    //user_now = find_user_in_hash_table(userHashTable, "U001");
+    //admin_now = admin_find_by_id(admin_list, "A00001");
+    //user_operation();
+    //admin_operation();
+    while (1)
+    {
+        system("cls");
+        do
+        {
+            mode = login();
+        }while(!mode);
+        if (mode == admin_mode) admin_operation();
+        else if (mode == user_mode) user_operation();
+        if(user_now||admin_now) write_file();
+    }
     
 }
 
@@ -33,58 +33,13 @@ static void user_operation()
         switch (option)
         {
         case 1:
-            user_purchase_ticket(filmHashTable, movieHashTable,orderHashTable, user_now, cinema_list, movie_list, &order_list);
+            user_purchase_system(filmHashTable, movieHashTable,orderHashTable, user_now, cinema_list, movie_list, &order_list);
             break;
         case 2:
-            printf("推荐影片:\n");
-            Film* hot_film = hot_films(film_list);
-            film_print(hot_film);
-            printf("是否进入购票>(1/0)");
-            if (!get_user_input_int(1)) break;
-            Movie* choosed_movie = search_target_film_and_choose_movie(hot_film,movieHashTable,user_now);
-            if (!choosed_movie) break;
-            press_zero_to_continue();
+            Film_recommend(film_list, movieHashTable, user_now, &order_list, orderHashTable, filmHashTable);
             break;
         case 3:
-            printf("请选择您的功能:\n1.查看订单.\n2.付款\n3.取消订单\n4.退款\n\n0.退出\n");
-            int cer = get_user_input_int(4);
-            switch (cer) {
-            case 1:
-                printf("请输入您的userID:\n");
-                char userID[100];
-                while (1) {
-                    if (scanf("%99s", userID) != 1) { // 使用宽度限制来防止缓冲区溢出  
-                        printf("输入无效，请重新输入。\n");
-                        while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
-                        continue;
-                    }
-                    break;
-                }
-                User* usr = user_find_by_id(user_list, userID);
-                if (usr == NULL) {
-                    printf("您输入的userID无效.\n");
-                    break;
-                }
-                else {
-                    order_list_show_by_user(usr, orderHashTable);
-                    press_zero_to_continue();
-                    break;
-                }
-            case 2:
-                process_pay_main();
-                press_zero_to_continue();
-                break;
-            case 3:
-                order_cancle_main();
-                press_zero_to_continue();
-                break;
-            case 4:
-                ticket_refund_main();
-                press_zero_to_continue();
-                break;
-            case 0:
-                 break;
-            }
+            order_system_for_user(user_now, orderHashTable, &order_list);
             break;
         case 4:
             order_show_all(order_list);
@@ -106,112 +61,21 @@ static void admin_operation()
         int option = get_user_input_int(5);
         switch (option)
         {
-        case 0:
-            return;
         case 1:
             admin_order_manage(admin_now,theaterHashTable,movieHashTable,orderHashTable,order_list);
             break;
         case 2:
-            admin_theater_manage(admin_now,theater_list,theaterHashTable); 
+            admin_theater_manage(admin_now,&theater_list,theaterHashTable); 
             break;
         case 3:
-            admin_movie_manage(film_list,filmHashTable,movieHashTable,theaterHashTable,movie_list,admin_now);
+            admin_movie_manage(film_list,filmHashTable,movieHashTable,theaterHashTable,&movie_list,admin_now);
             break;
         case 4:
             admin_modify_self_info(admin_now);
             break;
         default:
+            write_movies_to_csv("Data\\movies.csv", movie_list);
             return;
-        }
-    }
-}
-
-
-
-//用户根据订单付款
-int process_pay_main(void) {
-    char orderID[100]; // 假设订单ID不会超过99个字符  
-    printf("请输入您要取消的orderID.\n");
-    while (1) {
-        if (scanf("%99s", orderID) != 1) { // 使用宽度限制来防止缓冲区溢出  
-            printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
-            continue;
-        }
-        break;
-    }
-    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
-        printf("您输入的订单号无效.\n");
-        return 0;
-    }
-    Order* order = find_order_in_hash_table(orderHashTable, orderID);
-    return process_pay_main_order(order);
-}  
-
-//取消订单
-//return 0 ： 输入无效订单或用户信息获取失败
-//       1 ： 取消成功
-//       2 ： 取消失败  
-int order_cancle_main( ) {
-    printf("请输入您要取消的orderID.\n");
-    char orderID[20];
-    while (1) {
-        if (scanf("%s", orderID) != 1) {
-            printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n');
-            continue;
-        }
-        break;
-    }
-    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
-        printf("您输入的订单号无效.\n");
-        return 0;
-    }
-    else {
-        Order* order = find_order_in_hash_table(orderHashTable, orderID);
-        if (order->status != 2) {
-            printf("订单状态不合法,取消失败.\n");// 检查订单状态并尝试取消  
-            return 2;
-        }
-        else {
-            order_cancel(order);
-            printf("取消成功.\n");
-            return 1;
-        }
-    }
-}
-
-//退款
-//return 0 ： 输入无效订单或用户信息获取失败
-//       1 ： 退款成功
-//       2 ： 退款失败  
-int ticket_refund_main(  ) {
-    printf("请输入您退款的orderID.\n");
-    char* orderID;
-    while (1) {
-        if (scanf("%s", orderID) != 1) {
-            printf("输入无效，请重新输入。\n");
-            while (getchar() != '\n');
-            continue;
-        }
-        break;
-    }
-    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
-        printf("您输入的订单号无效.\n");
-        return 0;
-    }
-    else {
-        Order* order = find_order_in_hash_table(orderHashTable, orderID);
-        if (order->status != 1) {    // 检查订单状态并尝试退款
-            printf("订单状态不合法.\n");
-            return 2;
-        }
-        if (order->status != 1) {
-            printf("退款失败.\n");
-            return 2;
-        }
-        else {
-            return ticket_refund(order, order->movie->seat_map, orderHashTable);
         }
     }
 }

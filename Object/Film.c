@@ -49,7 +49,7 @@ Film* film_find_by_name(Film* head, const char* name) {
     }
     return NULL;
 }
-Film* hot_films(Film* film_list)
+Film* hot_films(Film* film_list, Film_hash_table* filmHashTable)
 {
     Film* copied_list = film_copy_list(film_list);
     Film* film_list_hot = film_sort(copied_list, compare_films_by_ratings);
@@ -59,8 +59,9 @@ Film* hot_films(Film* film_list)
             film_list_hot = film_list_hot->next;
     ++t;
     if (t >= 5) t %= 5;
+    Film* target_film = find_film_in_hash_table_by_id(filmHashTable, film_list_hot->film_id);
     film_list_free(copied_list);
-    return film_list_hot;
+    return target_film;
 }
 Film* film_copy_list(Film* head)
 {

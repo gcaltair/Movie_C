@@ -12,9 +12,10 @@ typedef struct Order Order;
 
 void admin_view_and_count_order(Admin* admin_now, Theater_hash_table* theaterHashTable, Movie_hash_table* movieHashTable,Order* order_list);
 
-void admin_theater_manage(Admin* admin_now, Theater* theater_list, Theater_hash_table* theaterHashTable);
+void admin_theater_manage(Admin* admin_now, Theater ** theater_list, Theater_hash_table* theaterHashTable);
+int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, char* end_time, Movie_hash_table* movie_hash_table, Movie** movie_list);
 
-void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Theater_hash_table* theaterHashTable, Movie* movie_list, Admin* admin_now);
+void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Theater_hash_table* theaterHashTable, Movie ** movie_list, Admin* admin_now);
 
 void admin_modify_self_info(Admin* admin_now);
 

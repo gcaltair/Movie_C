@@ -313,44 +313,83 @@ void movie_print(const Movie* movie) {
     printf("折扣: %.2f\n", movie->discount);
     printf("------------\n");
 }
-void movie_print_for_user_ticket(const Movie* movie, char* seat) {
+void movie_print_for_user_ticket(const Movie* movie, const char* seat) {
     if (movie == NULL) {
         printf("当前信息为空\n");
         return;
     }
 
+    // 定义边框宽度
+    const int lineWidth = 40; // 42字符宽度
+
+    // 计算电影院名称两边的空格数以实现居中
+    int cinemaNameLength = strlen(movie->theater->cinema->cinema_name);
+    int padding = (lineWidth - cinemaNameLength) / 2;
+    int paddingRight = lineWidth - cinemaNameLength - padding;
+
     printf("==========================================\n");
-    printf("|              电影票信息                |\n");
+    // 打印居中的电影院名称
+    printf("|%*s%s%*s|\n", padding, "", movie->theater->cinema->cinema_name, paddingRight, "");
     printf("==========================================\n");
-    printf("| %-10s: %-26s |\n", "电影名称", movie->film->film_name);
-    printf("| %-10s: %-26s |\n", "影院名称", movie->theater->cinema->cinema_name);
-    printf("| %-10s: %-26s |\n", "影厅名称", movie->theater->theater_name);
-    printf("| %-10s: %-26s |\n", "座位号", seat);
-    printf("| %-10s: %-26s |\n", "影厅类型", movie->theater->theater_type);
-    printf("| %-10s: %-26s |\n", "语言", movie->film->film_language);
-    printf("| %-10s: %-26s |\n", "开始时间", movie->start_time);
-    printf("| %-10s: %-26s |\n", "结束时间", movie->end_time);
-    printf("| %-10s: %-26.2f |\n", "价格", movie->price);
-    printf("| %-10s: %-26.2f |\n", "折扣", movie->discount);
+    printf("| %-8s : %-26s |\n", "电影名称", movie->film->film_name);
+    printf("| %-8s : %-26s |\n", "影厅名称", movie->theater->theater_name);
+    printf("| %-8s : %-26s |\n", "座位号", seat);
+    printf("| %-8s : %-26s |\n", "影厅类型", movie->theater->theater_type);
+    printf("| %-8s : %-26s |\n", "语言", movie->film->film_language);
+    printf("| %-8s : %-26s |\n", "开始时间", movie->start_time);
+    printf("| %-8s : %-26s |\n", "结束时间", movie->end_time);
+    printf("| %-8s : %-26.2f |\n", "价格", movie->price);
+    printf("| %-8s : %-26.2f |\n", "折扣", movie->discount);
     printf("==========================================\n\n");
 }
-void order_print_for_user(const Order* order)
-{
-    if (order == NULL) {//order找不到提示
-        printf("Order not found.\n");
+void order_print_for_user(const Order* order) {
+    if (order == NULL) { // order找不到提示
+        printf("*************************************************\n");
+        printf("*                 订单未找到                    *\n");
+        printf("*************************************************\n");
         return;
     }
-    printf("订单ID: %s\n", order->orderID);//展示order内容
-    printf("用户ID: %s\n", order->user_id);//展示order内容
-    printf("场次 ID: %s\n", order->movie_id);//展示order内容
-    printf("座位 %s\n", order->seats);//展示order内容
-    printf("座位个数: %d\n", order->seat_number);//展示order内容
-    printf("订单状态: %d\n", order->status);//展示order内容
-    printf("订单时间: %s\n", order->time);//展示order内容
-    printf("订单价格: %f\n", order->price);//展示order内容
-    printf("-----------------");
-    //movie_print(order->movie);//展示order内容
+
+    // 打印订单信息
+    printf("*************************************************\n");
+    printf("*                 订单信息                      *\n");
+    printf("*************************************************\n");
+    printf("* 订单ID     : %-32s *\n", order->orderID);
+    printf("* 用户ID     : %-32s *\n", order->user_id);
+    printf("* 影院名称   : %-32s *\n", order->movie->theater->cinema->cinema_name);
+    printf("* 电影名称   : %-32s *\n", order->movie->film->film_name);
+    printf("* 场次ID     : %-32s *\n", order->movie_id);
+    printf("* 开始时间   : %-32s *\n", order->movie->start_time);
+    printf("* 结束时间   : %-32s *\n", order->movie->end_time);
+    printf("* 座位       : %-32s *\n", order->seats);
+    printf("* 座位个数   : %-32d *\n", order->seat_number);
+
+    // 打印订单状态
+    printf("* 订单状态   : ");
+    switch (order->status) {
+    case 1:
+        printf("%-32s *\n", "已付款");
+        break;
+    case 2:
+        printf("%-32s *\n", "未付款");
+        break;
+    case 3:
+        printf("%-32s *\n", "已取消");
+        break;
+    case 4:
+        printf("%-32s *\n", "已退款");
+        break;
+    default:
+        printf("%-32s *\n", "未知状态");
+        break;
+    }
+
+    printf("* 订单时间   : %-32s *\n", order->time);
+    printf("* 订单价格   : %-32.2f *\n", order->price);
+    printf("*************************************************\n\n");
+
     // 可以根据需要显示更多的订单信息
+    // movie_print(order->movie); // 展示 order 关联的电影信息
 }
 void theater_print(const Theater* theater) {
     if (theater == NULL) {
@@ -390,6 +429,18 @@ void display_purchase_ticket()
     printf("* 3. 自定义查询                                 *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
+    printf("*************************************************\n");
+}
+void display_user_order_menu() {
+    printf("*************************************************\n");
+    printf("*                  我的订单                     *\n");
+    printf("*************************************************\n");
+    printf("* 1. 查看订单                                   *\n");
+    printf("* 2. 付款                                       *\n");
+    printf("* 3. 取消订单                                   *\n");
+    printf("* 4. 退款                                       *\n");
+    printf("*                                               *\n");
+    printf("* 0. 退出                                       *\n");
     printf("*************************************************\n");
 }
 void admin_greet()

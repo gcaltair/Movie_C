@@ -197,7 +197,7 @@ void admin_view_and_count_order(Admin* admin_now, Theater_hash_table* theaterHas
     }
 }
 
-void admin_theater_manage(Admin* admin_now, Theater* theater_list, Theater_hash_table* theaterHashTable)//theater的删除没做
+void admin_theater_manage(Admin* admin_now, Theater ** theater_list, Theater_hash_table* theaterHashTable)//theater的删除没做
 {
     while (1)
     {
@@ -235,7 +235,7 @@ void admin_theater_manage(Admin* admin_now, Theater* theater_list, Theater_hash_
     }
 }
 
-void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Theater_hash_table* theaterHashTable,Movie* movie_list,Admin* admin_now)//排片管理
+void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, Theater_hash_table* theaterHashTable, Movie ** movie_list,Admin* admin_now)//排片管理
 {
     while (1)
     {

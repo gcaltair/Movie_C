@@ -31,6 +31,7 @@ void display_user_movie_operate_main_menu();
 void display_admin_modify_info_menu();
 void display_user_greet();
 void display_purchase_ticket();
+void display_user_order_menu();
 void admin_greet();
 void admin_order_manage_greet();
 void admin_theater_manage_greet();

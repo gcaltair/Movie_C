@@ -23,7 +23,148 @@
 #include"Structure File/linked_list.h"
 #include"Structure File/io_system.h"
 #include"data_process.h"
-//付款
+//取消订单
+//return 0 ： 输入无效订单或用户信息获取失败
+//       1 ： 取消成功
+//       2 ： 取消失败  
+int order_cancle_main(Order_hash_table* orderHashTable) {
+    printf("请输入您要取消的orderID.\n");
+    char orderID[20];
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    else {
+        Order* order = find_order_in_hash_table(orderHashTable, orderID);
+        if (order->status != 2) {
+            printf("订单状态不合法,取消失败.\n");// 检查订单状态并尝试取消  
+            return 2;
+        }
+        else {
+            order_cancel(order);
+            printf("取消成功.\n");
+            return 1;
+        }
+    }
+}
+//退款
+//return 0 ： 输入无效订单或用户信息获取失败
+//       1 ： 退款成功
+//       2 ： 退款失败  
+int ticket_refund_main(Order_hash_table* orderHashTable) {
+    printf("请输入您退款的orderID.\n");
+    char orderID[30];
+    while (1) {
+        if (scanf("%s", orderID) != 1) {
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n');
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    else {
+        Order* order = find_order_in_hash_table(orderHashTable, orderID);
+        if (order->status != 1) {    // 检查订单状态并尝试退款
+            printf("订单状态不合法.\n");
+            return 2;
+        }
+        if (order->status != 1) {
+            printf("退款失败.\n");
+            return 2;
+        }
+        else {
+            return ticket_refund(order, order->movie->seat_map, orderHashTable);
+        }
+    }
+}
+void order_system_for_user(User* user_now,Order_hash_table* orderHashTable, Order** order_list)
+{
+    while (1)
+    {
+        system("cls");
+        display_user_order_menu();
+        int cer = get_user_input_int(4);
+        switch (cer) {
+        case 1:
+            order_list_show_by_user(user_now, orderHashTable);
+            press_zero_to_continue();
+            break;
+            
+        case 2:
+            order_list_show_by_user(user_now, orderHashTable);
+            process_pay_main(orderHashTable);
+            press_zero_to_continue();
+            break;
+        case 3:
+            order_list_show_by_user(user_now, orderHashTable);
+            order_cancle_main(orderHashTable);
+            press_zero_to_continue();
+            break;
+        case 4:
+            order_list_show_by_user(user_now, orderHashTable);
+            ticket_refund_main(orderHashTable);
+            press_zero_to_continue();
+            break;
+        case 0:
+            write_orders_to_csv("Data\\orders.csv", *order_list);
+            return;
+            break;
+        }
+    }
+}
+//用户根据订单付款
+int process_pay_main(Order_hash_table* orderHashTable) {
+    char orderID[100]; // 假设订单ID不会超过99个字符  
+    printf("请输入您要付款的orderID.\n");
+    while (1) {
+        if (scanf("%99s", orderID) != 1) { // 使用宽度限制来防止缓冲区溢出  
+            printf("输入无效，请重新输入。\n");
+            while (getchar() != '\n'); // 清除输入缓冲区中的剩余字符  
+            continue;
+        }
+        break;
+    }
+    if (find_order_in_hash_table(orderHashTable, orderID) == NULL) {
+        printf("您输入的订单号无效.\n");
+        return 0;
+    }
+    Order* order = find_order_in_hash_table(orderHashTable, orderID);
+    return process_pay_main_order(order,orderHashTable);
+}
+void order_list_show_by_user(User* usr, Order_hash_table* hashTable) {
+    if (usr == NULL) {
+        printf("找不到用户.\n");
+    }
+    Linked_string_list* order = usr->my_order;
+    while (order != NULL) {
+        order_print_for_user(find_order_in_hash_table(hashTable, order->id));
+        order = order->next;
+    }
+}
+void Film_recommend(Film* film_list,Movie_hash_table* movieHashTable,User* user_now,Order** order_list,Order_hash_table* orderHashTable, Film_hash_table* filmHashTable)
+{
+    printf("推荐影片:\n");
+    Film* hot_film = hot_films(film_list,filmHashTable);
+    film_print(hot_film);
+    printf("是否进入购票>(1/0)");
+    if (!get_user_input_int(1)) return;
+    Movie* choosed_movie = search_target_film_and_choose_movie(hot_film, movieHashTable, user_now);
+    if (!choosed_movie) return;
+    user_buy_ticket_by_movie(user_now, order_list, orderHashTable, choosed_movie);
+}
+//处理用户对订单付款的行为
 //return 1 ： 付款成功
 //       2 ： 付款失败
 int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
@@ -83,6 +224,16 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
         }
     }
 }
+void user_buy_ticket_by_movie(User* user_now,Order** order_list,Order_hash_table* orderHashTable,Movie* target_movie)
+{
+    Order* order_new = order_generate_main(user_now, target_movie, order_list, orderHashTable);
+
+    if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
+    else printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
+    if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
+    write_orders_to_csv("Data\\orders.csv", *order_list);
+    press_zero_to_continue();
+}
 //充值
 void recharge_main(User* user_now) {
 
@@ -93,7 +244,7 @@ void recharge_main(User* user_now) {
     if(recharge(user_now, money)) printf("充值成功！已充值%.2lf元\n",money);
 
 }
-void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable,Order_hash_table* orderHashTable, User* user_now, Cinema* cinema_list, Movie* movie_list,Order** order_list)
+void user_purchase_system(Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable,Order_hash_table* orderHashTable, User* user_now, Cinema* cinema_list, Movie* movie_list,Order** order_list)
 {
     while (1)
     {
@@ -120,19 +271,12 @@ void user_purchase_ticket(Film_hash_table* filmHashTable, Movie_hash_table* movi
 
         }
         if (!target_movie) continue;
-        Order* order_new=order_generate_main(user_now, target_movie, order_list, orderHashTable);
-        
-        if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
-        else printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
-        if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
-        press_zero_to_continue();
-        //write_orders_to_csv("Data\\orders.csv", order_list);
-        
+        user_buy_ticket_by_movie(user_now, order_list, orderHashTable, target_movie);
     }
 }
 Movie* user_view_and_count_movie(Movie* movie_list, Movie_hash_table* movieHashTable, User* user_now)
 {
-    Movie* new_movie_list = movie_filter_by_not_played(movie_list);
+    Movie* new_movie_list = movie_filter_by_not_played(movie_list); //筛选并复制一条未播放场次的链表
     if (!new_movie_list)
     {
         printf("当前无可用场\n");
@@ -202,62 +346,65 @@ Movie* for_user_movie_sort(Movie* new_movie_list)
 }
 Movie* for_user_movie_filter(Movie* new_movie_list)
 {
-    system("cls");
-    display_user_filter_menu();
-    int option = get_user_input_int(6);
-    Movie* free_temp = new_movie_list;
-    //时间段，影片类型，电影院，影厅类型
-    char start_time[20]; char end_time[20]; char text[20];
-    switch (option)
+    while (1)
     {
-    case 1:
-        printf("请分别输入起止时间\n");
-        get_valid_date_input(start_time);
-        get_valid_date_input(end_time);
-        printf("对时间段 %s-%s 的筛选已完成", start_time, end_time);
-        strcat(start_time, " 00:00:00");
-        strcat(end_time, " 00:00:00");
-        char* context[] = { start_time,end_time };
-        new_movie_list = movie_operation_filter(new_movie_list, 1, context);
-        break;
-    case 2:
-        printf("请输入影片类型:");
-        scanf("%s", text);
-        new_movie_list = movie_operation_filter(new_movie_list, 5, text);
-        printf("已筛选影片类型: %s\n", text);
-        break;
-    case 3:
-        printf("请输入电影院:");
-        scanf("%s", text);
-        new_movie_list = movie_filter_by_cinema_name(text, new_movie_list);
-        printf("已筛选电影院: %s\n", text);
-        break;
-    case 4:
-        printf("请输入影厅类型：");
-        get_user_input_string(text, 20);
-        new_movie_list = movie_filter_by_theater_type(text, new_movie_list);
-        printf("已筛选影厅类型：%s\n", text);
-        break;
-    default:
-        return new_movie_list; //可能返回NULL
+        system("cls");
+        display_user_filter_menu();
+        int option = get_user_input_int(6);
+        Movie* free_temp = new_movie_list;
+        //时间段，影片类型，电影院，影厅类型
+        char start_time[20]; char end_time[20]; char text[20];
+        switch (option)
+        {
+        case 1:
+            printf("请分别输入起止时间\n");
+            get_valid_date_input(start_time);
+            get_valid_date_input(end_time);
+            printf("对时间段 %s-%s 的筛选已完成", start_time, end_time);
+            strcat(start_time, " 00:00:00");
+            strcat(end_time, " 00:00:00");
+            char* context[] = { start_time,end_time };
+            new_movie_list = movie_operation_filter(new_movie_list, 1, context);
+            break;
+        case 2:
+            printf("请输入影片类型:");
+            scanf("%s", text);
+            new_movie_list = movie_operation_filter(new_movie_list, 5, text);
+            printf("已筛选影片类型: %s\n", text);
+            break;
+        case 3:
+            printf("请输入电影院:");
+            scanf("%s", text);
+            new_movie_list = movie_filter_by_cinema_name(text, new_movie_list);
+            printf("已筛选电影院: %s\n", text);
+            break;
+        case 4:
+            printf("请输入影厅类型：");
+            get_user_input_string(text, 20);
+            new_movie_list = movie_filter_by_theater_type(text, new_movie_list);
+            printf("已筛选影厅类型：%s\n", text);
+            break;
+        default:
+            return new_movie_list; //可能返回NULL
+        }
+        int count = 0; Movie* temp_head = new_movie_list;
+        while (temp_head)
+        {
+            count++; temp_head = temp_head->next;
+        }
+        printf("当前筛选得到 %d条数据", count);
+        if (count != 0)
+        {
+            movie_list_free(free_temp);
+            free_temp = NULL;
+        }
+        else
+        {
+            printf(",已回退,请重新筛选\n");
+            new_movie_list = free_temp;
+        }
+        press_zero_to_continue();
     }
-    int count = 0; Movie* temp_head = new_movie_list;
-    while (temp_head)
-    {
-        count++; temp_head = temp_head->next;
-    }
-    printf("当前筛选得到 %d条数据", count);
-    if (count != 0)
-    {
-        movie_list_free(free_temp);
-        free_temp = NULL;
-    }
-    else
-    {
-        printf(",已回退,请重新筛选\n");
-        new_movie_list = free_temp;
-    }
-    press_zero_to_continue();
 }
 Movie* sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* filmHashTable, Movie_hash_table* movieHashTable, User* user_now)
 {
@@ -391,6 +538,12 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
 {
     int count = 0;
     Movie* new_head_for_option = new_movie_list;
+    if (!new_movie_list)
+    {
+        printf("当前无可选择的场次");
+        press_zero_to_continue();
+        return NULL;
+    }
     while (new_movie_list)
     {
         count++;
@@ -463,7 +616,7 @@ int my_min(int a,int b)
 }
 
 //传入真实Film和Theater
-int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, char* end_time, Movie_hash_table* movie_hash_table, Movie* movie_list)
+int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, char* end_time, Movie_hash_table* movie_hash_table, Movie ** movie_list)
 {
     char movie_id[50];
     int remaining_ticket = theater->theater_capacity;
@@ -479,7 +632,7 @@ int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, cha
         discount = get_user_input_double(0, 1);
         //getchar(); // 清除缓冲区中的换行符
 
-        char start_date[20] = "2024-09-04";
+        char start_date[20] = "2024-09-16";
         int start_day = date_to_days(start_date);
 
         int duration_day = 10;
@@ -525,12 +678,12 @@ int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, cha
             }
 
             // 将新电影加入链表
-            movie_add_to_list(&movie_list, new_movie);
+            movie_add_to_list(movie_list, new_movie);
         }
         return 1;
     }
 }
-int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_table* theater_hash_table,Movie_hash_table* movie_hash_table,Movie* movie_list)
+int admin_auto_find_movie_to_theater(Cinema* cinema,Film* film,Theater_hash_table* theater_hash_table,Movie_hash_table* movie_hash_table, Movie ** movie_list)
 {
     int time = film->film_time;
     Theater* copied_theater_list = theater_list_create_by_cinema(cinema, theater_hash_table);
@@ -650,7 +803,7 @@ void press_zero_to_continue()
     while (get_user_input_int(0));
     return;
 }
-int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_table* theater_hash_table) {
+int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_table* theater_hash_table) {
     while (1) {
         char theater_id[50];
         char name[100];
@@ -689,7 +842,7 @@ int admin_add_a_theater(Admin* admin_now, Theater* theater_list, Theater_hash_ta
             return 2;
         }
 
-        theater_add_to_list(&theater_list, new_theater);
+        theater_add_to_list(theater_list, new_theater);
         return 1;
     }
 }
