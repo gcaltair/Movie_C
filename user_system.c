@@ -865,7 +865,6 @@ Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_ha
                 while (getchar() != '\n');  
                 continue;
             }
-            printf("ÊäÈëÓĞĞ§: %s\n", seats);
             break;
         }
         int judge = strcmp(get_current_time(), movie->start_time);
