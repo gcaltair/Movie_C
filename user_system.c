@@ -179,7 +179,7 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
         }
         else {
             printf("付款成功,您的票据信息是：\n");
-            char* token = strtok(order->seats, "-");
+            char* token = strtok(strdup(order->seats), "-"); //strdup可能导致内存泄露
             int token_count = 0;
             while (token&&token_count++<=3)
             {
@@ -205,7 +205,7 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
                 else {
                     process_pay(order, order->movie->seat_map);
                     printf("付款成功,您的票据信息是：\n");
-                    char* token = strtok(order->seats, "-");
+                    char* token = strtok(strdup(order->seats), "-");
                     int token_count = 0;
                     while (token && token_count++ <= 3)
                     {
@@ -229,10 +229,13 @@ void user_buy_ticket_by_movie(User* user_now,Order** order_list,Order_hash_table
     Order* order_new = order_generate_main(user_now, target_movie, order_list, orderHashTable);
 
     if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
-    else printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
-    if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
-    write_orders_to_csv("Data\\orders.csv", *order_list);
-    press_zero_to_continue();
+    else {
+        printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
+        if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
+        write_orders_to_csv("Data\\orders.csv", *order_list);
+        press_zero_to_continue();
+    }
+    return;
 }
 //充值
 void recharge_main(User* user_now) {
@@ -854,7 +857,7 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
 //       2 : 生成成功，支付失败
 Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_hash_table* orderHashTable) //判断当前时间是否早于电影开始时间
 {
-    char seats[30];
+    char *seats=(char*)malloc(sizeof(char)*30);
     while (1) {
         while (true)
         {
