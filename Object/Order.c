@@ -47,6 +47,7 @@ Order* order_create(Order_hash_table* hashTable, const char* orderID, User* usr,
 	insert_order_to_hash_table(hashTable, new_order);//插入哈希表
 	return new_order;
 }
+
 // 将一个订单添加到链表中
 void order_add_to_list(Order** head, Order* new_order) {
 	if (*head == NULL) {//判断头结点地址是否为空
@@ -152,6 +153,7 @@ int(*seat_map_generation())[26] { //创建一个正梯形的座位图，第一行设10个座位，第
 	}
 	return seat_map;
 	}
+
 //展示座位图
 void seat_map_show(int(*seat_map)[26]) {
 	printf("  ");//座位图输出美观
@@ -177,6 +179,7 @@ void seat_map_show(int(*seat_map)[26]) {
 		}
 		printf("\n");
 	}
+	printf("该场次的推荐座位是%s\n", get_great_seats(seat_map));
 }
 
 //查询场次剩余座位数
