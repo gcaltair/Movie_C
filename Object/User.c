@@ -177,8 +177,7 @@ void user_delete(User **head, const char *user_id) {
 }
 
 //修改用户信息
-User* user_modify(User* head, char* id, int mode, char* arg) {
-    User* user = user_find_by_id(head, id);
+User* user_modify(User* user,int mode, char* arg) {
     if (user == NULL) {
         printf("用户不存在!\n");
         return NULL; // 如果找不到用户，则直接返回
@@ -197,15 +196,15 @@ User* user_modify(User* head, char* id, int mode, char* arg) {
         free(user->gender);
         user->gender = strdup(arg);
         break;
-    case 4: // 修改电话
+    case 3: // 修改电话
         free(user->telephone);
         user->telephone = strdup(arg);
         break;
-    case 5: // 修改密码
+    case 4: // 修改密码
         free(user->password);
         user->password = strdup(arg);
         break;
-    case 3: // 修改邮箱
+    case 5: // 修改邮箱
         free(user->email);
         user->email = strdup(arg);
         break;

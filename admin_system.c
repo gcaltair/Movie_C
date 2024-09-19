@@ -17,6 +17,7 @@
 #include"Structure File/linked_list.h"
 #include "Structure File/io_system.h"
 #include "admin_system.h"
+#include"data_process.h"
 
 void admin_order_manage(Admin* admin_now, Theater_hash_table* theaterHashTable, Movie_hash_table* movieHashTable, Order_hash_table* orderHashTable,Order* order_list)
 {
@@ -42,6 +43,13 @@ void admin_order_manage(Admin* admin_now, Theater_hash_table* theaterHashTable, 
                     printf("未找到订单,是否重新输入?(1/0)");
                     int cer = get_user_input_int(1);
                     if (!cer) break;
+                }
+                else
+                {
+                    printf("已找到订单:\n");
+                    order_print_for_user(order);
+                    press_zero_to_continue();
+                    break;
                 }
             }
             break;
@@ -209,6 +217,7 @@ void admin_theater_manage(Admin* admin_now, Theater ** theater_list, Theater_has
         {
         case 1:
             int add_status = admin_add_a_theater(admin_now, theater_list, theaterHashTable);
+            write_theaters_to_csv("Data\\theaters.csv", *theater_list);
             switch (add_status)
             {
             case 1:
@@ -251,7 +260,9 @@ void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_h
             switch (add_status2)
             {
             case 1:
-                printf("场次添加成功\n"); break;
+                printf("场次添加成功\n"); 
+                write_movies_to_csv("Data\\movies.csv", *movie_list);
+                break;
             case 2:
                 printf("数据出错...\n"); break;
             case 0:
@@ -276,7 +287,9 @@ void admin_movie_manage(Film* film_list, Film_hash_table* filmHashTable, Movie_h
             switch (add_status)
             {
             case 1:
-                printf("场次添加成功\n"); break;
+                printf("场次添加成功\n"); 
+                write_movies_to_csv("Data\\movies.csv", *movie_list);
+                break;
             case 2:
                 printf("数据出错...\n"); break;
             case 0:

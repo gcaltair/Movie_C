@@ -11,7 +11,9 @@ typedef struct Film Film;
 typedef struct Order Order;
 typedef struct Order_hash_table Order_hash_table;
 
-void Film_recommend(Film* film_list, Movie_hash_table* movieHashTable, User* user_now, Order** order_list, Order_hash_table* orderHashTable, Film_hash_table* filmHashTable);
+void film_recommend(Film* film_list, Movie_hash_table* movieHashTable, User* user_now, Order** order_list, Order_hash_table* orderHashTable, Film_hash_table* filmHashTable);
+void personal_center(User* user_now, User* user_list, User_hash_table* userHashTable);
+void user_modify_self_info(User* user_now, User_hash_table* userHashTable);
 int order_cancle_main(Order_hash_table* orderHashTable);
 void order_system_for_user(User* user_now, Order_hash_table* orderHashTable, Order** order_list);
 int process_pay_main(Order_hash_table* orderHashTable);

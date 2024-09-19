@@ -23,6 +23,85 @@
 #include"Structure File/linked_list.h"
 #include"Structure File/io_system.h"
 #include"data_process.h"
+void personal_center(User* user_now, User* user_list, User_hash_table* userHashTable)
+{
+    while (1)
+    {
+        system("cls");
+        display_personal_center();
+        int option = get_user_input_int(2);
+        switch (option)
+        {
+        case 1:
+            recharge_main(user_now);
+            break;
+        case 2:
+            user_modify_self_info(user_now,userHashTable );
+            break;
+        default:
+            return;
+            break;
+        }
+        write_users_to_csv("Data\\users.csv", user_list);
+    }
+}
+void user_modify_self_info(User* user_now, User_hash_table* userHashTable)
+{
+    while (1)
+    {
+        system("cls");
+        display_user_modify_info_menu();
+        int option = get_user_input_int(5);
+        char buffter[24];
+        int skip = 0;
+        switch (option)
+        {
+        case 1:
+            printf("请输入新的id：\n");
+            get_user_input_string(buffter, 20);
+            if (find_user_in_hash_table(userHashTable, buffter))
+            {
+                printf("ID已存在！");
+                skip = 1;
+                press_zero_to_continue();
+                break;
+            }
+            printf("确认将id从 %s 修改为", user_now->userID);
+            break;
+        case 2:
+            printf("请输入新的姓名：\n");
+            get_user_input_string(buffter, 20);
+            printf("确认将姓名从 %s 修改为", user_now->user_name);
+            break;
+        case 3:
+            strcpy(buffter, get_valid_phone_number());
+            printf("确认将电话号码从 %s 修改为", user_now->telephone);
+            break;
+        case 4:
+            while (!change_password(user_now->password, buffter));
+            printf("确认将密码修改为");
+            break;
+        case 5:
+            get_valid_email(buffter, 20);
+            printf("确认将邮箱从 %s 修改为", user_now->email);
+            break;
+        case 0:
+            return;
+        default:
+            return;
+        }
+        if (skip) continue;
+        printf(" %s 吗？(1确认|0取消)\n", buffter);
+        int certify = get_user_input_int(1);
+
+        if (certify) {
+            user_modify(user_now, option, buffter);
+            printf("修改成功\n");
+            return;
+        }
+        else printf("已取消");
+    }
+}
 //取消订单
 //return 0 ： 输入无效订单或用户信息获取失败
 //       1 ： 取消成功
@@ -153,7 +232,7 @@ void order_list_show_by_user(User* usr, Order_hash_table* hashTable) {
         order = order->next;
     }
 }
-void Film_recommend(Film* film_list,Movie_hash_table* movieHashTable,User* user_now,Order** order_list,Order_hash_table* orderHashTable, Film_hash_table* filmHashTable)
+void film_recommend(Film* film_list,Movie_hash_table* movieHashTable,User* user_now,Order** order_list,Order_hash_table* orderHashTable, Film_hash_table* filmHashTable)
 {
     printf("推荐影片:\n");
     Film* hot_film = hot_films(film_list,filmHashTable);
@@ -226,6 +305,7 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
 }
 void user_buy_ticket_by_movie(User* user_now,Order** order_list,Order_hash_table* orderHashTable,Movie* target_movie)
 {
+
     Order* order_new = order_generate_main(user_now, target_movie, order_list, orderHashTable);
 
     if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
@@ -813,7 +893,7 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
     while (1) {
         char theater_id[50];
         char name[100];
-        int capacity;
+        int capacity=162;
         char* cinema_id = admin_now->cinema_id;
         char type[50];
         int temp_count = theater_hash_table->count + 1;
@@ -821,8 +901,6 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
         printf("输入影厅名字: ");
         fgets(name, sizeof(name), stdin);
         name[strcspn(name, "\n")] = 0;
-        printf("输入影厅容量: ");
-        capacity = get_user_input_int(500);
         
         printf("输入影厅类型: ");
         fgets(type, sizeof(type), stdin);

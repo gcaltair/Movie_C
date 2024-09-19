@@ -439,13 +439,24 @@ void theater_print(const Theater* theater) {
         return;
     }
 
-    printf("Theater ID: %s\n", theater->theater_id);
-    printf("Theater Name: %s\n", theater->theater_name);
-    printf("Capacity: %d\n", theater->theater_capacity);
-    printf("Cinema ID: %s\n", theater->cinema_id);
-    printf("Theater Type: %s\n", theater->theater_type);
-    printf("------------\n");
+    // 定义边框宽度
+    const int lineWidth = 40;
+
+    // 计算影厅名称两边的空格数以实现居中
+    int theaterNameLength = strlen(theater->theater_name);
+    int padding = (lineWidth - theaterNameLength) / 2;
+    int paddingRight = lineWidth - theaterNameLength - padding;
+
+    printf("==========================================\n");
+    // 打印居中的影厅名称
+    printf("|%*s%s%*s|\n", padding, "", theater->theater_name, paddingRight, "");
+    printf("==========================================\n");
+    printf("| %-8s : %-26s  |\n", "影厅ID", theater->theater_id);
+    printf("| %-8s : %-26d  |\n", "容量", theater->theater_capacity);
+    printf("| %-8s : %-26s  |\n", "影厅类型", theater->theater_type);
+    printf("==========================================\n\n");
 }
+
 
 void display_user_greet()
 {
@@ -455,7 +466,7 @@ void display_user_greet()
     printf("* 1. 电影购票                                   *\n");
     printf("* 2. 正在热映                                   *\n");
     printf("* 3. 我的订单                                   *\n");
-    printf("* 4. 充值                                       *\n");
+    printf("* 4. 个人中心                                   *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");
@@ -493,8 +504,8 @@ void admin_greet()
     printf("* 1. 订单管理                                   *\n");
     printf("* 2. 影厅管理                                   *\n");
     printf("* 3. 场次管理                                   *\n");
-    printf("* 4. 个人信息管理                               *\n");
-    printf("* 5. 用户信息管理                               *\n");
+    printf("* 4. 个人中心                                   *\n");
+    //printf("* 5. 用户信息管理                               *\n");
     printf("*                                               *\n");
     printf("* 0.退出                                        *\n");
     printf("*************************************************\n");
@@ -503,6 +514,31 @@ void display_admin_modify_info_menu()
 {
     printf("*************************************************\n");
     printf("*               修改管理员信息                  *\n");
+    printf("*************************************************\n");
+    printf("* 1. 修改ID                                     *\n");
+    printf("* 2. 修改姓名                                   *\n");
+    printf("* 3. 修改电话                                   *\n");
+    printf("* 4. 修改密码                                   *\n");
+    printf("* 5. 修改邮箱                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0. 退出                                       *\n");
+    printf("*************************************************\n");
+}
+void display_personal_center()
+{
+    printf("*************************************************\n");
+    printf("*               个人中心                        *\n");
+    printf("*************************************************\n");
+    printf("* 1. 充值                                       *\n");
+    printf("* 2. 修改信息                                   *\n");
+    printf("*                                               *\n");
+    printf("* 0. 退出                                       *\n");
+    printf("*************************************************\n");
+}
+void display_user_modify_info_menu()
+{
+    printf("*************************************************\n");
+    printf("*               修改用户信息                    *\n");
     printf("*************************************************\n");
     printf("* 1. 修改ID                                     *\n");
     printf("* 2. 修改姓名                                   *\n");

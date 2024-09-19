@@ -30,6 +30,8 @@ void film_print(const Film* film);
 void display_movie_operate_main_menu();
 void display_user_movie_operate_main_menu();
 void display_admin_modify_info_menu();
+void display_personal_center();
+void display_user_modify_info_menu();
 void display_user_greet();
 void display_purchase_ticket();
 void display_user_order_menu();

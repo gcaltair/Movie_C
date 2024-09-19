@@ -45,7 +45,7 @@ User* user_find_by_id(User* head, const char* userID); // 通过用户ID查找用户
 void user_show(const User* user); // 显示单个用户信息
 void user_show_all(User* head); // 显示所有用户信息
 //修改用户信息
-User* user_modify(User* head, char* id, int mode, char* arg);
+User* user_modify(User* user, int mode, char* arg);
 
 
 //哈希表相关

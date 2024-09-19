@@ -36,15 +36,13 @@ static void user_operation()
             user_purchase_system(filmHashTable, movieHashTable,orderHashTable, user_now, cinema_list, movie_list, &order_list);
             break;
         case 2:
-            Film_recommend(film_list, movieHashTable, user_now, &order_list, orderHashTable, filmHashTable);
+            film_recommend(film_list, movieHashTable, user_now, &order_list, orderHashTable, filmHashTable);
             break;
         case 3:
             order_system_for_user(user_now, orderHashTable, &order_list);
             break;
         case 4:
-            order_show_all(order_list);
-            //recharge_main();
-            press_zero_to_continue();
+            personal_center(user_now,user_list, userHashTable);
             break;
         default:
             return;
@@ -72,9 +70,10 @@ static void admin_operation()
             break;
         case 4:
             admin_modify_self_info(admin_now);
+            write_admins_to_csv("Data\\admins.csv", admin_list);
             break;
         default:
-            write_movies_to_csv("Data\\movies.csv", movie_list);
+            
             return;
         }
     }

@@ -379,6 +379,7 @@ int is_current_date(char* time) {
 //       9 :购买多个影片场次时间冲突
 //       10 :已购买过该场次的票且购买多个影片场次时间冲突
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
+
 	StringSet* movie_id_set = create_string_set();
 	int count = 0;
 	int hint1 = 0; //买过相同场次电影
@@ -388,7 +389,8 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 		return 0;
 	}
 	Linked_string_list* order = usr->my_order;//复制头结点
-	while (order != NULL) {//遍历链表
+	while (order != NULL) 
+	{//遍历链表
 		Order* order_find = find_order_in_hash_table(hashTable, order->id);
 		if (order_find->status != 1) {//确定订单为已付款状态
 			order = order->next;
@@ -415,9 +417,10 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 		return 7;
 	}
 	if (hint1 == 1 && hint2 == 1) {
+
 		return 10;
+		
 	}
-	string_set_destroy(movie_id_set);
 	return 1;
 }
 
