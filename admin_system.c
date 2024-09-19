@@ -180,6 +180,7 @@ void admin_view_and_count_order(Admin* admin_now, Theater_hash_table* theaterHas
         case 3:
             Movie * movie_choice = movie_choose(new_movie_list, movieHashTable);
             if (movie_choice == NULL) break;
+            
             printf("该场次的订单是:\n\n");
             from_user_print_order(movie_choice,order_list);
             press_zero_to_continue();
@@ -501,7 +502,7 @@ int admin_add_a_movie_to_theater(Theater* theater, Film* film, Movie* movie_list
         discount = get_user_input_double(0, 1);
         //getchar(); // 清除缓冲区中的换行符
 
-        char start_date[20] = "2024-09-04";
+        char *start_date=get_current_day();
         int start_day = date_to_days(start_date);
 
         int duration_day = 10;

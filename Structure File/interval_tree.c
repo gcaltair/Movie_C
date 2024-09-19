@@ -1,5 +1,6 @@
 #include "interval_tree.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 // 创建一个新的区间树节点
 interval_node* create_interval_node(int start, int end) {
     interval_node* node = (interval_node*)malloc(sizeof(interval_node));

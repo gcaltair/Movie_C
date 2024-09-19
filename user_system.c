@@ -179,7 +179,7 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
         }
         else {
             printf("付款成功,您的票据信息是：\n");
-            char* token = strtok(order->seats, "-");
+            char* token = strtok(strdup(order->seats), "-"); //strdup可能导致内存泄露
             int token_count = 0;
             while (token&&token_count++<=3)
             {
@@ -205,7 +205,7 @@ int process_pay_main_order(Order* order, Order_hash_table* orderHashTable) {
                 else {
                     process_pay(order, order->movie->seat_map);
                     printf("付款成功,您的票据信息是：\n");
-                    char* token = strtok(order->seats, "-");
+                    char* token = strtok(strdup(order->seats), "-");
                     int token_count = 0;
                     while (token && token_count++ <= 3)
                     {
@@ -229,10 +229,13 @@ void user_buy_ticket_by_movie(User* user_now,Order** order_list,Order_hash_table
     Order* order_new = order_generate_main(user_now, target_movie, order_list, orderHashTable);
 
     if (order_new == 0) { printf("订单生成失败\n"); press_zero_to_continue(); }
-    else printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
-    if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
-    write_orders_to_csv("Data\\orders.csv", *order_list);
-    press_zero_to_continue();
+    else {
+        printf("订单生成成功！是否现在付款?(未付款将不会锁定座位)\n");
+        if (get_user_input_int(1)) process_pay_main_order(order_new, orderHashTable);
+        write_orders_to_csv("Data\\orders.csv", *order_list);
+        press_zero_to_continue();
+    }
+    return;
 }
 //充值
 void recharge_main(User* user_now) {
@@ -435,8 +438,12 @@ Movie* sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* fil
     }
 
     Movie* raw_movie_list = movie_list_create_by_film(target_film, movieHashTable);
-    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(film_name, raw_movie_list);
-    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list, movieHashTable);
+    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(cinema_name, raw_movie_list);
+    Movie* cinema_film_movie_list_date = movie_filter_by_current_date(cinema_film_movie_list);
+    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list_date, movieHashTable);
+    movie_list_free(choosed_movie);
+    movie_list_free(raw_movie_list);
+    movie_list_free(cinema_film_movie_list_date);
     return choosed_movie;
 }
 
@@ -547,8 +554,8 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
     while (new_movie_list)
     {
         count++;
-        printf("序号 %d:\n", count);
-        movie_print(new_movie_list);
+        printf("选项 %d:\n", count);
+        movie_print_for_user(new_movie_list);
         new_movie_list = new_movie_list->next;
     }
     int option = get_user_input_int(count);
@@ -573,7 +580,7 @@ Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* 
         return;
     }
     Movie* target_movie = for_user_movie_choose(movie_filtered_list, movieHashTable); //得到target_movie
-    movie_print(target_movie);
+    movie_print_for_user(target_movie);
     
     
     //order_generate_main(user_now, target_movie);
@@ -587,14 +594,14 @@ Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
     if (!new_movie_list)
     {
         printf("当天无可播放影片\n");
-        return;
+        return NULL;
     }
     Movie* new_head_for_option = new_movie_list;
     while (new_movie_list)
     {
         count++;
         printf("序号 %d:\n", count);
-        movie_print(new_movie_list);
+        movie_print_for_user(new_movie_list);
         new_movie_list = new_movie_list->next;
     }
     printf("请输入你的选择(输入0退出):");
@@ -632,7 +639,7 @@ int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, cha
         discount = get_user_input_double(0, 1);
         //getchar(); // 清除缓冲区中的换行符
 
-        char start_date[20] = "2024-09-16";
+        char* start_date=get_current_day();
         int start_day = date_to_days(start_date);
 
         int duration_day = 10;
@@ -769,13 +776,12 @@ Film* film_choose(Film* new_film_list,Film_hash_table* hash_table)
     while (new_film_list)
     {
         count++;
-        printf("序号 %d:\n", count);
+        printf("选项 %d:\n", count);
         film_print(new_film_list);  // 打印每个 Film 的详细信息
         new_film_list = new_film_list->next;
     }
 
     // 获取用户输入的选择
-    printf("请输入你的选择(输入0退出): ");
     int option = get_user_input_int(count);  // 获取用户输入的整数
     if (option == 0) return NULL;  // 如果用户选择退出，则返回 NULL
 
@@ -854,7 +860,7 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
 //       2 : 生成成功，支付失败
 Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_hash_table* orderHashTable) //判断当前时间是否早于电影开始时间
 {
-    char seats = NULL;
+    char *seats=(char*)malloc(sizeof(char)*30);
     while (1) {
         while (true)
         {

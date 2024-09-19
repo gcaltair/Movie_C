@@ -134,13 +134,13 @@ static void load_file() {
 }
 static void write_file()
 {
-    write_users_to_csv("users.csv", user_list);
-    write_cinemas_to_csv("cinemas.csv", cinema_list);
-    write_films_to_csv("films.csv", film_list);
-    write_movies_to_csv("movies.csv", movie_list);
-    write_orders_to_csv("orders.csv", order_list);
-    write_theaters_to_csv("theaters.csv", theater_list);
-    write_admins_to_csv("admins.csv", admin_list);
+    write_users_to_csv("Data\\users.csv", user_list);
+    write_cinemas_to_csv("Data\\cinemas.csv", cinema_list);
+    write_films_to_csv("Data\\films.csv", film_list);
+    write_movies_to_csv("Data\\movies.csv", movie_list);
+    write_orders_to_csv("Data\\orders.csv", order_list);
+    write_theaters_to_csv("Data\\theaters.csv", theater_list);
+    write_admins_to_csv("Data\\admins.csv", admin_list);
  
 }
 
