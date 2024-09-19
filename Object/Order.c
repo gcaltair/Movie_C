@@ -381,7 +381,7 @@ int is_current_date(char* time) {
 int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTable) {
 	StringSet* movie_id_set = create_string_set();
 	int count = 0;
-	int hint1 = 0;
+	int hint1 = 0; //买过相同场次电影
 	int hint2 = 0;
 	if (usr == NULL) {
 		printf("用户不存在.\n");
@@ -399,12 +399,12 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 			if (string_set_size(movie_id_set) == 5 && string_set_add(movie_id_set, movie->movie_id) == 1) {
 				return 8;
 			}
-		}
-		if (strcmp(order_find->movie_id, movie->movie_id) == 0) {
-			hint1 = 1;
-		}
-		if (strcmp(order_find->movie_id, movie->movie_id) != 0 && order_find->movie->start_min <= movie->start_min && order_find->movie->end_min >= movie->start_min) {
-			hint2 = 1;
+			if (strcmp(order_find->movie_id, movie->movie_id) != 0 && order_find->movie->start_min <= movie->start_min && order_find->movie->end_min >= movie->start_min) {
+				hint2 = 1;
+			}
+			if (strcmp(order_find->movie_id, movie->movie_id) == 0) {
+				hint1 = 1;
+			}
 		}
 		order = order->next;
 	}
@@ -417,6 +417,7 @@ int history_order_time_check(User* usr, Movie* movie, Order_hash_table* hashTabl
 	if (hint1 == 1 && hint2 == 1) {
 		return 10;
 	}
+	string_set_destroy(movie_id_set);
 	return 1;
 }
 
