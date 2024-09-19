@@ -1,8 +1,7 @@
 #ifndef INTERVAL_TREE_H
 #define INTERVAL_TREE_H
 
-#include <stdio.h>
-#include <stdlib.h>
+
 
 // 区间节点结构体
 typedef struct interval_node {

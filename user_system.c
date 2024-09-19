@@ -438,8 +438,12 @@ Movie* sub_purchase_by_name_and_cinema(Cinema* cinema_list, Film_hash_table* fil
     }
 
     Movie* raw_movie_list = movie_list_create_by_film(target_film, movieHashTable);
-    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(film_name, raw_movie_list);
-    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list, movieHashTable);
+    Movie* cinema_film_movie_list = movie_filter_by_cinema_name(cinema_name, raw_movie_list);
+    Movie* cinema_film_movie_list_date = movie_filter_by_current_date(cinema_film_movie_list);
+    Movie* choosed_movie = for_user_movie_choose(cinema_film_movie_list_date, movieHashTable);
+    movie_list_free(choosed_movie);
+    movie_list_free(raw_movie_list);
+    movie_list_free(cinema_film_movie_list_date);
     return choosed_movie;
 }
 
@@ -550,8 +554,8 @@ Movie* movie_choose(Movie* new_movie_list,Movie_hash_table* hash_table)
     while (new_movie_list)
     {
         count++;
-        printf("序号 %d:\n", count);
-        movie_print(new_movie_list);
+        printf("选项 %d:\n", count);
+        movie_print_for_user(new_movie_list);
         new_movie_list = new_movie_list->next;
     }
     int option = get_user_input_int(count);
@@ -576,7 +580,7 @@ Movie* search_target_film_and_choose_movie(Film* target_film, Movie_hash_table* 
         return;
     }
     Movie* target_movie = for_user_movie_choose(movie_filtered_list, movieHashTable); //得到target_movie
-    movie_print(target_movie);
+    movie_print_for_user(target_movie);
     
     
     //order_generate_main(user_now, target_movie);
@@ -590,14 +594,14 @@ Movie* for_user_movie_choose(Movie* new_movie_list, Movie* movie_hash_table)
     if (!new_movie_list)
     {
         printf("当天无可播放影片\n");
-        return;
+        return NULL;
     }
     Movie* new_head_for_option = new_movie_list;
     while (new_movie_list)
     {
         count++;
         printf("序号 %d:\n", count);
-        movie_print(new_movie_list);
+        movie_print_for_user(new_movie_list);
         new_movie_list = new_movie_list->next;
     }
     printf("请输入你的选择(输入0退出):");
@@ -635,7 +639,7 @@ int add_movie_to_theater_dev(Film* film, Theater* theater, char* start_time, cha
         discount = get_user_input_double(0, 1);
         //getchar(); // 清除缓冲区中的换行符
 
-        char start_date[20] = "2024-09-16";
+        char* start_date=get_current_day();
         int start_day = date_to_days(start_date);
 
         int duration_day = 10;
@@ -772,13 +776,12 @@ Film* film_choose(Film* new_film_list,Film_hash_table* hash_table)
     while (new_film_list)
     {
         count++;
-        printf("序号 %d:\n", count);
+        printf("选项 %d:\n", count);
         film_print(new_film_list);  // 打印每个 Film 的详细信息
         new_film_list = new_film_list->next;
     }
 
     // 获取用户输入的选择
-    printf("请输入你的选择(输入0退出): ");
     int option = get_user_input_int(count);  // 获取用户输入的整数
     if (option == 0) return NULL;  // 如果用户选择退出，则返回 NULL
 

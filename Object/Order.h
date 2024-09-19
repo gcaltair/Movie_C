@@ -39,11 +39,6 @@ typedef struct Order_hash_table {
 	int count;
 } Order_hash_table;
 
-//订座位，seats为用户视角下，故行与列均-1
-// 座位  0 ：不在影院座次范围内
-//       1 ：可购买
-//       2 ：已售出
-//       3 ：因与已售出的座位相隔一个座位导致无法售出
 // 创建并初始化一个 Order_hash_table
 Order_hash_table* order_hash_table_create();
 
@@ -55,7 +50,7 @@ void insert_order_to_hash_table(Order_hash_table* ht, Order* order);
 
 // 在哈希表中查找订单，通过 orderID 查找
 Order* find_order_in_hash_table(Order_hash_table* ht, char* orderID);
-#endif //MOVIE_C_ORDER_H
+
 
 //创建并初始化座位图
 int(*seat_map_generation())[26];
@@ -185,4 +180,4 @@ Order* order_copy_info(Order* order);
 //
 Order* order_list_create_by_user(User* usr, Order_hash_table* order_hash_table);
 
-
+#endif //MOVIE_C_ORDER_H

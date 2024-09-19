@@ -9,6 +9,7 @@ typedef struct Film Film;
 
 
 void movie_print(const Movie* movie);
+void movie_print_for_user(const Movie* movie);
 void order_print_for_user(const Order* order);
 void movie_print_for_user_ticket(const Movie* movie, char* seat);
 void theater_print(const Theater* theater);

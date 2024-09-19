@@ -287,31 +287,73 @@ void movie_list_print(const Movie* movie_list)
 {
     while (movie_list)
     {
-        movie_print(movie_list);
+        movie_print_for_user(movie_list);
         movie_list = movie_list->next;
     }
 }
 void film_print(const Film* film) {
-    if (film) {
-        printf("Film ID: %s\n", film->film_id);
-        printf("Name: %s\n", film->film_name);
-        printf("Type: %s\n", film->film_type);
-        printf("Language: %s\n", film->film_language);
-        printf("Summary: %s\n", film->film_summary);
-        printf("Rating: %d\n", film->film_rating);
+    if (film == NULL) {
+        printf("当前影片信息为空\n");
+        return;
     }
+
+    // 定义边框宽度
+    const int lineWidth = 40; // 40字符宽度
+
+    // 计算电影名称两边的空格数以实现居中
+    int filmNameLength = strlen(film->film_name);
+    int padding = (lineWidth - filmNameLength) / 2;
+    int paddingRight = lineWidth - filmNameLength - padding;
+
+    printf("==========================================\n");
+    // 打印居中的电影名称
+    printf("|%*s%s%*s|\n", padding, "", film->film_name, paddingRight, "");
+    printf("==========================================\n");
+    printf("| %-8s : %-26s |\n", "影片ID", film->film_id);
+    printf("| %-8s : %-26s |\n", "类型", film->film_type);
+    printf("| %-8s : %-26s |\n", "语言", film->film_language);
+    printf("| %-8s : %-26d |\n", "评分", film->film_rating); // 若评分存在，显示评分
+    printf("| %-8s : %-26s |\n", "简介","");
+
+    // 打印简介，考虑到简介可能较长，需要逐行输出
+    int summaryLen = strlen(film->film_summary);
+    int start = 0;
+    while (start < summaryLen) {
+        int lineLen = summaryLen - start > 26 ? 26 : summaryLen - start;
+        printf("|    %-34.*s |\n", lineLen, film->film_summary + start);
+        start += lineLen;
+    }
+
+    printf("==========================================\n\n");
 }
-void movie_print(const Movie* movie) {
-    if (movie == NULL) { printf("当前信息为空"); return; }
-    printf("场次ID: %s\n", movie->movie_id);
-    printf("电影ID: %s\n", movie->film_id);
-    printf("影厅ID: %s\n", movie->theater_id);
-    printf("开始时间: %s\n", movie->start_time);
-    printf("结束时间: %s\n", movie->end_time);
-    printf("余票数: %d\n", movie->remaining_ticket);
-    printf("价格: %.2f\n", movie->price);
-    printf("折扣: %.2f\n", movie->discount);
-    printf("------------\n");
+
+void movie_print_for_user(const Movie* movie) {
+    if (movie == NULL) {
+        printf("当前信息为空\n");
+        return;
+    }
+
+    // 定义边框宽度
+    const int lineWidth = 40; // 42字符宽度
+
+    // 计算电影院名称两边的空格数以实现居中
+    int cinemaNameLength = strlen(movie->theater->cinema->cinema_name);
+    int padding = (lineWidth - cinemaNameLength) / 2;
+    int paddingRight = lineWidth - cinemaNameLength - padding;
+
+    printf("==========================================\n");
+    // 打印居中的电影院名称
+    printf("|%*s%s%*s|\n", padding, "", movie->theater->cinema->cinema_name, paddingRight, "");
+    printf("==========================================\n");
+    printf("| %-8s : %-26s |\n", "电影名称", movie->film->film_name);
+    printf("| %-8s : %-26s |\n", "影厅名称", movie->theater->theater_name);
+    printf("| %-8s : %-26s |\n", "影厅类型", movie->theater->theater_type);
+    printf("| %-8s : %-26s |\n", "语言", movie->film->film_language);
+    printf("| %-8s : %-26s |\n", "开始时间", movie->start_time);
+    printf("| %-8s : %-26s |\n", "结束时间", movie->end_time);
+    printf("| %-8s : %-26.2f |\n", "价格", movie->price);
+    printf("| %-8s : %-26.2f |\n", "折扣", movie->discount);
+    printf("==========================================\n\n");
 }
 void movie_print_for_user_ticket(const Movie* movie, const char* seat) {
     if (movie == NULL) {

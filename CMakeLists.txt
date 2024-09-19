@@ -23,4 +23,4 @@ add_executable(Movie_C main.c
         user_system.c
         user_system.h
         "main.h"
- "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h" "Structure File/interval_tree.h" "Structure File/interval_tree.c" "Structure File/io_system.c" "Structure File/io_system.h" "admin_system.h" "admin_system.c")
+ "Object/Film.c" "Object/Film.h" "Structure File/String_set.c" "Structure File/String_set.h" "Structure File/interval_tree.h" "Structure File/interval_tree.c" "Structure File/io_system.c" "Structure File/io_system.h" "admin_system.h" "admin_system.c"  )

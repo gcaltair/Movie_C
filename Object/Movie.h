@@ -102,7 +102,7 @@ Movie* movie_operation_filter(Movie* head, int mode, void* filter_param);
 int compare_movies_by_occupancy_rate(const void* a, const void* b);
 
 int compare_movies_by_price(const void* a, const void* b);
-
+//判断是否产生了人流冲突，并且返回冲突的场次数
 int is_avoid_flow(Cinema* cinema, int start_min, int end_min);
 
 double caculate_movie_income(Movie* head);
