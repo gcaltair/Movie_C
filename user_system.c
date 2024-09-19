@@ -860,10 +860,11 @@ int admin_add_a_theater(Admin* admin_now, Theater ** theater_list, Theater_hash_
 //       2 : 生成成功，支付失败
 Order* order_generate_main(User* usr, Movie* movie, Order** order_list, Order_hash_table* orderHashTable) //判断当前时间是否早于电影开始时间
 {
-    char *seats=(char*)malloc(sizeof(char)*30);
+    char* seats = NULL;
     while (1) {
         while (true)
         {
+            seat_map_show(movie->seat_map);
             printf("请输入您想购买的座位号(形如A1-B1-C1).\n");
             seats = seats_input_check();
             if (seats == NULL) {
